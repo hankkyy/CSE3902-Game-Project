@@ -1,0 +1,29 @@
+# Visual Studio / MonoGame
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build/
+[Bb]in/
+[Oo]bj/
+
+# NuGet packages
+packages/
+*.nupkg
+
+# MonoGame content build output
+**/Content/bin/
+**/Content/obj/
+
+# OS files
+.DS_Store
+Thumbs.db
