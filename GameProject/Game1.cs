@@ -17,6 +17,7 @@ public sealed class Game1 : Game
 
     protected override void Update(GameTime gameTime)
     {
+        // Exit when Escape is held or player one's controller Back button is pressed.
         if (Keyboard.GetState().IsKeyDown(Keys.Escape) ||
             GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
         {
