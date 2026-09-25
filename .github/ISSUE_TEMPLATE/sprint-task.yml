@@ -1,0 +1,40 @@
+name: Sprint task
+description: Track one scoped Sprint 2 implementation task
+title: "[S2][8] "
+labels: ["sprint-2"]
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome
+      description: Describe the observable result, not just files to edit.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and effort breakdown
+      placeholder: "Feature A (3), feature B (3), tests/docs (2)"
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: "- [ ] Build passes\n- [ ] Behavior is manually verified"
+    validations:
+      required: true
+  - type: input
+    id: branch
+    attributes:
+      label: Branch
+      placeholder: feature/example
+    validations:
+      required: true
+  - type: input
+    id: remaining
+    attributes:
+      label: Initial remaining effort
+      value: "8"
+    validations:
+      required: true

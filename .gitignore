@@ -29,3 +29,7 @@ packages/
 Thumbs.db
 
 # Sprint 1 Git practice
+
+# Local Codex workspace folders (not part of the game repository)
+/work/
+/outputs/

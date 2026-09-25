@@ -1,0 +1,24 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+          cache: true
+          cache-dependency-path: GameProject/GameProject.csproj
+      - name: Restore
+        run: dotnet restore GameProject/GameProject.csproj
+      - name: Check formatting
+        run: dotnet format GameProject/GameProject.csproj --no-restore --verify-no-changes
+      - name: Build
+        run: dotnet build GameProject/GameProject.csproj --no-restore --configuration Release
