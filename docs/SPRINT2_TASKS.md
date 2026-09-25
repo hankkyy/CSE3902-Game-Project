@@ -12,15 +12,15 @@ The assignments below use the five GitHub contributors already present in the re
 
 Each owner must use the matching prompt in `.codex/tasks/` and follow the file-ownership table in `AGENTS.md`. Shared contracts are frozen in `docs/ARCHITECTURE_CONTRACT.md`; feature agents propose changes instead of editing those files independently.
 
-## Suggested GitHub issues
+## GitHub issues
 
-1. `[S2][8] Player gameplay states and actions` — assign `@hankkyy`
-2. `[S2][8] Player sprites and four-direction animation` — assign `@JojoLi132`
-3. `[S2][8] Enemy/NPC classes, movement, and projectile` — assign `@mo46-123`
-4. `[S2][8] Block and item classes, sprites, and galleries` — assign `@Lzzz-7`
-5. `[S2][8] Commands, menu state, HUD, and CI quality` — assign `@xing-gif`
+1. [#8 — Player gameplay states and actions](https://github.com/hankkyy/CSE3902-Game-Project/issues/8) — `@hankkyy`
+2. [#9 — Player sprites and four-direction animation](https://github.com/hankkyy/CSE3902-Game-Project/issues/9) — `@JojoLi132`
+3. [#10 — Enemy/NPC classes, movement, and projectile](https://github.com/hankkyy/CSE3902-Game-Project/issues/10) — `@mo46-123`
+4. [#11 — Block and item classes, sprites, and galleries](https://github.com/hankkyy/CSE3902-Game-Project/issues/11) — `@Lzzz-7`
+5. [#12 — Commands, menu state, HUD, and CI quality](https://github.com/hankkyy/CSE3902-Game-Project/issues/12) — `@xing-gif`
 
-Initial status: **Todo**. Remaining effort: **8**. Sprint: **Sprint 2**. Reduce remaining effort at the end of each work session and set it to zero only when acceptance criteria are met.
+All five issues are open with labels `sprint-2` and `effort-8`. Initial status: **Todo**. Reduce remaining effort at the end of each work session and set it to zero only when acceptance criteria are met.
 
 ## Integration and review
 
