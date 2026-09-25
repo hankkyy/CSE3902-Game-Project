@@ -24,6 +24,7 @@ Legend: **Done** is implemented in the scaffold; **Assigned** has an owner in th
 - [x] Roslyn/.NET analyzers enabled and CI build added
 - [x] Create and assign the five Sprint 2 issues with effort labels
 - [x] Add the five issues to the [Sprint 2 GitHub Project board](https://github.com/users/hankkyy/projects/4)
+- [x] Set Sprint dates to September 25–28, 2026 on all five project items
 - [ ] Enter the official Sprint 2 start/end dates on the board
 - [ ] Each member completes readability and maintainability review records
 - [ ] Record weekly analyzer results, complete reflection, zip, and submit on Carmen
