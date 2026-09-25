@@ -4,11 +4,11 @@ The assignments below use the five GitHub contributors already present in the re
 
 Project board: [CSE 3902 Team Sprint 2](https://github.com/users/hankkyy/projects/4)
 
-Sprint start: **September 25, 2026**
+Sprint start: **September 15, 2026**
 
 Sprint due date: **September 28, 2026**
 
-> Sprint 开始日期：**2026 年 9 月 25 日**
+> Sprint 开始日期：**2026 年 9 月 15 日**
 >
 > Sprint 截止日期：**2026 年 9 月 28 日**
 
