@@ -66,7 +66,7 @@ GameProject/
 ## Team workflow
 
 1. Pick only your assigned task in [docs/SPRINT2_TASKS.md](docs/SPRINT2_TASKS.md).
-2. Create the listed branch from an updated `main`.
+2. Check out the pre-created branch listed for you.
 3. Move the matching issue to **In Progress** and update remaining effort.
 4. Commit small, buildable changes. Do not commit `bin/` or `obj/`.
 5. Before opening a PR, run `dotnet build GameProject/GameProject.csproj` and complete the manual acceptance checks.
