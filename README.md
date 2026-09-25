@@ -75,6 +75,10 @@ GameProject/
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for exact Git commands and review rules.
 
+### Codex consistency
+
+Every Codex session is governed by the repository-level [AGENTS.md](AGENTS.md). It freezes shared contracts, assigns file ownership, prohibits cross-feature rewrites, and defines one verification command. Each branch also has a focused prompt under `.codex/tasks/`. Teammates should not give Codex a broad request such as “finish Sprint 2”; they should use only the prompt for their assigned branch.
+
 ## Known limitations
 
 - Sprites are geometric placeholders; no copyrighted game assets are committed.
@@ -86,6 +90,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for exact Git commands and review rules.
 
 - [Sprint 2 requirements checklist](docs/SPRINT2_CHECKLIST.md)
 - [Five-person task plan](docs/SPRINT2_TASKS.md)
+- [Architecture and integration contract](docs/ARCHITECTURE_CONTRACT.md)
 - [Code review template](docs/code-reviews/TEMPLATE.md)
 - [Sprint reflection template](docs/SPRINT2_REFLECTION_TEMPLATE.md)
 

@@ -1,0 +1,3 @@
+# Codex task: player sprites (`feature/player-sprites`)
+
+Work only in the owned paths from `AGENTS.md`. Implement legal, attributed player sprite assets and four-direction idle/walk/attack/damage animation behind the existing `ISprite.Draw` entry point. Gameplay objects must not contain texture regions or frame tables. Keep `SpriteFactory`'s existing constructor and creation methods compatible. Do not change player rules, controls, `Game1`, Core, or project files. Record asset origin and license; do not commit copyrighted material without explicit team permission. Run `./scripts/verify.sh` and document visual test steps with a screenshot/GIF in the PR.

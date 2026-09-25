@@ -1,0 +1,3 @@
+# Codex task: player states (`feature/player-states`)
+
+Work only in the owned paths from `AGENTS.md`. Implement explicit idle, walking, attacking, and damaged player states without changing frozen contracts. Preserve constructor and input methods used by `Game1`. State transitions must prevent attack during damage, return to idle predictably, preserve four-direction facing, use `GameTime`, and reset fully. Add non-graphics tests where practical and document manual checks for Z/N, E, 1–3, movement, animation, and reset. Do not edit sprites, input mappings, `Game1`, or project files. End by running `./scripts/verify.sh` and report changed files plus remaining integration needs.

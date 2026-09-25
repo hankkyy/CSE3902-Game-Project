@@ -1,0 +1,3 @@
+# Codex task: enemies and NPCs (`feature/enemies-npcs`)
+
+Work only in the owned paths from `AGENTS.md`. Add focused Octorok, Keese, Gel, and NPC classes implementing `IGameObject`, with deterministic reset and frame-rate-independent characteristic movement. Add a visible Octorok projectile owned by enemy code. Preserve `EnemyObject`'s current constructor for compatibility and keep gallery interaction-free. Do not poll keyboard input or edit player, items, blocks, sprites, `Game1`, Core, or project files. Run `./scripts/verify.sh`; document O/P wraparound, movement bounds, projectile, NPC, and reset checks.

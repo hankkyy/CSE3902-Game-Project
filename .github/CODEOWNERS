@@ -1,0 +1,23 @@
+# Shared architecture and integration
+/AGENTS.md @hankkyy
+/Directory.Build.props @hankkyy
+/GameProject/Core/ @hankkyy
+/GameProject/GameProject.csproj @hankkyy
+/docs/ARCHITECTURE_CONTRACT.md @hankkyy
+
+# Feature owner followed by required reviewer
+/GameProject/Objects/Player.cs @hankkyy @JojoLi132
+/GameProject/Objects/PlayerStates/ @hankkyy @JojoLi132
+/GameProject/Sprites/ @JojoLi132 @hankkyy
+/GameProject/Content/ @JojoLi132 @hankkyy
+/GameProject/Objects/EnemyObject.cs @mo46-123 @Lzzz-7
+/GameProject/Objects/Enemies/ @mo46-123 @Lzzz-7
+/GameProject/Objects/ItemObject.cs @Lzzz-7 @xing-gif
+/GameProject/Objects/BlockObject.cs @Lzzz-7 @xing-gif
+/GameProject/Objects/Items/ @Lzzz-7 @xing-gif
+/GameProject/Objects/Blocks/ @Lzzz-7 @xing-gif
+/GameProject/Commands/ @xing-gif @mo46-123
+/GameProject/Controllers/ @xing-gif @mo46-123
+/GameProject/States/ @xing-gif @mo46-123
+/GameProject/UI/ @xing-gif @mo46-123
+/GameProject/Game1.cs @xing-gif @mo46-123

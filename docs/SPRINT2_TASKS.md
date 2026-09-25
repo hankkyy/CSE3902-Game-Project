@@ -10,6 +10,8 @@ The assignments below use the five GitHub contributors already present in the re
 | `@Lzzz-7` | `feature/items-blocks` | Create final block/object classes and visuals (3); create item classes with appropriate animation/motion (3); add gallery/reset tests and asset docs (2) | `T/Y` cycles at least four stationary blocks; `U/I` cycles at least four recognizable animated items; wraparound and `R` work; build passes | `@xing-gif` |
 | `@xing-gif` | `feature/input-quality` | Expand typed Command classes and input tests (3); add a start/menu game state entered with Enter (2); add HUD labels/help overlay and polish layout (2); maintain CI/release checklist (1) | Upper/lowercase letter input works through XNA keys; every required key has one command; menu starts the game on Enter; controls appear on-screen; CI and formatter pass | `@mo46-123` |
 
+Each owner must use the matching prompt in `.codex/tasks/` and follow the file-ownership table in `AGENTS.md`. Shared contracts are frozen in `docs/ARCHITECTURE_CONTRACT.md`; feature agents propose changes instead of editing those files independently.
+
 ## Suggested GitHub issues
 
 1. `[S2][8] Player gameplay states and actions` — assign `@hankkyy`

@@ -16,9 +16,5 @@ jobs:
           dotnet-version: 8.0.x
           cache: true
           cache-dependency-path: GameProject/GameProject.csproj
-      - name: Restore
-        run: dotnet restore GameProject/GameProject.csproj
-      - name: Check formatting
-        run: dotnet format GameProject/GameProject.csproj --no-restore --verify-no-changes
-      - name: Build
-        run: dotnet build GameProject/GameProject.csproj --no-restore --configuration Release
+      - name: Verify repository
+        run: ./scripts/verify.sh

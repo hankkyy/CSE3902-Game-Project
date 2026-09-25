@@ -18,17 +18,20 @@ git fetch origin
 git switch --track origin/feature/your-task
 ```
 
+When using Codex, it automatically reads the root `AGENTS.md`. Before asking it to implement anything, make sure it also reads `docs/ARCHITECTURE_CONTRACT.md` and the matching `.codex/tasks/*.md` file. A good first prompt is:
+
+> Read AGENTS.md, docs/ARCHITECTURE_CONTRACT.md, and the task file matching this branch. Implement only that assignment, stay inside owned paths, run ./scripts/verify.sh, and summarize any integration needs.
+
 Do not share a branch. Do not push directly to `main`. If two tasks need the same API, agree on the interface first and merge that small change before the implementations.
 
 ## Before every push
 
 ```sh
-dotnet format GameProject/GameProject.csproj --verify-no-changes
-dotnet build GameProject/GameProject.csproj
+./scripts/verify.sh
 git status
 ```
 
-Format locally with `dotnet format GameProject/GameProject.csproj` if the first command reports changes.
+If formatting fails, run `dotnet format GameProject/GameProject.csproj`, inspect the changes, and rerun the verification script.
 
 ## Pull requests and reviews
 

@@ -1,0 +1,3 @@
+# Codex task: input, menu, HUD, and quality (`feature/input-quality`)
+
+Work only in the owned paths from `AGENTS.md`. Keep required controls unchanged and translate discrete input through typed `ICommand` implementations. Add a start/menu state entered with Enter, an on-screen controls/status HUD, and integration wiring in `Game1` without moving gameplay logic into it. Preserve all existing object construction and feature behavior; do not redesign frozen contracts or edit feature-owned objects/sprites. Maintain CI and release documentation. Run `./scripts/verify.sh` and manually test every required key, menu-to-gameplay transition, HUD, reset, and quit.
