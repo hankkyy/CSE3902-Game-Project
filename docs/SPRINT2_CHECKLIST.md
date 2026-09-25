@@ -23,7 +23,7 @@ Legend: **Done** is implemented in the scaffold; **Assigned** has an owner in th
 - [x] PR, issue, code-review, and reflection templates
 - [x] Roslyn/.NET analyzers enabled and CI build added
 - [x] Create and assign the five Sprint 2 issues with effort labels
-- [ ] Add the five issues to the GitHub Project board
+- [x] Add the five issues to the [Sprint 2 GitHub Project board](https://github.com/users/hankkyy/projects/4)
 - [ ] Enter the official Sprint 2 start/end dates on the board
 - [ ] Each member completes readability and maintainability review records
 - [ ] Record weekly analyzer results, complete reflection, zip, and submit on Carmen

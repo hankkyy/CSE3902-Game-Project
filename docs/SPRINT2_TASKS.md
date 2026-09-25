@@ -2,6 +2,8 @@
 
 The assignments below use the five GitHub contributors already present in the repository. Each owner has about **8 effort points**. Player work is split between two people as recommended by the assignment. Owners may coordinate interfaces, but each person should author and have reviewed at least one class.
 
+Project board: [CSE 3902 Team Sprint 2](https://github.com/users/hankkyy/projects/4)
+
 | Owner | Branch | Scope (8 points each) | Acceptance criteria | Reviewer |
 |---|---|---|---|---|
 | `@hankkyy` | `feature/player-states` | Replace the placeholder Player action timer with explicit idle/walk/attack/damaged states (4); add sword/item-use presentation and state-safe transitions (2); add player-focused tests and docs (2) | Four directions animate; `Z/N` attacks; `E` damages and flashes; `1–3` changes the used item; invalid overlapping states are prevented; build passes | `@JojoLi132` |
