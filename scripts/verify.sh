@@ -12,6 +12,20 @@ fi
 dotnet restore GameProject/GameProject.csproj
 dotnet format GameProject/GameProject.csproj --no-restore --verify-no-changes
 dotnet build GameProject/GameProject.csproj --no-restore --configuration Release
+
+test_projects=(
+  "tests/PlayerStates/PlayerStates.Tests.csproj"
+  "tests/PlayerSprites/PlayerSprites.Tests.csproj"
+  "tests/Enemies/Enemies.Tests.csproj"
+  "tests/InputTests/InputTests.csproj"
+)
+
+for project in "${test_projects[@]}"; do
+  dotnet restore "$project"
+  dotnet format "$project" --no-restore --verify-no-changes
+  dotnet run --project "$project" --configuration Release --no-restore
+done
+
 git diff --check
 
-echo "Verification passed: hygiene, format, analyzers, and Release build."
+echo "Verification passed: hygiene, format, analyzers, Release build, and all headless tests."

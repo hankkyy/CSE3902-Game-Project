@@ -12,12 +12,14 @@ Legend: **Done** is implemented in the scaffold; **Assigned** has an owner in th
 - [x] **Done:** item gallery with `U/I`, animation, and wraparound
 - [x] **Done:** enemy/NPC gallery with `O/P`, distinct movement, and animation
 - [x] **Done:** `Q` quit and `R` reset
-- [ ] **Assigned:** real sprite sheets and complete per-object animation clips
-- [ ] **Assigned:** dedicated class for each final dungeon object and enemy projectile behavior
+- [x] **Done:** original attributed player sprite sheet with four-direction idle/walk/attack/damage clips
+- [ ] **Missing:** dedicated block and item classes; the assigned `feature/items-blocks` branch has no implementation
+- [x] **Done:** dedicated player-state, enemy, NPC, and enemy-projectile classes
 - [x] **Done:** start/menu state; `Enter` starts gameplay and `Q`/`Escape` exit in either mode
 - [x] **Done:** typed discrete commands, on-screen controls/status HUD, and input/menu regression checks
 
 Input/menu/HUD release checks are tracked separately in [INPUT_QUALITY_CHECKLIST.md](INPUT_QUALITY_CHECKLIST.md).
+Enemy and player-sprite checks are documented in their feature guides.
 
 ## Process and documentation
 

@@ -17,13 +17,20 @@ public sealed class Player : IGameObject
     private readonly ISprite sprite;
     private readonly PlayerStateMachine stateMachine = new();
     private Vector2 pendingDirection;
-    private double animationTime;
+    private PlayerAction visualAction = PlayerAction.Idle;
+    private double visualActionTime;
 
     public Player(Vector2 position, Rectangle bounds, SpriteFactory sprites)
+        : this(position, bounds, sprites.CreatePlayerSprite())
+    {
+    }
+
+    /// <summary>Creates a player with an injected sprite for headless behavior verification.</summary>
+    public Player(Vector2 position, Rectangle bounds, ISprite sprite)
     {
         startPosition = position;
         this.bounds = bounds;
-        sprite = sprites.CreatePlayerSprite();
+        this.sprite = sprite;
         Position = position;
     }
 
@@ -47,7 +54,13 @@ public sealed class Player : IGameObject
             : (direction.Y < 0 ? Direction.Up : Direction.Down);
     }
 
-    public void Attack() => stateMachine.TryAttack();
+    public void Attack()
+    {
+        if (stateMachine.TryAttack())
+        {
+            ResetVisualActionClock();
+        }
+    }
 
     public void TakeDamage()
     {
@@ -56,6 +69,7 @@ public sealed class Player : IGameObject
             return;
         }
 
+        ResetVisualActionClock();
         Health = Math.Max(0, Health - 1);
     }
 
@@ -64,9 +78,13 @@ public sealed class Player : IGameObject
     public void Update(GameTime gameTime)
     {
         double seconds = gameTime.ElapsedGameTime.TotalSeconds;
-        animationTime += seconds;
+        visualActionTime += seconds;
         bool wantsToMove = pendingDirection != Vector2.Zero;
         stateMachine.Update(seconds, wantsToMove);
+        if (Action != visualAction)
+        {
+            ResetVisualActionClock();
+        }
 
         if (stateMachine.AllowsMovement && wantsToMove)
         {
@@ -82,9 +100,31 @@ public sealed class Player : IGameObject
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        bool alternate = ((int)(animationTime * 8) % 2) == 1;
+        bool alternate = ((int)(visualActionTime * 8) % 2) == 1;
         if (Action == PlayerAction.Damaged && alternate) return; // Damage flash.
-        sprite.Draw(spriteBatch, Position + GetActionOffset(), Facing, alternate && Action != PlayerAction.Idle);
+
+        Vector2 drawPosition = Position + GetActionOffset();
+        if (sprite is IAnimatedPlayerSprite animatedSprite)
+        {
+            animatedSprite.Draw(spriteBatch, drawPosition, Facing, AnimationFor(Action), visualActionTime);
+            return;
+        }
+
+        sprite.Draw(spriteBatch, drawPosition, Facing, alternate && Action != PlayerAction.Idle);
+    }
+
+    private static PlayerSpriteAnimation AnimationFor(PlayerAction action) => action switch
+    {
+        PlayerAction.Walking => PlayerSpriteAnimation.Walking,
+        PlayerAction.Attacking => PlayerSpriteAnimation.Attacking,
+        PlayerAction.Damaged => PlayerSpriteAnimation.Damaged,
+        _ => PlayerSpriteAnimation.Idle
+    };
+
+    private void ResetVisualActionClock()
+    {
+        visualAction = Action;
+        visualActionTime = 0;
     }
 
     private Vector2 GetActionOffset()
@@ -110,8 +150,8 @@ public sealed class Player : IGameObject
         Facing = Direction.Down;
         Health = 5;
         SelectedItem = 1;
-        animationTime = 0;
         pendingDirection = Vector2.Zero;
         stateMachine.Reset();
+        ResetVisualActionClock();
     }
 }

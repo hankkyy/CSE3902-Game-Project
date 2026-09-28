@@ -2,9 +2,9 @@
 
 > # CSE 3902 游戏项目 — Sprint 2
 
-A MonoGame functionality gallery for Sprint 2 (Game Objects and Sprites). The current build is deliberately asset-free: colored placeholder sprites make every required state visible while the team works in parallel on final art and object behavior.
+A MonoGame functionality gallery for Sprint 2 (Game Objects and Sprites). The integrated build includes an original CC0 player atlas, dedicated player/enemy behaviors, a start menu, and an on-screen gameplay HUD. Dedicated item/block implementations remain assigned but unsubmitted.
 
-> 这是 Sprint 2（游戏对象与精灵）的 MonoGame 功能展示项目。目前版本特意不依赖外部美术资源，而是使用彩色占位精灵展示所有必需状态，方便团队并行开发最终素材和对象行为。
+> 这是 Sprint 2（游戏对象与精灵）的 MonoGame 功能展示项目。集成版本包含原创 CC0 玩家图集、独立玩家／敌人行为、开始菜单和游戏 HUD；独立物品／方块实现仍未提交。
 
 ## Functionality check-in status
 
@@ -54,9 +54,9 @@ The current build provides:
 
 > - 使用 Command、Factory Method 以及对象和精灵接口分离职责。
 
-This is a functional foundation, not the final dungeon. Placeholder visuals and simplified motion will be replaced through the five assigned feature branches in [the Sprint 2 task plan](docs/SPRINT2_TASKS.md).
+This is the completed Sprint 2 functionality gallery, not the final dungeon. The five assignments and their integration boundaries are recorded in [the Sprint 2 task plan](docs/SPRINT2_TASKS.md).
 
-> 这是可运行的功能基础，并不是最终地牢。占位画面和简化运动将由 [Sprint 2 五人任务计划](docs/SPRINT2_TASKS.md) 中的五个功能分支逐步替换。
+> 这是完成后的 Sprint 2 功能展示，并不是最终地牢。五项分工及集成边界记录在 [Sprint 2 五人任务计划](docs/SPRINT2_TASKS.md) 中。
 
 ## Requirements and setup
 
@@ -110,11 +110,11 @@ Move Link and change facing direction.
 
 ### `Z` or `N`
 
-Trigger the existing attack state. The HUD briefly shows `ATTACKING`; the placeholder artwork does not yet show a sword swing.
+Attack with the sword. The HUD briefly shows `ATTACKING`, and the directional attack clip is selected from the player atlas.
 
 > **`Z` 或 `N`**
 >
-> 触发现有攻击状态。HUD 会短暂显示 `ATTACKING`；当前占位图还没有挥剑画面。
+> 使用剑攻击。HUD 会短暂显示 `ATTACKING`，同时播放玩家图集中的对应方向攻击动画。
 
 ### `1`, `2`, or `3`
 
@@ -186,7 +186,7 @@ GameProject/
 ├── Controllers/    Input mapping and key-edge detection
 ├── Core/           Shared object contracts, direction, gallery
 ├── Objects/        Player, blocks, items, enemies/NPCs
-├── Sprites/        Drawing contract, placeholders, sprite factory
+├── Sprites/        Drawing contracts, player animation clips, sprite factory
 ├── States/         Menu-to-gameplay session state
 ├── UI/             Start menu, pixel text, status HUD and help
 ├── Game1.cs        Composition root and game loop
@@ -199,7 +199,7 @@ GameProject/
 ├── Controllers/    输入映射与按键边沿检测
 ├── Core/           公共对象契约、方向和展示列表
 ├── Objects/        玩家、方块、物品、敌人与 NPC
-├── Sprites/        绘制契约、占位精灵与精灵工厂
+├── Sprites/        绘制契约、玩家动画片段与精灵工厂
 ├── States/         菜单与游戏中的会话状态
 ├── UI/             开始菜单、像素文字、状态与操作说明
 ├── Game1.cs        组合入口与游戏循环
@@ -270,17 +270,17 @@ Read AGENTS.md, docs/ARCHITECTURE_CONTRACT.md, and the task file matching this b
 
 > **已知限制**
 
-- Sprites are geometric placeholders; no copyrighted game assets are committed.
+- The player uses an original CC0 atlas. Other gallery sprites remain simple generated primitives so no copyrighted game assets are committed.
 
-> - 当前精灵是几何占位图，仓库中没有提交受版权保护的游戏素材。
+> - 玩家使用原创 CC0 图集；其他展示对象仍使用简单生成图形，因此仓库中没有提交受版权保护的游戏素材。
 
 - Object galleries demonstrate behaviors independently. Collision, room transitions, inventory UI, audio, and a complete dungeon are outside this check-in scaffold.
 
 > - 对象展示区只用于独立演示行为；碰撞、房间切换、背包 UI、音效和完整地牢不属于本次 check-in 骨架范围。
 
-- Enemy motion is deterministic and projectiles are assigned to the enemy task.
+- Enemy and item motion is deterministic; Octorok projectiles are demonstrations and do not interact with other objects during Sprint 2.
 
-> - 当前敌人运动是确定性的，投射物功能已分配给敌人任务。
+> - 敌人与物品运动是确定性的；Octorok 投射物仅用于演示，在 Sprint 2 中不与其他对象交互。
 
 - Menu and HUD text use a small built-in pixel alphabet. It supports English letters, digits, and the punctuation used by the controls; it is not a general-purpose localized font.
 
@@ -318,20 +318,18 @@ Read AGENTS.md, docs/ARCHITECTURE_CONTRACT.md, and the task file matching this b
 
 > **当前验证状态**
 
-Run these commands from the repository root before submitting the input-quality branch:
+Run the integrated verification command from the repository root before submitting:
 
-> 提交 input-quality 分支前，在仓库根目录依次运行：
+> 提交前，在仓库根目录运行集成验证命令：
 
 ```sh
 bash scripts/verify.sh
-dotnet run --project tests/InputTests/InputTests.csproj --configuration Release
-dotnet format tests/InputTests/InputTests.csproj --no-restore --verify-no-changes
 ```
 
-The verification script checks repository hygiene, main-project formatting, analyzers, and the Release build. The test executable performs 25 assertions on press/hold/release behavior, Shift-modified input, unbound/simultaneous keys, and menu transitions. A failed assertion exits unsuccessfully; a successful run ends with `All input and menu tests passed.` The separate format command checks the test project.
+The verification script checks repository hygiene, formatting, analyzers, the Release build, and every submitted headless feature suite: player states and sprites, enemies/NPCs/projectiles, and input/menu behavior.
 
-> 验证脚本检查仓库整洁度、主项目格式、分析器和 Release 构建。测试程序执行 25 项断言，覆盖按下／长按／松开、Shift 组合键、未绑定键、同时按键和菜单切换。断言失败时返回失败状态；成功时最后显示 `All input and menu tests passed.`。最后一条命令检查测试项目格式。
+> 验证脚本检查仓库整洁度、格式、分析器、Release 构建，以及已提交的玩家状态和精灵、敌人／NPC／投射物和输入／菜单无窗口测试。
 
-The existing GitHub Actions workflow runs `./scripts/verify.sh` for pull requests targeting `main` and pushes to `main`. It does not currently run the separate input/menu executable or its formatting check; run and report both explicitly. These tests cover dispatch and state gating, while the actual keyboard bindings, visual layout, and all gameplay controls still require the manual checks in the acceptance checklist.
+GitHub Actions runs the same `./scripts/verify.sh` command for pull requests targeting `main` and pushes to `main`. Actual keyboard bindings and visual layout still require the manual checks in the acceptance checklists.
 
-> 现有 GitHub Actions 会在目标为 `main` 的 PR 和推送到 `main` 时运行 `./scripts/verify.sh`。目前不会自动执行独立的输入／菜单测试及其格式检查，需单独运行并记录结果。自动化测试覆盖命令分发和状态限制；实际按键绑定、画面布局以及全部游戏操作仍需按验收检查表人工确认。
+> GitHub Actions 会在目标为 `main` 的 PR 和推送到 `main` 时运行同一个 `./scripts/verify.sh`。实际键盘绑定与画面布局仍需按验收清单人工检查。
