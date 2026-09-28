@@ -1,0 +1,42 @@
+{
+  "asset": "moss-scout.png",
+  "sha256": "1db3e043ae4922222a5f9862d3c746446e2d963f6a18032dd653ceb5ff2720ca",
+  "size": [
+    160,
+    640
+  ],
+  "cellSize": 40,
+  "bodyOrigin": [
+    13,
+    11
+  ],
+  "scale": 2,
+  "directions": [
+    "Down",
+    "Left",
+    "Right",
+    "Up"
+  ],
+  "animations": {
+    "Idle": {
+      "frames": 2,
+      "seconds": 0.45,
+      "loop": true
+    },
+    "Walking": {
+      "frames": 4,
+      "seconds": 0.1,
+      "loop": true
+    },
+    "Attacking": {
+      "frames": 3,
+      "seconds": 0.09,
+      "loop": false
+    },
+    "Damaged": {
+      "frames": 2,
+      "seconds": 0.075,
+      "loop": true
+    }
+  }
+}
