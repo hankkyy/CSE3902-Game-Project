@@ -1,4 +1,5 @@
 using GameProject.Core;
+using GameProject.Objects.Items;
 using GameProject.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,25 +10,23 @@ public enum ItemKind { Heart, Rupee, Key, Bomb }
 
 public sealed class ItemObject : IGameObject
 {
-    private readonly Vector2 startPosition;
-    private readonly ISprite sprite;
-    private double elapsed;
+    private readonly IGameObject item;
 
     public ItemObject(string name, Vector2 position, ItemKind kind, SpriteFactory sprites)
     {
         Name = name;
-        startPosition = position;
-        sprite = sprites.CreateItemSprite(kind);
+        ISprite sprite = sprites.CreateItemSprite(kind);
+        item = kind switch
+        {
+            ItemKind.Heart => new HeartItem(position, sprite),
+            ItemKind.Rupee => new RupeeItem(position, sprite),
+            ItemKind.Key => new KeyItem(position, sprite),
+            _ => new BombItem(position, sprite)
+        };
     }
 
     public string Name { get; }
-    public void Update(GameTime gameTime) => elapsed += gameTime.ElapsedGameTime.TotalSeconds;
-
-    public void Draw(SpriteBatch spriteBatch)
-    {
-        Vector2 bobbed = startPosition + new Vector2(0, (float)Math.Sin(elapsed * 4) * 7);
-        sprite.Draw(spriteBatch, bobbed, Direction.Down, ((int)(elapsed * 6) % 2) == 1);
-    }
-
-    public void Reset() => elapsed = 0;
+    public void Update(GameTime gameTime) => item.Update(gameTime);
+    public void Draw(SpriteBatch spriteBatch) => item.Draw(spriteBatch);
+    public void Reset() => item.Reset();
 }

@@ -1,4 +1,5 @@
 using GameProject.Core;
+using GameProject.Objects.Blocks;
 using GameProject.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,18 +10,23 @@ public enum BlockKind { Stone, Push, Water, Statue }
 
 public sealed class BlockObject : IGameObject
 {
-    private readonly Vector2 position;
-    private readonly ISprite sprite;
+    private readonly IGameObject block;
 
     public BlockObject(string name, Vector2 position, BlockKind kind, SpriteFactory sprites)
     {
         Name = name;
-        this.position = position;
-        sprite = sprites.CreateBlockSprite(kind);
+        ISprite sprite = sprites.CreateBlockSprite(kind);
+        block = kind switch
+        {
+            BlockKind.Stone => new StoneBlock(position, sprite),
+            BlockKind.Push => new PushBlock(position, sprite),
+            BlockKind.Water => new WaterTile(position, sprite),
+            _ => new StatueBlock(position, sprite)
+        };
     }
 
     public string Name { get; }
-    public void Update(GameTime gameTime) { }
-    public void Draw(SpriteBatch spriteBatch) => sprite.Draw(spriteBatch, position, Direction.Down, false);
-    public void Reset() { }
+    public void Update(GameTime gameTime) => block.Update(gameTime);
+    public void Draw(SpriteBatch spriteBatch) => block.Draw(spriteBatch);
+    public void Reset() => block.Reset();
 }
