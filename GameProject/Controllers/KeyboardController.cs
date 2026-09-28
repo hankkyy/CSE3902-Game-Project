@@ -22,21 +22,21 @@ public sealed class KeyboardController
         this.player = player;
         pressedCommands = new Dictionary<Keys, ICommand>
         {
-            [Keys.Z] = new ActionCommand(player.Attack),
-            [Keys.N] = new ActionCommand(player.Attack),
-            [Keys.D1] = new ActionCommand(() => player.SelectItem(1)),
-            [Keys.D2] = new ActionCommand(() => player.SelectItem(2)),
-            [Keys.D3] = new ActionCommand(() => player.SelectItem(3)),
-            [Keys.E] = new ActionCommand(player.TakeDamage),
-            [Keys.T] = new ActionCommand(previousBlock),
-            [Keys.Y] = new ActionCommand(nextBlock),
-            [Keys.U] = new ActionCommand(previousItem),
-            [Keys.I] = new ActionCommand(nextItem),
-            [Keys.O] = new ActionCommand(previousEnemy),
-            [Keys.P] = new ActionCommand(nextEnemy),
-            [Keys.R] = new ActionCommand(reset),
-            [Keys.Q] = new ActionCommand(quit),
-            [Keys.Escape] = new ActionCommand(quit)
+            [Keys.Z] = new AttackCommand(player),
+            [Keys.N] = new AttackCommand(player),
+            [Keys.D1] = new SelectItemCommand(player, 1),
+            [Keys.D2] = new SelectItemCommand(player, 2),
+            [Keys.D3] = new SelectItemCommand(player, 3),
+            [Keys.E] = new TakeDamageCommand(player),
+            [Keys.T] = new PreviousGalleryCommand(previousBlock),
+            [Keys.Y] = new NextGalleryCommand(nextBlock),
+            [Keys.U] = new PreviousGalleryCommand(previousItem),
+            [Keys.I] = new NextGalleryCommand(nextItem),
+            [Keys.O] = new PreviousGalleryCommand(previousEnemy),
+            [Keys.P] = new NextGalleryCommand(nextEnemy),
+            [Keys.R] = new ResetGameCommand(reset),
+            [Keys.Q] = new QuitGameCommand(quit),
+            [Keys.Escape] = new QuitGameCommand(quit)
         };
     }
 
