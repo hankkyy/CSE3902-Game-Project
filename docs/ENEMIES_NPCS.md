@@ -23,7 +23,16 @@ The headless executable checks movement and shot bounds over 120 seconds,
 NPC immobility, animation, split-frame equivalence, projectile cooldown,
 reset, draw purity and gallery wrapping without a graphics device.
 
-## Manual checks (still require visual verification)
+## Visual evidence
+
+The Release game was launched successfully. The screenshot below shows the
+Octorok and its enemy-owned projectile inside the gallery panel. Automated
+desktop key input did not reliably reach MonoGame, so O/P and R gameplay checks
+remain pending; headless tests cover the underlying gallery and reset behavior.
+
+![Running gallery with Octorok and projectile](enemies-octorok.png)
+
+## Manual checks (keyboard interaction still requires verification)
 1. Run dotnet run --project GameProject/GameProject.csproj.
 2. Wait two seconds on Octorok: verify horizontal patrol and a visible shot.
    Watch shots disappear before leaving the lower gallery panel.
@@ -35,4 +44,3 @@ reset, draw purity and gallery wrapping without a graphics device.
 6. Confirm arrows/WASD, other galleries and Q still work.
 7. Capture a screenshot/GIF for review; these visual checks are not claimed
    as completed by the automated test.
-
