@@ -40,22 +40,13 @@ Launch with `dotnet run --project GameProject/GameProject.csproj`.
 - [ ] Test Q and Escape in separate runs, both in the menu and gameplay.
 - [ ] HUD labels, gallery names, and bottom controls are visible without overlap or clipping. Preserve a menu screenshot and a gameplay screenshot.
 
-The current scaffold uses geometric placeholder sprites and does not implement combat collisions. Use HUD state and the short movement pause to verify attacks; do not expect enemies in the separate gallery to take damage.
+The integrated player uses an animated atlas, while the other galleries still use geometric placeholder sprites. Verify the sword attack clip as well as HUD state. Combat collisions are not implemented; enemies in the separate gallery do not take damage.
 
 ## CI coverage and integration
 
-The existing `.github/workflows/build.yml` runs `./scripts/verify.sh` on PRs targeting `main` and pushes to `main`. The separate test executable and test formatting are currently local checks, so a green existing CI job alone does not demonstrate that those checks ran.
+On the integration branch, `scripts/verify.sh` runs the Release build plus formatting and execution of all five headless test projects: player states, player sprites, enemies, input/menu, and items/blocks. The standalone input commands above remain useful for focused debugging.
 
-A future CI update can run these additional steps after repository verification:
-
-```yaml
-- name: Verify input and menu behavior
-  run: dotnet run --project tests/InputTests/InputTests.csproj --configuration Release
-- name: Verify input test formatting
-  run: dotnet format tests/InputTests/InputTests.csproj --no-restore --verify-no-changes
-```
-
-Keep existing verification enabled. Coordinate changes to shared CI configuration with the integrator; this task's documentation does not claim that the additional steps have already been installed.
+The existing `.github/workflows/build.yml` invokes this script for PRs targeting `main` and pushes to `main`. Pushing the integration branch alone does not trigger this workflow. A prior feature-branch CI result is not evidence that the later integrated commit passed; check the intended commit's run and retain the manual checks below.
 
 ## Before review and release
 

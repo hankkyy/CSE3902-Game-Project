@@ -2,9 +2,9 @@
 
 > # CSE 3902 游戏项目 — Sprint 2
 
-A MonoGame functionality gallery for Sprint 2 (Game Objects and Sprites). The integrated build includes an original CC0 player atlas, dedicated player/enemy behaviors, a start menu, and an on-screen gameplay HUD. Dedicated item/block implementations remain assigned but unsubmitted.
+A MonoGame functionality gallery for Sprint 2 (Game Objects and Sprites). The integrated build includes an original CC0 player atlas, dedicated player/enemy behaviors, a start menu, and an on-screen gameplay HUD. Dedicated item/block implementations and their gallery/reset tests are also integrated; their visuals still use placeholders.
 
-> 这是 Sprint 2（游戏对象与精灵）的 MonoGame 功能展示项目。集成版本包含原创 CC0 玩家图集、独立玩家／敌人行为、开始菜单和游戏 HUD；独立物品／方块实现仍未提交。
+> 这是 Sprint 2（游戏对象与精灵）的 MonoGame 功能展示项目。集成版本包含原创 CC0 玩家图集、独立玩家／敌人行为、开始菜单和游戏 HUD；独立物品／方块类及展示切换、重置测试也已整合，相关外观仍为占位图。
 
 ## Functionality check-in status
 
@@ -22,13 +22,13 @@ The current build provides:
 
 > - 使用 `Z` 或 `N` 攻击，使用 `E` 进入受伤状态，使用 `1`–`3` 选择物品。
 
-- Stationary block gallery cycled with `T` and `Y`.
+- Dedicated Stone, Push, Water, and Statue block classes, cycled with `T` and `Y`; all remain stationary.
 
-> - 使用 `T` 和 `Y` 循环切换静止方块。
+> - 石块、推块、水块和雕像使用独立类；使用 `T` 和 `Y` 循环切换，全部保持静止。
 
-- Animated item gallery cycled with `U` and `I`.
+- Dedicated Heart, Rupee, Key, and Bomb item classes with time-based in-place preview animation, cycled with `U` and `I`.
 
-> - 使用 `U` 和 `I` 循环切换带动画的物品。
+> - 心、卢比、钥匙和炸弹使用独立类，按时间播放原地预览动画；使用 `U` 和 `I` 循环切换。
 
 - Independently moving and animated enemy/NPC gallery cycled with `O` and `P`.
 
@@ -54,9 +54,9 @@ The current build provides:
 
 > - 使用 Command、Factory Method 以及对象和精灵接口分离职责。
 
-This is the completed Sprint 2 functionality gallery, not the final dungeon. The five assignments and their integration boundaries are recorded in [the Sprint 2 task plan](docs/SPRINT2_TASKS.md).
+This integrates all five submitted feature scopes into a Sprint 2 functionality gallery. Remaining functionality and visual limitations are listed below; it is not a finished dungeon. The five assignments and their integration boundaries are recorded in [the Sprint 2 task plan](docs/SPRINT2_TASKS.md).
 
-> 这是完成后的 Sprint 2 功能展示，并不是最终地牢。五项分工及集成边界记录在 [Sprint 2 五人任务计划](docs/SPRINT2_TASKS.md) 中。
+> 这里整合了五个已提交功能分支，形成 Sprint 2 功能展示。尚未完成的功能和视觉限制列在下方；这并不是完成的地牢。五项分工及集成边界记录在 [Sprint 2 五人任务计划](docs/SPRINT2_TASKS.md) 中。
 
 ## Requirements and setup
 
@@ -278,9 +278,13 @@ Read AGENTS.md, docs/ARCHITECTURE_CONTRACT.md, and the task file matching this b
 
 > - 对象展示区只用于独立演示行为；碰撞、房间切换、背包 UI、音效和完整地牢不属于本次 check-in 骨架范围。
 
-- Enemy and item motion is deterministic; Octorok projectiles are demonstrations and do not interact with other objects during Sprint 2.
+- Enemy movement and item animation are deterministic; Octorok projectiles are demonstrations and do not interact with other objects during Sprint 2.
 
-> - 敌人与物品运动是确定性的；Octorok 投射物仅用于演示，在 Sprint 2 中不与其他对象交互。
+> - 敌人运动和物品动画是确定性的；Octorok 投射物仅用于演示，在 Sprint 2 中不与其他对象交互。
+
+- Number keys currently select an item slot; they do not demonstrate using a secondary item. Final recognizable item/block/enemy artwork and item-specific animation remain incomplete. See [items/blocks notes](docs/ITEMS_BLOCKS.md).
+
+> - 数字键目前只选择物品槽，没有演示副物品使用。物品／方块／敌人的最终可辨认外观和物品专属动画仍未完成，详见[物品／方块说明](docs/ITEMS_BLOCKS.md)。
 
 - Menu and HUD text use a small built-in pixel alphabet. It supports English letters, digits, and the punctuation used by the controls; it is not a general-purpose localized font.
 
@@ -326,9 +330,9 @@ Run the integrated verification command from the repository root before submitti
 bash scripts/verify.sh
 ```
 
-The verification script checks repository hygiene, formatting, analyzers, the Release build, and every submitted headless feature suite: player states and sprites, enemies/NPCs/projectiles, and input/menu behavior.
+The verification script checks repository hygiene, formatting, analyzers, the Release build, and every submitted headless feature suite: player states and sprites, enemies/NPCs/projectiles, input/menu behavior, and items/blocks/gallery reset.
 
-> 验证脚本检查仓库整洁度、格式、分析器、Release 构建，以及已提交的玩家状态和精灵、敌人／NPC／投射物和输入／菜单无窗口测试。
+> 验证脚本检查仓库整洁度、格式、分析器、Release 构建，以及玩家状态、精灵、敌人／NPC／投射物、输入／菜单、物品／方块／展示重置五组无窗口测试。
 
 GitHub Actions runs the same `./scripts/verify.sh` command for pull requests targeting `main` and pushes to `main`. Actual keyboard bindings and visual layout still require the manual checks in the acceptance checklists.
 
