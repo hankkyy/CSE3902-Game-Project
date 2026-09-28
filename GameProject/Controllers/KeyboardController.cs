@@ -9,8 +9,7 @@ namespace GameProject.Controllers;
 public sealed class KeyboardController
 {
     private readonly Player player;
-    private readonly Dictionary<Keys, ICommand> pressedCommands;
-    private KeyboardState previousState;
+    private readonly KeyPressDispatcher keyPressDispatcher;
 
     public KeyboardController(
         Player player,
@@ -20,7 +19,7 @@ public sealed class KeyboardController
         Action reset, Action quit)
     {
         this.player = player;
-        pressedCommands = new Dictionary<Keys, ICommand>
+        Dictionary<Keys, ICommand> pressedCommands = new()
         {
             [Keys.Z] = new AttackCommand(player),
             [Keys.N] = new AttackCommand(player),
@@ -38,6 +37,7 @@ public sealed class KeyboardController
             [Keys.Q] = new QuitGameCommand(quit),
             [Keys.Escape] = new QuitGameCommand(quit)
         };
+        keyPressDispatcher = new KeyPressDispatcher(pressedCommands);
     }
 
     public void Update()
@@ -50,10 +50,6 @@ public sealed class KeyboardController
         if (current.IsKeyDown(Keys.Down) || current.IsKeyDown(Keys.S)) movement.Y += 1;
         player.SetMovement(movement);
 
-        foreach ((Keys key, ICommand command) in pressedCommands)
-        {
-            if (current.IsKeyDown(key) && previousState.IsKeyUp(key)) command.Execute();
-        }
-        previousState = current;
+        keyPressDispatcher.Update(current);
     }
 }
