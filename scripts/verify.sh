@@ -4,9 +4,14 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
-if git ls-files | grep -E '(^|/)(bin|obj)/|\.user$|\.suo$|^\.vs/' >/dev/null; then
-  echo "Generated build or IDE files are tracked. Remove them before merging." >&2
-  exit 1
+inside_git=false
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  inside_git=true
+
+  if git ls-files | grep -E '(^|/)(bin|obj)/|\.user$|\.suo$|^\.vs/' >/dev/null; then
+    echo "Generated build or IDE files are tracked. Remove them before merging." >&2
+    exit 1
+  fi
 fi
 
 dotnet restore GameProject/GameProject.csproj
@@ -27,6 +32,8 @@ for project in "${test_projects[@]}"; do
   dotnet run --project "$project" --configuration Release --no-restore
 done
 
-git diff --check
+if [[ "$inside_git" == true ]]; then
+  git diff --check
+fi
 
 echo "Verification passed: hygiene, format, analyzers, Release build, and all headless tests."
