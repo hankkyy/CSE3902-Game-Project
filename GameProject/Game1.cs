@@ -2,6 +2,8 @@ using GameProject.Controllers;
 using GameProject.Core;
 using GameProject.Objects;
 using GameProject.Sprites;
+using GameProject.States;
+using GameProject.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,6 +13,8 @@ namespace GameProject;
 public sealed class Game1 : Game
 {
     private readonly GraphicsDeviceManager graphics;
+    private readonly GameSession session = new();
+    private StartMenu? startMenu;
     private SpriteBatch? spriteBatch;
     private SpriteFactory? spriteFactory;
     private Player? player;
@@ -35,6 +39,7 @@ public sealed class Game1 : Game
     {
         spriteBatch = new SpriteBatch(GraphicsDevice);
         spriteFactory = new SpriteFactory(GraphicsDevice);
+        startMenu = new StartMenu(spriteFactory);
         CreateDemoObjects();
         base.LoadContent();
     }
@@ -73,7 +78,7 @@ public sealed class Game1 : Game
             () => blocks.Previous(), () => blocks.Next(),
             () => items.Previous(), () => items.Next(),
             () => enemies.Previous(), () => enemies.Next(),
-            ResetDemo, Exit);
+            ResetDemo, Exit, session);
     }
 
     private void ResetDemo()
@@ -87,10 +92,14 @@ public sealed class Game1 : Game
     protected override void Update(GameTime gameTime)
     {
         keyboard?.Update();
-        player?.Update(gameTime);
-        blocks?.Current.Update(gameTime);
-        items?.Current.Update(gameTime);
-        enemies?.Current.Update(gameTime);
+        if (session.Mode == GameMode.Playing)
+        {
+            player?.Update(gameTime);
+            blocks?.Current.Update(gameTime);
+            items?.Current.Update(gameTime);
+            enemies?.Current.Update(gameTime);
+        }
+
         base.Update(gameTime);
     }
 
@@ -103,6 +112,23 @@ public sealed class Game1 : Game
         }
 
         spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+        if (session.Mode == GameMode.Menu)
+        {
+            startMenu?.Draw(spriteBatch, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+        }
+        else
+        {
+            DrawGameplay(spriteBatch);
+        }
+
+        spriteBatch.End();
+        base.Draw(gameTime);
+    }
+
+    private void DrawGameplay(SpriteBatch spriteBatch)
+    {
+        if (spriteFactory is null) return;
+
         spriteFactory.DrawPanel(spriteBatch, new Rectangle(16, 58, 576, 452), new Color(43, 78, 59));
         spriteFactory.DrawPanel(spriteBatch, new Rectangle(616, 58, 328, 452), new Color(34, 47, 64));
         player?.Draw(spriteBatch);
@@ -110,8 +136,6 @@ public sealed class Game1 : Game
         items?.Current.Draw(spriteBatch);
         enemies?.Current.Draw(spriteBatch);
         DrawGalleryIndicators(spriteBatch);
-        spriteBatch.End();
-        base.Draw(gameTime);
     }
 
     private void DrawGalleryIndicators(SpriteBatch batch)
