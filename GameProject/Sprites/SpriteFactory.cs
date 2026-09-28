@@ -8,15 +8,20 @@ namespace GameProject.Sprites;
 public sealed class SpriteFactory
 {
     private readonly Texture2D pixel;
+    private readonly Texture2D playerAtlas;
 
     public SpriteFactory(GraphicsDevice graphicsDevice)
     {
         pixel = new Texture2D(graphicsDevice, 1, 1);
         pixel.SetData([Color.White]);
+        using MemoryStream stream = new(Convert.FromBase64String(PlayerSpriteAtlasData.PngBase64));
+        playerAtlas = Texture2D.FromStream(graphicsDevice, stream);
     }
 
-    public ISprite CreatePlayerSprite() =>
-        new PrimitiveSprite(pixel, new Color(50, 165, 83), new Color(229, 211, 118), new Point(28, 34));
+    public ISprite CreatePlayerSprite() => CreateAnimatedPlayerSprite();
+
+    /// <summary>Additive animation entry point for the player-state owner; existing calls remain valid.</summary>
+    public IAnimatedPlayerSprite CreateAnimatedPlayerSprite() => new PlayerSprite(playerAtlas);
 
     public ISprite CreateBlockSprite(BlockKind kind) => kind switch
     {
