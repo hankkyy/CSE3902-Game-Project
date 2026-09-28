@@ -10,15 +10,15 @@ A MonoGame functionality gallery for Sprint 2 (Game Objects and Sprites). The cu
 
 > **功能检查进度**
 
-The starter currently provides:
+The current build provides:
 
-> 当前项目骨架已经实现：
+> 当前版本已经实现：
 
 - Player movement with arrow keys or `WASD`, four facing directions, and walking animation.
 
 > - 使用方向键或 `WASD` 移动玩家，支持四个朝向和行走动画。
 
-- Sword attack with `Z` or `N`, damage state with `E`, and item selection with `1`–`3`.
+- Attack state with `Z` or `N`, damage state with `E`, and item selection with `1`–`3`.
 
 > - 使用 `Z` 或 `N` 攻击，使用 `E` 进入受伤状态，使用 `1`–`3` 选择物品。
 
@@ -37,6 +37,18 @@ The starter currently provides:
 - Reset with `R`; quit with `Q` or `Escape`.
 
 > - 使用 `R` 重置；使用 `Q` 或 `Escape` 退出。
+
+- A start menu entered with `Enter`, with `Q`/`Escape` available in both the menu and gameplay.
+
+> - 启动时显示菜单，按 `Enter` 进入游戏；菜单和游戏中都可以按 `Q`/`Escape` 退出。
+
+- On-screen health, item slot, action, facing direction, gallery names/indexes, and control instructions.
+
+> - 屏幕显示生命值、物品槽、角色动作、朝向、展示对象名称和序号，以及操作说明。
+
+- Typed discrete commands and 25 headless input/menu regression checks.
+
+> - 单次触发操作使用专门的命令类，并提供 25 项无需图形窗口的输入／菜单回归检查。
 
 - Command, Factory Method, and object/sprite interfaces for separation of concerns.
 
@@ -80,6 +92,14 @@ Visual Studio users can open `GameProject/GameProject.csproj` directly. VS Code 
 
 > **操作按键**
 
+### `Enter`
+
+Start gameplay from the menu. Gameplay controls are inactive until the game starts; a discrete key held in the menu must be released and pressed again to trigger in gameplay.
+
+> **`Enter`**
+>
+> 从开始菜单进入游戏。进入前，移动、攻击、受伤和切换操作不会改变游戏对象；在菜单中按住的单次触发按键，需要松开再按才能在游戏中触发。
+
 ### Arrow keys or `WASD`
 
 Move Link and change facing direction.
@@ -90,11 +110,11 @@ Move Link and change facing direction.
 
 ### `Z` or `N`
 
-Use the sword to attack.
+Trigger the existing attack state. The HUD briefly shows `ATTACKING`; the placeholder artwork does not yet show a sword swing.
 
 > **`Z` 或 `N`**
 >
-> 使用剑攻击。
+> 触发现有攻击状态。HUD 会短暂显示 `ATTACKING`；当前占位图还没有挥剑画面。
 
 ### `1`, `2`, or `3`
 
@@ -138,23 +158,23 @@ Show the previous or next enemy/NPC.
 
 ### `R`
 
-Reset all objects.
+Reset all objects during gameplay, including health, selected item, positions, timers, and gallery indexes. Gameplay stays active.
 
 > **`R`**
 >
-> 重置所有对象。
+> 游戏中重置对象的位置、生命、物品选择、计时器和展示列表序号，并继续停留在游戏画面。
 
 ### `Q` or `Escape`
 
-Quit the game.
+Quit from either the start menu or gameplay.
 
 > **`Q` 或 `Escape`**
 >
-> 退出游戏。
+> 从开始菜单或游戏画面退出。
 
-The top red bar represents player health. The gold bar represents the selected item slot. Dots in the right panel show the selected block, item, and enemy.
+The top HUD shows health, selected item slot, action, and facing direction. The red and gold bars visualize health and item selection. The right panel shows each gallery's name, current selection, count, and previous/next keys. The bottom row lists the gameplay controls.
 
-> 顶部红色条表示玩家生命值，金色条表示当前物品栏位，右侧面板中的圆点分别表示当前选择的方块、物品和敌人。
+> 顶部 HUD 显示生命值、物品槽、动作与朝向，红条和金条分别表示生命与物品选择。右侧显示每组对象的名称、当前序号、总数和切换键；底部显示游戏操作说明。
 
 ## Architecture
 
@@ -167,6 +187,8 @@ GameProject/
 ├── Core/           Shared object contracts, direction, gallery
 ├── Objects/        Player, blocks, items, enemies/NPCs
 ├── Sprites/        Drawing contract, placeholders, sprite factory
+├── States/         Menu-to-gameplay session state
+├── UI/             Start menu, pixel text, status HUD and help
 ├── Game1.cs        Composition root and game loop
 └── Program.cs      Application entry point
 ```
@@ -178,6 +200,8 @@ GameProject/
 ├── Core/           公共对象契约、方向和展示列表
 ├── Objects/        玩家、方块、物品、敌人与 NPC
 ├── Sprites/        绘制契约、占位精灵与精灵工厂
+├── States/         菜单与游戏中的会话状态
+├── UI/             开始菜单、像素文字、状态与操作说明
 ├── Game1.cs        组合入口与游戏循环
 └── Program.cs      程序入口
 ```
@@ -258,9 +282,9 @@ Read AGENTS.md, docs/ARCHITECTURE_CONTRACT.md, and the task file matching this b
 
 > - 当前敌人运动是确定性的，投射物功能已分配给敌人任务。
 
-- There is no on-screen font yet; this README is the current control reference.
+- Menu and HUD text use a small built-in pixel alphabet. It supports English letters, digits, and the punctuation used by the controls; it is not a general-purpose localized font.
 
-> - 当前还没有屏幕字体，本 README 是现阶段的操作说明。
+> - 菜单和 HUD 使用内置像素字形，支持英文字母、数字及操作说明所需符号；它不是通用的多语言字体。
 
 ## Documentation
 
@@ -286,10 +310,28 @@ Read AGENTS.md, docs/ARCHITECTURE_CONTRACT.md, and the task file matching this b
 
 > - [Sprint 回顾模板](docs/SPRINT2_REFLECTION_TEMPLATE.md)
 
+- [Input/menu/HUD acceptance and release checklist](docs/INPUT_QUALITY_CHECKLIST.md)
+
+> - [输入／菜单／HUD 验收与发布检查表](docs/INPUT_QUALITY_CHECKLIST.md)
+
 ## Current verification
 
 > **当前验证状态**
 
-`dotnet restore`, formatting, analyzers, and the Release build pass with zero warnings and zero errors. GitHub Actions runs the same `./scripts/verify.sh` command on every pull request and push to `main`.
+Run these commands from the repository root before submitting the input-quality branch:
 
-> `dotnet restore`、代码格式检查、analyzer 和 Release 构建均已通过，结果为零警告、零错误。GitHub Actions 会在每个 PR 和每次推送到 `main` 时运行同一个 `./scripts/verify.sh` 命令。
+> 提交 input-quality 分支前，在仓库根目录依次运行：
+
+```sh
+bash scripts/verify.sh
+dotnet run --project tests/InputTests/InputTests.csproj --configuration Release
+dotnet format tests/InputTests/InputTests.csproj --no-restore --verify-no-changes
+```
+
+The verification script checks repository hygiene, main-project formatting, analyzers, and the Release build. The test executable performs 25 assertions on press/hold/release behavior, Shift-modified input, unbound/simultaneous keys, and menu transitions. A failed assertion exits unsuccessfully; a successful run ends with `All input and menu tests passed.` The separate format command checks the test project.
+
+> 验证脚本检查仓库整洁度、主项目格式、分析器和 Release 构建。测试程序执行 25 项断言，覆盖按下／长按／松开、Shift 组合键、未绑定键、同时按键和菜单切换。断言失败时返回失败状态；成功时最后显示 `All input and menu tests passed.`。最后一条命令检查测试项目格式。
+
+The existing GitHub Actions workflow runs `./scripts/verify.sh` for pull requests targeting `main` and pushes to `main`. It does not currently run the separate input/menu executable or its formatting check; run and report both explicitly. These tests cover dispatch and state gating, while the actual keyboard bindings, visual layout, and all gameplay controls still require the manual checks in the acceptance checklist.
+
+> 现有 GitHub Actions 会在目标为 `main` 的 PR 和推送到 `main` 时运行 `./scripts/verify.sh`。目前不会自动执行独立的输入／菜单测试及其格式检查，需单独运行并记录结果。自动化测试覆盖命令分发和状态限制；实际按键绑定、画面布局以及全部游戏操作仍需按验收检查表人工确认。
