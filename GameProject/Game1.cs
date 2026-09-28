@@ -15,6 +15,7 @@ public sealed class Game1 : Game
     private readonly GraphicsDeviceManager graphics;
     private readonly GameSession session = new();
     private StartMenu? startMenu;
+    private GameHud? hud;
     private SpriteBatch? spriteBatch;
     private SpriteFactory? spriteFactory;
     private Player? player;
@@ -40,6 +41,7 @@ public sealed class Game1 : Game
         spriteBatch = new SpriteBatch(GraphicsDevice);
         spriteFactory = new SpriteFactory(GraphicsDevice);
         startMenu = new StartMenu(spriteFactory);
+        hud = new GameHud(spriteFactory);
         CreateDemoObjects();
         base.LoadContent();
     }
@@ -127,40 +129,21 @@ public sealed class Game1 : Game
 
     private void DrawGameplay(SpriteBatch spriteBatch)
     {
-        if (spriteFactory is null) return;
-
-        spriteFactory.DrawPanel(spriteBatch, new Rectangle(16, 58, 576, 452), new Color(43, 78, 59));
-        spriteFactory.DrawPanel(spriteBatch, new Rectangle(616, 58, 328, 452), new Color(34, 47, 64));
-        player?.Draw(spriteBatch);
-        blocks?.Current.Draw(spriteBatch);
-        items?.Current.Draw(spriteBatch);
-        enemies?.Current.Draw(spriteBatch);
-        DrawGalleryIndicators(spriteBatch);
-    }
-
-    private void DrawGalleryIndicators(SpriteBatch batch)
-    {
-        if (spriteFactory is null || blocks is null || items is null || enemies is null || player is null)
+        if (hud is null || player is null || blocks is null || items is null || enemies is null)
         {
             return;
         }
 
-        spriteFactory.DrawPanel(batch, new Rectangle(28, 22, 160, 18), new Color(55, 28, 28));
-        spriteFactory.DrawPanel(batch, new Rectangle(30, 24, player.Health * 30, 14), Color.IndianRed);
-        spriteFactory.DrawPanel(batch, new Rectangle(216, 22, player.SelectedItem * 24, 18), Color.Gold);
-        DrawDots(batch, blocks, 650, 82, new Color(150, 170, 190));
-        DrawDots(batch, items, 650, 227, Color.Gold);
-        DrawDots(batch, enemies, 650, 377, Color.IndianRed);
+        hud.DrawBackground(spriteBatch);
+        player.Draw(spriteBatch);
+        blocks.Current.Draw(spriteBatch);
+        items.Current.Draw(spriteBatch);
+        enemies.Current.Draw(spriteBatch);
+        hud.Draw(spriteBatch,
+            new PlayerHudInfo(player.Health, player.SelectedItem, player.Action.ToString(), player.Facing.ToString()),
+            GetGalleryHudInfo(blocks), GetGalleryHudInfo(items), GetGalleryHudInfo(enemies));
     }
 
-    private void DrawDots<T>(SpriteBatch batch, ObjectGallery<T> gallery, int x, int y, Color color)
-        where T : IGameObject
-    {
-        if (spriteFactory is null) return;
-        for (int i = 0; i < gallery.Count; i++)
-        {
-            spriteFactory.DrawPanel(batch, new Rectangle(x + (i * 18), y, 12, 8),
-                i == gallery.Index ? color : new Color(75, 85, 95));
-        }
-    }
+    private static GalleryHudInfo GetGalleryHudInfo<T>(ObjectGallery<T> gallery) where T : IGameObject =>
+        new(gallery.Current.Name, gallery.Index, gallery.Count);
 }
