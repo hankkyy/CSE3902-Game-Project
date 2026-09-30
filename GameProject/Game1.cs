@@ -1,7 +1,10 @@
 using GameProject.Controllers;
 using GameProject.Core;
 using GameProject.Objects;
+using GameProject.Objects.Enemies;
 using GameProject.Sprites;
+using GameProject.States;
+using GameProject.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,12 +14,15 @@ namespace GameProject;
 public sealed class Game1 : Game
 {
     private readonly GraphicsDeviceManager graphics;
+    private readonly GameSession session = new();
+    private StartMenu? startMenu;
+    private GameHud? hud;
     private SpriteBatch? spriteBatch;
     private SpriteFactory? spriteFactory;
     private Player? player;
     private ObjectGallery<BlockObject>? blocks;
     private ObjectGallery<ItemObject>? items;
-    private ObjectGallery<EnemyObject>? enemies;
+    private ObjectGallery<EnemyDisplayPair>? enemies;
     private KeyboardController? keyboard;
 
     public Game1()
@@ -35,6 +41,8 @@ public sealed class Game1 : Game
     {
         spriteBatch = new SpriteBatch(GraphicsDevice);
         spriteFactory = new SpriteFactory(GraphicsDevice);
+        startMenu = new StartMenu(spriteFactory);
+        hud = new GameHud(spriteFactory);
         CreateDemoObjects();
         base.LoadContent();
     }
@@ -61,19 +69,24 @@ public sealed class Game1 : Game
             new("Key", new Vector2(700, 270), ItemKind.Key, spriteFactory),
             new("Bomb", new Vector2(700, 270), ItemKind.Bomb, spriteFactory)
         ]);
-        enemies = new ObjectGallery<EnemyObject>(
+        // Reserve room to the right for the Octorok's projectile as well as its patrol.
+        Vector2 playAreaEnemyPosition = new(370, 450);
+        EnemyDisplayPair CreateEnemyPair(string name, EnemyKind kind) => new(
+            new EnemyObject(name, new Vector2(700, 420), kind, spriteFactory),
+            new EnemyObject(name, playAreaEnemyPosition, kind, spriteFactory));
+        enemies = new ObjectGallery<EnemyDisplayPair>(
         [
-            new("Octorok", new Vector2(700, 420), EnemyKind.Octorok, spriteFactory),
-            new("Keese", new Vector2(700, 420), EnemyKind.Keese, spriteFactory),
-            new("Gel", new Vector2(700, 420), EnemyKind.Gel, spriteFactory),
-            new("Old Man", new Vector2(700, 420), EnemyKind.OldMan, spriteFactory)
+            CreateEnemyPair("Octorok", EnemyKind.Octorok),
+            CreateEnemyPair("Keese", EnemyKind.Keese),
+            CreateEnemyPair("Gel", EnemyKind.Gel),
+            CreateEnemyPair("Old Man", EnemyKind.OldMan)
         ]);
         keyboard = new KeyboardController(
             player,
             () => blocks.Previous(), () => blocks.Next(),
             () => items.Previous(), () => items.Next(),
             () => enemies.Previous(), () => enemies.Next(),
-            ResetDemo, Exit);
+            ResetDemo, Exit, session);
     }
 
     private void ResetDemo()
@@ -87,10 +100,14 @@ public sealed class Game1 : Game
     protected override void Update(GameTime gameTime)
     {
         keyboard?.Update();
-        player?.Update(gameTime);
-        blocks?.Current.Update(gameTime);
-        items?.Current.Update(gameTime);
-        enemies?.Current.Update(gameTime);
+        if (session.Mode == GameMode.Playing)
+        {
+            player?.Update(gameTime);
+            blocks?.Current.Update(gameTime);
+            items?.Current.Update(gameTime);
+            enemies?.Current.Update(gameTime);
+        }
+
         base.Update(gameTime);
     }
 
@@ -103,40 +120,36 @@ public sealed class Game1 : Game
         }
 
         spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-        spriteFactory.DrawPanel(spriteBatch, new Rectangle(16, 58, 576, 452), new Color(43, 78, 59));
-        spriteFactory.DrawPanel(spriteBatch, new Rectangle(616, 58, 328, 452), new Color(34, 47, 64));
-        player?.Draw(spriteBatch);
-        blocks?.Current.Draw(spriteBatch);
-        items?.Current.Draw(spriteBatch);
-        enemies?.Current.Draw(spriteBatch);
-        DrawGalleryIndicators(spriteBatch);
+        if (session.Mode == GameMode.Menu)
+        {
+            startMenu?.Draw(spriteBatch, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+        }
+        else
+        {
+            DrawGameplay(spriteBatch);
+        }
+
         spriteBatch.End();
         base.Draw(gameTime);
     }
 
-    private void DrawGalleryIndicators(SpriteBatch batch)
+    private void DrawGameplay(SpriteBatch spriteBatch)
     {
-        if (spriteFactory is null || blocks is null || items is null || enemies is null || player is null)
+        if (hud is null || player is null || blocks is null || items is null || enemies is null)
         {
             return;
         }
 
-        spriteFactory.DrawPanel(batch, new Rectangle(28, 22, 160, 18), new Color(55, 28, 28));
-        spriteFactory.DrawPanel(batch, new Rectangle(30, 24, player.Health * 30, 14), Color.IndianRed);
-        spriteFactory.DrawPanel(batch, new Rectangle(216, 22, player.SelectedItem * 24, 18), Color.Gold);
-        DrawDots(batch, blocks, 650, 82, new Color(150, 170, 190));
-        DrawDots(batch, items, 650, 227, Color.Gold);
-        DrawDots(batch, enemies, 650, 377, Color.IndianRed);
+        hud.DrawBackground(spriteBatch);
+        player.Draw(spriteBatch);
+        blocks.Current.Draw(spriteBatch);
+        items.Current.Draw(spriteBatch);
+        enemies.Current.Draw(spriteBatch);
+        hud.Draw(spriteBatch,
+            new PlayerHudInfo(player.Health, player.SelectedItem, player.Action.ToString(), player.Facing.ToString()),
+            GetGalleryHudInfo(blocks), GetGalleryHudInfo(items), GetGalleryHudInfo(enemies));
     }
 
-    private void DrawDots<T>(SpriteBatch batch, ObjectGallery<T> gallery, int x, int y, Color color)
-        where T : IGameObject
-    {
-        if (spriteFactory is null) return;
-        for (int i = 0; i < gallery.Count; i++)
-        {
-            spriteFactory.DrawPanel(batch, new Rectangle(x + (i * 18), y, 12, 8),
-                i == gallery.Index ? color : new Color(75, 85, 95));
-        }
-    }
+    private static GalleryHudInfo GetGalleryHudInfo<T>(ObjectGallery<T> gallery) where T : IGameObject =>
+        new(gallery.Current.Name, gallery.Index, gallery.Count);
 }

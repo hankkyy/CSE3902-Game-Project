@@ -12,9 +12,16 @@ Legend: **Done** is implemented in the scaffold; **Assigned** has an owner in th
 - [x] **Done:** item gallery with `U/I`, animation, and wraparound
 - [x] **Done:** enemy/NPC gallery with `O/P`, distinct movement, and animation
 - [x] **Done:** `Q` quit and `R` reset
-- [ ] **Assigned:** real sprite sheets and complete per-object animation clips
-- [ ] **Assigned:** dedicated class for each final dungeon object and enemy projectile behavior
-- [ ] **Assigned:** start/menu state (optional for five-person teams, included as polish)
+- [x] **Done:** original attributed player sprite sheet with four-direction idle/walk/attack/damage clips
+- [x] **Done:** dedicated block and item classes with gallery/reset tests integrated from `feature/items-blocks`
+- [ ] **Remaining:** final recognizable item/block/enemy artwork and item-specific animation
+- [ ] **Remaining:** visible secondary-item use; number keys currently select a slot only
+- [x] **Done:** dedicated player-state, enemy, NPC, and enemy-projectile classes
+- [x] **Done:** start/menu state; `Enter` starts gameplay and `Q`/`Escape` exit in either mode
+- [x] **Done:** typed discrete commands, on-screen controls/status HUD, and input/menu regression checks
+
+Input/menu/HUD release checks are tracked separately in [INPUT_QUALITY_CHECKLIST.md](INPUT_QUALITY_CHECKLIST.md).
+Enemy and player-sprite checks are documented in their feature guides. Item/block behavior and manual checks are documented in [ITEMS_BLOCKS.md](ITEMS_BLOCKS.md). The integration script runs all five submitted headless test projects.
 
 ## Process and documentation
 
@@ -31,9 +38,9 @@ Legend: **Done** is implemented in the scaffold; **Assigned** has an owner in th
 
 ## Check-in demo script
 
-1. Build and run the game.
+1. Build and run the game; confirm the start menu appears and press `Enter`.
 2. Move with arrows and `WASD`; show four directions and animation.
-3. Press `Z`/`N`, then `E`; show attack and damage/health.
+3. Press `Z`/`N`, then `E`; show `ATTACKING`/`DAMAGED` in the HUD and the health change.
 4. Press `1`, `2`, `3`; show the selected-item bar change.
 5. Cycle blocks with `T/Y`, items with `U/I`, and enemies with `O/P` in both directions.
 6. Leave an enemy/item visible long enough to show autonomous movement/animation.

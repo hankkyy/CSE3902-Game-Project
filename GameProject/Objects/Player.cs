@@ -1,4 +1,5 @@
 using GameProject.Core;
+using GameProject.Objects.PlayerStates;
 using GameProject.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,29 +15,40 @@ public sealed class Player : IGameObject
     private readonly Vector2 startPosition;
     private readonly Rectangle bounds;
     private readonly ISprite sprite;
+    private readonly PlayerStateMachine stateMachine = new();
     private Vector2 pendingDirection;
-    private double actionTimeRemaining;
-    private double animationTime;
+    private PlayerAction visualAction = PlayerAction.Idle;
+    private double visualActionTime;
 
     public Player(Vector2 position, Rectangle bounds, SpriteFactory sprites)
+        : this(position, bounds, sprites.CreatePlayerSprite())
+    {
+    }
+
+    /// <summary>Creates a player with an injected sprite for headless behavior verification.</summary>
+    public Player(Vector2 position, Rectangle bounds, ISprite sprite)
     {
         startPosition = position;
         this.bounds = bounds;
-        sprite = sprites.CreatePlayerSprite();
+        this.sprite = sprite;
         Position = position;
     }
 
     public string Name => "Link";
     public Vector2 Position { get; private set; }
     public Direction Facing { get; private set; } = Direction.Down;
-    public PlayerAction Action { get; private set; } = PlayerAction.Idle;
+    public PlayerAction Action => stateMachine.Action;
     public int Health { get; private set; } = 5;
     public int SelectedItem { get; private set; } = 1;
 
     public void SetMovement(Vector2 direction)
     {
         pendingDirection = direction;
-        if (direction == Vector2.Zero || Action is PlayerAction.Attacking or PlayerAction.Damaged) return;
+        if (direction == Vector2.Zero || !stateMachine.AllowsMovement)
+        {
+            return;
+        }
+
         Facing = Math.Abs(direction.X) > Math.Abs(direction.Y)
             ? (direction.X < 0 ? Direction.Left : Direction.Right)
             : (direction.Y < 0 ? Direction.Up : Direction.Down);
@@ -44,16 +56,21 @@ public sealed class Player : IGameObject
 
     public void Attack()
     {
-        if (Action == PlayerAction.Damaged) return;
-        Action = PlayerAction.Attacking;
-        actionTimeRemaining = 0.28;
+        if (stateMachine.TryAttack())
+        {
+            ResetVisualActionClock();
+        }
     }
 
     public void TakeDamage()
     {
+        if (!stateMachine.TryTakeDamage())
+        {
+            return;
+        }
+
+        ResetVisualActionClock();
         Health = Math.Max(0, Health - 1);
-        Action = PlayerAction.Damaged;
-        actionTimeRemaining = 0.45;
     }
 
     public void SelectItem(int slot) => SelectedItem = Math.Clamp(slot, 1, 3);
@@ -61,25 +78,21 @@ public sealed class Player : IGameObject
     public void Update(GameTime gameTime)
     {
         double seconds = gameTime.ElapsedGameTime.TotalSeconds;
-        animationTime += seconds;
-        if (actionTimeRemaining > 0)
+        visualActionTime += seconds;
+        bool wantsToMove = pendingDirection != Vector2.Zero;
+        stateMachine.Update(seconds, wantsToMove);
+        if (Action != visualAction)
         {
-            actionTimeRemaining -= seconds;
-            if (actionTimeRemaining <= 0) Action = PlayerAction.Idle;
+            ResetVisualActionClock();
         }
 
-        if (Action is not PlayerAction.Attacking and not PlayerAction.Damaged && pendingDirection != Vector2.Zero)
+        if (stateMachine.AllowsMovement && wantsToMove)
         {
             pendingDirection.Normalize();
             Position += pendingDirection * Speed * (float)seconds;
             Position = new Vector2(
                 MathHelper.Clamp(Position.X, bounds.Left, bounds.Right - 28),
                 MathHelper.Clamp(Position.Y, bounds.Top, bounds.Bottom - 34));
-            Action = PlayerAction.Walking;
-        }
-        else if (actionTimeRemaining <= 0)
-        {
-            Action = PlayerAction.Idle;
         }
 
         pendingDirection = Vector2.Zero;
@@ -87,19 +100,58 @@ public sealed class Player : IGameObject
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        bool alternate = ((int)(animationTime * 8) % 2) == 1;
+        bool alternate = ((int)(visualActionTime * 8) % 2) == 1;
         if (Action == PlayerAction.Damaged && alternate) return; // Damage flash.
-        sprite.Draw(spriteBatch, Position, Facing, alternate && Action != PlayerAction.Idle);
+
+        Vector2 drawPosition = Position + GetActionOffset();
+        if (sprite is IAnimatedPlayerSprite animatedSprite)
+        {
+            animatedSprite.Draw(spriteBatch, drawPosition, Facing, AnimationFor(Action), visualActionTime);
+            return;
+        }
+
+        sprite.Draw(spriteBatch, drawPosition, Facing, alternate && Action != PlayerAction.Idle);
+    }
+
+    private static PlayerSpriteAnimation AnimationFor(PlayerAction action) => action switch
+    {
+        PlayerAction.Walking => PlayerSpriteAnimation.Walking,
+        PlayerAction.Attacking => PlayerSpriteAnimation.Attacking,
+        PlayerAction.Damaged => PlayerSpriteAnimation.Damaged,
+        _ => PlayerSpriteAnimation.Idle
+    };
+
+    private void ResetVisualActionClock()
+    {
+        visualAction = Action;
+        visualActionTime = 0;
+    }
+
+    private Vector2 GetActionOffset()
+    {
+        if (Action != PlayerAction.Attacking)
+        {
+            return Vector2.Zero;
+        }
+
+        const float attackLungeDistance = 6f;
+        return Facing switch
+        {
+            Direction.Up => new Vector2(0, -attackLungeDistance),
+            Direction.Down => new Vector2(0, attackLungeDistance),
+            Direction.Left => new Vector2(-attackLungeDistance, 0),
+            _ => new Vector2(attackLungeDistance, 0)
+        };
     }
 
     public void Reset()
     {
         Position = startPosition;
         Facing = Direction.Down;
-        Action = PlayerAction.Idle;
         Health = 5;
         SelectedItem = 1;
-        actionTimeRemaining = 0;
-        animationTime = 0;
+        pendingDirection = Vector2.Zero;
+        stateMachine.Reset();
+        ResetVisualActionClock();
     }
 }
