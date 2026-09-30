@@ -1,6 +1,7 @@
 using GameProject.Controllers;
 using GameProject.Core;
 using GameProject.Objects;
+using GameProject.Objects.Enemies;
 using GameProject.Sprites;
 using GameProject.States;
 using GameProject.UI;
@@ -21,7 +22,7 @@ public sealed class Game1 : Game
     private Player? player;
     private ObjectGallery<BlockObject>? blocks;
     private ObjectGallery<ItemObject>? items;
-    private ObjectGallery<EnemyObject>? enemies;
+    private ObjectGallery<EnemyDisplayPair>? enemies;
     private KeyboardController? keyboard;
 
     public Game1()
@@ -68,12 +69,17 @@ public sealed class Game1 : Game
             new("Key", new Vector2(700, 270), ItemKind.Key, spriteFactory),
             new("Bomb", new Vector2(700, 270), ItemKind.Bomb, spriteFactory)
         ]);
-        enemies = new ObjectGallery<EnemyObject>(
+        // Reserve room to the right for the Octorok's projectile as well as its patrol.
+        Vector2 playAreaEnemyPosition = new(370, 450);
+        EnemyDisplayPair CreateEnemyPair(string name, EnemyKind kind) => new(
+            new EnemyObject(name, new Vector2(700, 420), kind, spriteFactory),
+            new EnemyObject(name, playAreaEnemyPosition, kind, spriteFactory));
+        enemies = new ObjectGallery<EnemyDisplayPair>(
         [
-            new("Octorok", new Vector2(700, 420), EnemyKind.Octorok, spriteFactory),
-            new("Keese", new Vector2(700, 420), EnemyKind.Keese, spriteFactory),
-            new("Gel", new Vector2(700, 420), EnemyKind.Gel, spriteFactory),
-            new("Old Man", new Vector2(700, 420), EnemyKind.OldMan, spriteFactory)
+            CreateEnemyPair("Octorok", EnemyKind.Octorok),
+            CreateEnemyPair("Keese", EnemyKind.Keese),
+            CreateEnemyPair("Gel", EnemyKind.Gel),
+            CreateEnemyPair("Old Man", EnemyKind.OldMan)
         ]);
         keyboard = new KeyboardController(
             player,

@@ -1,5 +1,20 @@
 # Enemy/NPC implementation (issue #10)
 
+## Main play-area integration
+
+Each selection now includes the side preview at (700,420) and a matching enemy
+in the lower-right play area at (370,450). Both share update timing, selection,
+animation and reset. O/P cycles both displays; R resets both, including shots.
+The main-area projectile stays within x=294..554, leaving space for its sprite
+inside the play area's right edge. Game1 composes the paired gallery without
+changing input mappings, menus, HUD or shared interfaces.
+
+Automated enemy tests cover matching movement, animation, projectile timing,
+both draw calls, wraparound, reset and main-area bounds. For a visual check,
+start the game, cycle O/P through all four characters, observe matching motion
+and shots in both panels, and press R during a shot and after changing selection.
+In-game visual verification of this addition remains pending.
+
 Branch: feature/enemies-npcs. Reviewer: @Lzzz-7.
 
 EnemyObject preserves the gallery constructor and delegates to Octorok, Keese,
