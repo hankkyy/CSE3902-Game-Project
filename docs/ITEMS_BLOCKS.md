@@ -40,5 +40,31 @@ reset of hidden items. It uses the existing project dependency, no new packages.
    revisit every item to confirm its animation restarts from the initial phase.
 5. Repeat R and confirm no drift. Verify the player/enemy controls still work.
 
-Visual acceptance and final recognizable artwork remain pending. Before a PR,
-attach a screenshot/GIF, record manual results, and request reviewer @xing-gif.
+## Manual acceptance results — 2026-10-01
+
+The items/blocks owner (`@Lzzz-7`) reported completing manual acceptance with
+no issues. These are user-reported results, not an automated UI test.
+
+| Check | Result |
+|---|---|
+| T/Y select the previous/next block | Passed |
+| U/I select the previous/next item | Passed |
+| Both galleries wrap from first to last and last to first | Passed |
+| Blocks remain stationary and non-interacting | Passed |
+| All four items display the in-place placeholder animation | Passed |
+| R restores the initial gallery selections and restarts the preview | Passed |
+
+The owner observed approximately two to three flashes per second, consistent
+with the placeholder animation. Exact animation-phase reset and resetting hidden
+items are covered by the headless tests; manual observation does not measure
+those timings precisely.
+
+When this record was added, the checked-out branch was `feature/items-blocks`
+at `6276325016f67c6ada8be5a02f79e9baa4203267`. This identifies the documentation
+baseline; the exact commit used for the owner's manual run was not separately
+captured.
+
+This acceptance covers the requested functionality-only version. Final artwork
+and reference-game visual fidelity remain outside this pass. No screenshot/GIF
+is attached to this record yet. Request reviewer `@xing-gif` for the PR; this
+manual acceptance record does not constitute code-review approval.
