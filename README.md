@@ -246,16 +246,13 @@ Project records:
 - [Sprint 2 reflection](docs/SPRINT2_REFLECTION.md)
 - [Project task board](https://github.com/users/hankkyy/projects/4)
 
-## 10. Assets and Attribution
+## 10. Game Artwork
 
-The player uses the original Moss Scout atlas. Gallery objects and player
-item effects use original procedural pixel artwork.
+We use the Moss Scout sprite sheet for the player.
+Other objects and item effects use simple pixel art drawn through code.
 
-Asset provenance and applicable license information are documented in:
+More details about the artwork and licenses:
 
-- [Player sprite attribution](docs/assets/PLAYER_SPRITES.md)
+- [Player sprites](docs/assets/PLAYER_SPRITES.md)
 - [Starlight Ruins artwork](docs/assets/STARLIGHT_RUINS.md)
-- [Baseline gallery artwork](docs/assets/SIMPLE_GALLERY_ART.md)
-
-These asset-specific statements do not relicense the entire repository
-or its dependencies.
+- [Basic gallery artwork](docs/assets/SIMPLE_GALLERY_ART.md)
