@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject.Objects;
 
-public enum ItemKind { Heart, Rupee, Key, Bomb }
+public enum ItemKind { Heart, Rupee, Key, Bomb, Bow, Boomerang, Map, Compass, StarShard }
 
 /// <summary>Compatibility entry point that delegates to a dedicated item implementation.</summary>
 public sealed class ItemObject : IGameObject
@@ -26,6 +26,11 @@ public sealed class ItemObject : IGameObject
             ItemKind.Rupee => new RupeeItem(name, position, sprite),
             ItemKind.Key => new KeyItem(name, position, sprite),
             ItemKind.Bomb => new BombItem(name, position, sprite),
+            ItemKind.Bow => new BowItem(name, position, sprite),
+            ItemKind.Boomerang => new BoomerangItem(name, position, sprite),
+            ItemKind.Map => new MapItem(name, position, sprite),
+            ItemKind.Compass => new CompassItem(name, position, sprite),
+            ItemKind.StarShard => new StarShardItem(name, position, sprite),
             _ => throw new ArgumentOutOfRangeException(nameof(kind))
         };
     }

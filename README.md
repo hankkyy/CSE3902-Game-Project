@@ -2,13 +2,15 @@
 
 > # CSE 3902 游戏项目 — Sprint 2
 
-A MonoGame functionality gallery for Sprint 2 (Game Objects and Sprites). The integrated build includes an original CC0 player atlas, dedicated player/enemy behaviors, a start menu, and an on-screen gameplay HUD. Dedicated item/block implementations and their gallery/reset tests are also integrated; their visuals still use placeholders.
+A MonoGame functionality gallery for Sprint 2 (Game Objects and Sprites). The integrated build includes an original CC0 player atlas, dedicated player/enemy behaviors, a start menu, and an on-screen gameplay HUD. Dedicated item/block implementations and their gallery/reset tests are also integrated; their visuals now use simple original pixel motifs.
 
 > 这是 Sprint 2（游戏对象与精灵）的 MonoGame 功能展示项目。集成版本包含原创 CC0 玩家图集、独立玩家／敌人行为、开始菜单和游戏 HUD；独立物品／方块类及展示切换、重置测试也已整合，相关外观仍为占位图。
 
-## Functionality check-in status
+## Sprint 2 implementation status
 
 > **功能检查进度**
+
+The current build uses an original extension theme, **Starlight Ruins**, while retaining the existing course scaffold and player controls. The selected mini-dungeon roster contains **6 blocks, 9 gallery items, and 7 enemies/NPCs**. See [the roster and planned room roles](docs/STARLIGHT_RUINS_ROSTER.md). These counts are our design choices, not a numeric grading threshold.
 
 The current build provides:
 
@@ -18,21 +20,21 @@ The current build provides:
 
 > - 使用方向键或 `WASD` 移动玩家，支持四个朝向和行走动画。
 
-- Attack state with `Z` or `N`, damage state with `E`, and item selection with `1`–`3`.
+- Attack state with `Z` or `N`, damage state with `E`, three usable items: `1` fires an arrow, `2` throws a returning boomerang, and `3` places a timed bomb.
 
-> - 使用 `Z` 或 `N` 攻击，使用 `E` 进入受伤状态，使用 `1`–`3` 选择物品。
+> - 使用 `Z` 或 `N` 攻击，使用 `E` 进入受伤状态，使用 `1` 射箭、`2` 投掷回旋镖、`3` 放置定时炸弹。
 
-- Dedicated Stone, Push, Water, and Statue block classes, cycled with `T` and `Y`; all remain stationary.
+- Six dedicated block classes: Stone, Push, Water, Statue, Crystal Pillar, and Rune Tile. Cycle with `T`/`Y`; all remain stationary.
 
-> - 石块、推块、水块和雕像使用独立类；使用 `T` 和 `Y` 循环切换，全部保持静止。
+> - 石块、推块、水块、雕像、水晶柱、符文地砖共六种，均有独立类；使用 `T`/`Y` 循环切换，全部保持静止。
 
-- Dedicated Heart, Rupee, Key, and Bomb item classes with time-based in-place preview animation, cycled with `U` and `I`.
+- Nine gallery items: Heart, Rupee, Key, Bomb, Bow, Boomerang, Ruins Map, Star Compass, and Star Shard. Dedicated classes use elapsed-time preview animation and `U`/`I` cycling. Pickup previews are separate from using items with `1`/`2`/`3`.
 
-> - 心、卢比、钥匙和炸弹使用独立类，按时间播放原地预览动画；使用 `U` 和 `I` 循环切换。
+> - 心、卢比、钥匙、炸弹、弓、回旋镖、遗迹地图、星向指南针、星灯碎片共九种展示物品，有独立类与按时间更新的预览动画；`U`/`I` 切换，和 `1`/`2`/`3` 使用物品相互独立。
 
-- Independently moving and animated enemy/NPC gallery cycled with `O` and `P`.
+- Seven enemies/NPCs cycled with `O`/`P`: Octorok, Keese, Gel, Lantern Keeper (existing NPC), Rune Wisp, Clockwork Beetle, and Prism Sentinel. New behaviors include floating, a four-sided patrol, and stationary charging/light shots.
 
-> - 使用 `O` 和 `P` 循环切换能够独立移动和播放动画的敌人或 NPC。
+> - `O`/`P` 切换七种敌人／NPC；新增符光精灵浮游、机关甲虫矩形巡逻、棱晶守卫原地蓄能并发射光弹。守灯人复用原有 NPC 实现。
 
 - Reset with `R`; quit with `Q` or `Escape`.
 
@@ -118,11 +120,11 @@ Attack with the sword. The HUD briefly shows `ATTACKING`, and the directional at
 
 ### `1`, `2`, or `3`
 
-Select the secondary item slot.
+Press `1` to fire an arrow, `2` to throw a boomerang that returns to Link's current position, or `3` to place a bomb that explodes after 1.2 seconds. Each key selects and uses that item. One effect of each type may be active at a time; release and press again after it ends. New uses are blocked during sword attacks or damage. Item effects do not collide with or damage other objects. See [arrow checks](docs/PLAYER_ARROW.md) and [boomerang/bomb checks](docs/PLAYER_SECONDARY_ITEMS.md).
 
 > **`1`、`2` 或 `3`**
 >
-> 选择副物品栏位。
+> 按 `1` 射箭，`2` 投掷返回玩家当前位置的回旋镖，`3` 放置 1.2 秒后爆炸的炸弹。每个键同时选择并使用该物品；每种物品同时最多一个效果，结束后需松开再按。剑攻击和受伤期间禁止新使用。效果不碰撞、不伤害其他对象。详见[箭的检查](docs/PLAYER_ARROW.md)和[回旋镖／炸弹检查](docs/PLAYER_SECONDARY_ITEMS.md)。
 
 ### `E`
 
@@ -158,11 +160,11 @@ Show the previous or next enemy/NPC.
 
 ### `R`
 
-Reset all objects during gameplay, including health, selected item, positions, timers, and gallery indexes. Gameplay stays active.
+Reset all objects during gameplay, including health, selected item, positions, timers, gallery indexes, and all active player arrows, boomerangs, bombs, and explosions. Gameplay stays active.
 
 > **`R`**
 >
-> 游戏中重置对象的位置、生命、物品选择、计时器和展示列表序号，并继续停留在游戏画面。
+> 游戏中重置对象的位置、生命、物品选择、计时器和展示列表序号，同时清除玩家的箭、回旋镖、炸弹和爆炸效果，并继续停留在游戏画面。
 
 ### `Q` or `Escape`
 
@@ -270,21 +272,21 @@ Read AGENTS.md, docs/ARCHITECTURE_CONTRACT.md, and the task file matching this b
 
 > **已知限制**
 
-- The player uses an original CC0 atlas. Other gallery sprites remain simple generated primitives so no copyrighted game assets are committed.
+- The player uses the existing original CC0 atlas. The ten new roster objects use original procedural pixel motifs; the twelve older gallery sprites now also use simple original motifs, including two-frame enemy/item details. See [new roster art provenance](docs/assets/STARLIGHT_RUINS.md) and [baseline gallery art and manual checks](docs/assets/SIMPLE_GALLERY_ART.md). This is not final visual acceptance.
 
-> - 玩家使用原创 CC0 图集；其他展示对象仍使用简单生成图形，因此仓库中没有提交受版权保护的游戏素材。
+> - 玩家沿用原创 CC0 图集；十个新增对象使用原创程序绘制像素图形，旧展示对象仍使用占位图。详见[新增素材说明](docs/assets/STARLIGHT_RUINS.md)。这不代表最终视觉验收完成。
 
-- Object galleries demonstrate behaviors independently. Collision, room transitions, inventory UI, audio, and a complete dungeon are outside this check-in scaffold.
+- Object galleries demonstrate behaviors independently. Collision, room transitions, inventory UI, audio, and a complete dungeon are outside this Sprint 2 functionality demonstration.
 
-> - 对象展示区只用于独立演示行为；碰撞、房间切换、背包 UI、音效和完整地牢不属于本次 check-in 骨架范围。
+> - 对象展示区只用于独立演示行为；碰撞、房间切换、背包 UI、音效和完整地牢不属于当前 Sprint 2 功能展示范围。
 
 - Enemy movement and item animation are deterministic; Octorok projectiles are demonstrations and do not interact with other objects during Sprint 2.
 
 > - 敌人运动和物品动画是确定性的；Octorok 投射物仅用于演示，在 Sprint 2 中不与其他对象交互。
 
-- Number keys currently select an item slot; they do not demonstrate using a secondary item. Final recognizable item/block/enemy artwork and item-specific animation remain incomplete. See [items/blocks notes](docs/ITEMS_BLOCKS.md).
+- Numbers `1`/`2`/`3` demonstrate an arrow, boomerang, and bomb using original procedural sprites. They preserve the existing player poses; a dedicated item-use pose/state and inventory/ammunition rules are not implemented. This is not a declaration that the complete target-dungeon object roster is finished. Simple recognizable gallery motifs and two-frame details are now provided; final in-game visual acceptance remains to be performed. See [items/blocks notes](docs/ITEMS_BLOCKS.md).
 
-> - 数字键目前只选择物品槽，没有演示副物品使用。物品／方块／敌人的最终可辨认外观和物品专属动画仍未完成，详见[物品／方块说明](docs/ITEMS_BLOCKS.md)。
+> - 数字键 `1`/`2`/`3` 分别演示箭、回旋镖和炸弹，使用原创程序绘制图形，玩家沿用现有姿态；专门的使用物品姿态／状态、背包和弹药规则尚未实现。这不代表目标地牢的对象清单已全部完成。物品／方块／敌人的最终可辨认外观和物品专属动画仍未完成，详见[物品／方块说明](docs/ITEMS_BLOCKS.md)。
 
 - Menu and HUD text use a small built-in pixel alphabet. It supports English letters, digits, and the punctuation used by the controls; it is not a general-purpose localized font.
 
@@ -330,9 +332,9 @@ Run the integrated verification command from the repository root before submitti
 bash scripts/verify.sh
 ```
 
-The verification script checks repository hygiene, formatting, analyzers, the Release build, and every submitted headless feature suite: player states and sprites, enemies/NPCs/projectiles, input/menu behavior, and items/blocks/gallery reset.
+The verification script checks repository hygiene, formatting, analyzers, the Release build, and every submitted headless feature suite: player states, player items (arrows/boomerangs/bombs), sprites, enemies/NPCs/projectiles, input/menu behavior, and items/blocks/gallery reset.
 
-> 验证脚本检查仓库整洁度、格式、分析器、Release 构建，以及玩家状态、精灵、敌人／NPC／投射物、输入／菜单、物品／方块／展示重置五组无窗口测试。
+> 验证脚本检查仓库整洁度、格式、分析器、Release 构建，以及玩家状态、玩家物品（箭／回旋镖／炸弹）、精灵、敌人／NPC／投射物、输入／菜单、物品／方块／展示重置六组无窗口测试。
 
 GitHub Actions runs the same `./scripts/verify.sh` command for pull requests targeting `main` and pushes to `main`. Actual keyboard bindings and visual layout still require the manual checks in the acceptance checklists.
 

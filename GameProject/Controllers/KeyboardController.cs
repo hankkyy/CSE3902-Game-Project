@@ -27,9 +27,9 @@ public sealed class KeyboardController
         {
             [Keys.Z] = new AttackCommand(player),
             [Keys.N] = new AttackCommand(player),
-            [Keys.D1] = new SelectItemCommand(player, 1),
-            [Keys.D2] = new SelectItemCommand(player, 2),
-            [Keys.D3] = new SelectItemCommand(player, 3),
+            [Keys.D1] = new FireArrowCommand(player),
+            [Keys.D2] = new ThrowBoomerangCommand(player),
+            [Keys.D3] = new PlaceBombCommand(player),
             [Keys.E] = new TakeDamageCommand(player),
             [Keys.T] = new PreviousGalleryCommand(previousBlock),
             [Keys.Y] = new NextGalleryCommand(nextBlock),
@@ -55,9 +55,11 @@ public sealed class KeyboardController
         keyPressDispatcher = new KeyPressDispatcher(pressedCommands);
     }
 
-    public void Update()
+    public void Update() => Update(Keyboard.GetState());
+
+    /// <summary>Accepts one keyboard snapshot so actual bindings can be tested without a window.</summary>
+    public void Update(KeyboardState current)
     {
-        KeyboardState current = Keyboard.GetState();
         Vector2 movement = Vector2.Zero;
         if (session is null || session.Mode == GameMode.Playing)
         {

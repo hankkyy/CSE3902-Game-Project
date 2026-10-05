@@ -1,44 +1,32 @@
-# Items and blocks: functionality implementation
+# Items and blocks: Starlight Ruins roster
 
-The existing `BlockObject` and `ItemObject` constructors remain compatible with
-Game1. They delegate to dedicated StoneBlock, PushBlock, WaterBlock, StatueBlock,
-HeartItem, RupeeItem, KeyItem, and BombItem classes. Shared behavior lives in
-BlockEntity and ItemEntity. ISprite injection allows tests without a graphics device.
+The existing BlockObject and ItemObject constructors remain compatible. They delegate to dedicated classes; shared stationary behavior remains in BlockEntity and elapsed-time preview animation in ItemEntity. The complete planned list and future room roles are in [STARLIGHT_RUINS_ROSTER.md](STARLIGHT_RUINS_ROSTER.md).
 
-All blocks remain stationary, including PushBlock. Items now animate in place
-instead of using the scaffold's generic floating motion. The existing two-frame
-placeholder animation runs from GameTime; it is a temporary preview, not a claim
-that final NES item animation is complete. Final art and item-specific clips still
-need coordination with the sprite owner. No textures/assets were added.
+## Current gallery
 
-There is no collection, collision, pushing, item use, fuse, or explosion.
-Reset restores the item animation phase; gallery reset restores index zero and
-resets hidden objects too. Existing Game1/keyboard wiring is unchanged. Only the
-visible object advances, matching the existing gallery lifecycle.
+- Six blocks: Stone, Push, Water, Statue, Crystal Pillar, Rune Tile.
+- Nine items: Heart, Rupee, Key, Bomb, Bow, Boomerang, Ruins Map, Star Compass, Star Shard.
+- All blocks stay stationary, including Push Block. Item previews animate in place and do not collect, equip, collide, or trigger puzzles.
+- The new block/item kinds have original small motifs in RuinsSprite. Older sprites are still placeholders; their final visual fidelity is not claimed complete.
+- Only the visible gallery entry updates. R resets index zero and all entries, including hidden animation clocks.
+- Gallery previews are separate from player item use. The player can now use arrow/boomerang/bomb on 1/2/3; see [PLAYER_SECONDARY_ITEMS.md](PLAYER_SECONDARY_ITEMS.md).
 
 ## Automated checks
 
-Run from the repository root:
-
 ```sh
-./scripts/verify.sh
+bash scripts/verify.sh
 dotnet run --project tests/ItemsBlocks/ItemsBlocks.csproj --configuration Release
 ```
 
-The headless executable checks every kind, stationary positions, elapsed-time
-animation, draw purity, repeatable reset, both-direction gallery wraparound, and
-reset of hidden items. It uses the existing project dependency, no new packages.
+The test executable enumerates every kind and checks stationary placement, elapsed-time animation, pure drawing, repeated reset, bidirectional wraparound, and hidden-item reset. Its final line reports the actual counts rather than a hard-coded eight objects.
 
-## Manual acceptance
+## Manual acceptance — still to perform on the expanded roster
 
-1. Run `dotnet run --project GameProject/GameProject.csproj`.
-2. Press Y four times: Stone → Push → Water → Statue → Stone. Press T at Stone
-   to reach Statue. Wait on each: it must not move or interact with the player.
-3. Press I four times: Heart → Rupee → Key → Bomb → Heart. Press U at Heart
-   to reach Bomb. Wait on each: its placeholder detail animates in place.
-4. Select later entries, wait, then press R: Stone and Heart must be selected;
-   revisit every item to confirm its animation restarts from the initial phase.
-5. Repeat R and confirm no drift. Verify the player/enemy controls still work.
+1. Run the game and enter gameplay.
+2. Press Y six times to return to Stone; T from Stone must reach Rune Tile. Check all blocks remain stationary.
+3. Press I nine times to return to Heart; U from Heart must reach Star Shard. Inspect the five new item motifs and their preview animation.
+4. Select later entries, wait, then press R. Revisit hidden items and confirm their animation restarts.
+5. Check player 1/2/3 use remains independent of gallery selection, and existing movement, enemy controls, and quit still work.
+6. Attach screenshots or a recording after actual visual checks. This document does not claim they have been completed.
 
-Visual acceptance and final recognizable artwork remain pending. Before a PR,
-attach a screenshot/GIF, record manual results, and request reviewer @xing-gif.
+The original feature/items-blocks branch requested reviewer @xing-gif; record review of the new changes separately rather than treating earlier review as approval of this expansion.

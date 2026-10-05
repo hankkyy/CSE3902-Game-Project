@@ -29,7 +29,7 @@ public sealed class StartMenu
 
         DrawCentered(batch, "CSE 3902", screenWidth, top + 36, 5, new Color(190, 225, 230));
         DrawCentered(batch, "SPRINT 2", screenWidth, top + 100, 3, Color.Gold);
-        DrawCentered(batch, "FUNCTIONALITY GALLERY", screenWidth, top + 144, 2, Color.White);
+        DrawCentered(batch, "STARLIGHT RUINS", screenWidth, top + 144, 2, Color.White);
 
         sprites.DrawPanel(batch,
             new Rectangle((screenWidth - StartButtonWidth) / 2, top + 190, StartButtonWidth, StartButtonHeight),

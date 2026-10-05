@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject.Objects;
 
-public enum BlockKind { Stone, Push, Water, Statue }
+public enum BlockKind { Stone, Push, Water, Statue, CrystalPillar, RuneTile }
 
 /// <summary>Compatibility entry point that delegates to a dedicated block implementation.</summary>
 public sealed class BlockObject : IGameObject
@@ -26,6 +26,8 @@ public sealed class BlockObject : IGameObject
             BlockKind.Push => new PushBlock(name, position, sprite),
             BlockKind.Water => new WaterBlock(name, position, sprite),
             BlockKind.Statue => new StatueBlock(name, position, sprite),
+            BlockKind.CrystalPillar => new CrystalPillar(name, position, sprite),
+            BlockKind.RuneTile => new RuneTile(name, position, sprite),
             _ => throw new ArgumentOutOfRangeException(nameof(kind))
         };
     }

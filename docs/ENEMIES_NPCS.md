@@ -1,61 +1,46 @@
-# Enemy/NPC implementation (issue #10)
+# Enemies/NPCs: Starlight Ruins roster
 
-## Main play-area integration
+## Current paired gallery
 
-Each selection now includes the side preview at (700,420) and a matching enemy
-in the lower-right play area at (370,450). Both share update timing, selection,
-animation and reset. O/P cycles both displays; R resets both, including shots.
-The main-area projectile stays within x=294..554, leaving space for its sprite
-inside the play area's right edge. Game1 composes the paired gallery without
-changing input mappings, menus, HUD or shared interfaces.
+The preview at (700,420) and the play-area copy at (370,450) use the same update timing and selection. O/P cycles all seven entries, and R resets both copies and hidden entries, including shots.
 
-Automated enemy tests cover matching movement, animation, projectile timing,
-both draw calls, wraparound, reset and main-area bounds. For a visual check,
-start the game, cycle O/P through all four characters, observe matching motion
-and shots in both panels, and press R during a shot and after changing selection.
-In-game visual verification of this addition remains pending.
+| Display name | Behavior |
+|---|---|
+| Octorok | Existing horizontal patrol and periodic shots |
+| Keese | Existing bounded figure-eight flight |
+| Gel | Existing pause/hop cycle |
+| Lantern Keeper | Existing Npc implementation; stationary |
+| Rune Wisp | New elliptical floating path and flickering accents |
+| Clockwork Beetle | New rectangular patrol with four facing directions |
+| Prism Sentinel | New stationary charge and alternating right/left light shots |
 
-Branch: feature/enemies-npcs. Reviewer: @Lzzz-7.
+EnemyObject preserves its original factory constructor and adds sprite injection for headless verification. New enum values are appended. The three new behaviors are separate EnemyCharacter subclasses, and every object still draws through ISprite.
 
-EnemyObject preserves the gallery constructor and delegates to Octorok, Keese,
-Gel or Npc. All simulation updates use GameTime; drawing only delegates to ISprite.
-Octorok patrols horizontally and shoots every two seconds; Keese flies a figure-eight;
-Gel rests then hops; the NPC stays stationary and animates.
-Reset restores the constructor position, right-facing direction, animation clock and shots.
-The existing ObjectGallery and keyboard commands retain O/P wraparound and R reset.
-
-The enemy-owned projectile uses the existing Bomb sprite as a visible placeholder.
-No sprite factory, assets, interfaces or teammate-owned files were changed.
-Movement envelopes are relative to the constructor position and fit the current
-(700,420) gallery layout; projectile top-left x stays within 624..884.
-A future gallery relocation or larger sprite needs corresponding bounds review.
+The sentinel charges from 1.2 seconds into each two-second cycle, then fires. A shot lasts at most 0.6 seconds. Its 8-pixel light-bolt motif and movement envelope fit both current panels. Timers use elapsed game time; Draw does not advance state. New shots do not interact with the player or other objects.
 
 ## Automated checks
-Run ./scripts/verify.sh and:
+
+```sh
+bash scripts/verify.sh
 dotnet run --project tests/Enemies/Enemies.Tests.csproj --configuration Release
+```
 
-The headless executable checks movement and shot bounds over 120 seconds,
-NPC immobility, animation, split-frame equivalence, projectile cooldown,
-reset, draw purity and gallery wrapping without a graphics device.
+The original four-character regression checks remain. RuinsEnemyChecks adds coverage for new movement envelopes over 120 seconds, frame partition independence, charge/shot boundaries, all four beetle patrol legs, actual EnemyObject routing for all seven kinds, paired draw calls, gallery wraparound, and hidden resets.
 
-## Visual evidence
+## Manual checks — complete before visual acceptance
 
-The Release game was launched successfully. The screenshot below shows the
-Octorok and its enemy-owned projectile inside the gallery panel. Automated
-desktop key input did not reliably reach MonoGame, so O/P and R gameplay checks
-remain pending; headless tests cover the underlying gallery and reset behavior.
+1. Cycle P through all seven entries. O from Octorok should reach Prism Sentinel.
+2. Observe matching movement and animation in the side preview and green play area.
+3. Wait on Rune Wisp and Clockwork Beetle long enough to see their different paths.
+4. Wait on Prism Sentinel for at least four seconds: observe charge, a right shot, then a left shot. Shots should disappear inside the panels.
+5. Change selection during a shot, press R, and revisit the sentinel. It should start at rest with no shot and wait a fresh interval.
+6. Confirm 1/2/3, WASD/arrows, other galleries, and Q/Escape still work.
+7. Capture a screenshot/GIF after testing. The automated suite cannot establish visual quality or real keyboard behavior.
 
-![Running gallery with Octorok and projectile](enemies-octorok.png)
+## Earlier visual evidence
 
-## Manual checks (keyboard interaction still requires verification)
-1. Run dotnet run --project GameProject/GameProject.csproj.
-2. Wait two seconds on Octorok: verify horizontal patrol and a visible shot.
-   Watch shots disappear before leaving the lower gallery panel.
-3. Press P through Keese, Gel, Old Man, Octorok. Press O from Octorok:
-   it must wrap to Old Man. Each press should advance once.
-4. Observe Keese flight, Gel pause/hop, and stationary animated Old Man.
-5. Press R during a shot, and again after selecting another character:
-   return to Octorok at its start with no shot; the next shot starts after two seconds.
-6. Confirm arrows/WASD, other galleries and Q still work.
-7. Capture a screenshot/GIF for review; these visual checks are not claimed
-   as completed by the automated test.
+The following existing screenshot belongs to the earlier Octorok implementation, not the expanded seven-character roster:
+
+![Earlier Octorok gallery](enemies-octorok.png)
+
+Original feature branch: feature/enemies-npcs; its requested reviewer was @Lzzz-7. Earlier review or screenshots do not automatically cover these new objects.

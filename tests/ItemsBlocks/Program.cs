@@ -50,10 +50,10 @@ foreach (ItemKind kind in Enum.GetValues<ItemKind>())
 
 ObjectGallery<ItemObject> gallery = new(items);
 gallery.Previous();
-Check(gallery.Index == 3, "Previous wraps to last");
+Check(gallery.Index == gallery.Count - 1, "Previous wraps to last");
 gallery.Next();
 Check(gallery.Index == 0, "Next wraps to first");
-for (int i = 0; i < 4; i++) gallery.Next();
+for (int i = 0; i < gallery.Count; i++) gallery.Next();
 Check(gallery.Index == 0, "Complete cycle");
 gallery.Next();
 gallery.Reset();
@@ -66,13 +66,13 @@ for (int i = 0; i < items.Count; i++)
 ObjectGallery<BlockObject> blocks = new(Enum.GetValues<BlockKind>()
     .Select(kind => new BlockObject(kind.ToString(), start, kind, new RecordingSprite())).ToArray());
 blocks.Previous();
-Check(blocks.Index == 3, "Block previous wraps");
+Check(blocks.Index == blocks.Count - 1, "Block previous wraps");
 blocks.Next();
 Check(blocks.Index == 0, "Block next wraps");
 blocks.Next();
 blocks.Reset();
 Check(blocks.Index == 0, "Block selection resets");
-Console.WriteLine("Passed: all eight objects, animation timing, pure drawing, gallery wraparound, hidden-item reset.");
+Console.WriteLine($"Passed: {blocks.Count} blocks and {gallery.Count} items; animation timing, pure drawing, gallery wraparound, hidden-item reset.");
 
 sealed class RecordingSprite : ISprite
 {

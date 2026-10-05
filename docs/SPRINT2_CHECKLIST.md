@@ -15,13 +15,15 @@ Legend: **Done** is implemented in the scaffold; **Assigned** has an owner in th
 - [x] **Done:** original attributed player sprite sheet with four-direction idle/walk/attack/damage clips
 - [x] **Done:** dedicated block and item classes with gallery/reset tests integrated from `feature/items-blocks`
 - [ ] **Remaining:** final recognizable item/block/enemy artwork and item-specific animation
-- [ ] **Remaining:** visible secondary-item use; number keys currently select a slot only
+- [x] **Implemented:** `1` arrow, `2` returning boomerang, `3` timed bomb, with reset/menu/input tests
+- [x] **Implemented:** Starlight Ruins design roster: 6 blocks, 9 gallery items, 7 enemies/NPCs
+- [ ] **Remaining:** manually demonstrate every expanded roster entry and review visual fidelity
 - [x] **Done:** dedicated player-state, enemy, NPC, and enemy-projectile classes
 - [x] **Done:** start/menu state; `Enter` starts gameplay and `Q`/`Escape` exit in either mode
 - [x] **Done:** typed discrete commands, on-screen controls/status HUD, and input/menu regression checks
 
 Input/menu/HUD release checks are tracked separately in [INPUT_QUALITY_CHECKLIST.md](INPUT_QUALITY_CHECKLIST.md).
-Enemy and player-sprite checks are documented in their feature guides. Item/block behavior and manual checks are documented in [ITEMS_BLOCKS.md](ITEMS_BLOCKS.md). The integration script runs all five submitted headless test projects.
+Enemy and player-sprite checks are documented in their feature guides. Item/block behavior and manual checks are documented in [ITEMS_BLOCKS.md](ITEMS_BLOCKS.md). The integration script runs all six headless test projects.
 
 ## Process and documentation
 
@@ -36,12 +38,12 @@ Enemy and player-sprite checks are documented in their feature guides. Item/bloc
 - [ ] Each member completes readability and maintainability review records
 - [ ] Record weekly analyzer results, complete reflection, zip, and submit on Carmen
 
-## Check-in demo script
+## Final-submission demo walkthrough
 
 1. Build and run the game; confirm the start menu appears and press `Enter`.
 2. Move with arrows and `WASD`; show four directions and animation.
 3. Press `Z`/`N`, then `E`; show `ATTACKING`/`DAMAGED` in the HUD and the health change.
-4. Press `1`, `2`, `3`; show the selected-item bar change.
+4. Press `1`, `2`, `3`; demonstrate arrow, returning boomerang, and bomb fuse/explosion.
 5. Cycle blocks with `T/Y`, items with `U/I`, and enemies with `O/P` in both directions.
 6. Leave an enemy/item visible long enough to show autonomous movement/animation.
 7. Press `R` and verify all state resets; press `Q` to quit.

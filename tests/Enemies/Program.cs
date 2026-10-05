@@ -119,6 +119,8 @@ Require(previews.All(c => c.Position == start && !c.AlternateFrame) &&
 Require(!((Octorok)previews[0]).Projectile.IsActive &&
     !((Octorok)playAreaEnemies[0]).Projectile.IsActive, "Paired reset shots");
 Console.WriteLine("PASS: paired selection, movement, animation, projectiles, drawing, play-area bounds and reset.");
+int ruinsChecks = RuinsEnemyChecks.Run();
+Console.WriteLine($"PASS: {ruinsChecks} Starlight Ruins enemy checks; all 7 enemy/NPC kinds, paired galleries and reset.");
 
 sealed class RecordingSprite : ISprite
 {

@@ -20,6 +20,7 @@ dotnet build GameProject/GameProject.csproj --no-restore --configuration Release
 
 test_projects=(
   "tests/PlayerStates/PlayerStates.Tests.csproj"
+  "tests/PlayerItems/PlayerItems.Tests.csproj"
   "tests/PlayerSprites/PlayerSprites.Tests.csproj"
   "tests/Enemies/Enemies.Tests.csproj"
   "tests/InputTests/InputTests.csproj"

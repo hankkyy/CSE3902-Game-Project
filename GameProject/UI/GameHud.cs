@@ -11,7 +11,7 @@ public sealed class GameHud
     private const int GalleryNameLimit = 24;
     private const int HealthSegmentWidth = 30;
     private const int ItemSegmentWidth = 24;
-    private const string Controls = "WASD/ARROWS MOVE  Z/N ATTACK  1-3 ITEM  E DAMAGE  R RESET  Q/ESC QUIT";
+    private const string Controls = "WASD/ARROWS MOVE  Z/N SWORD  1 ARROW 2 BOOM 3 BOMB  E HURT R RESET Q/ESC QUIT";
     private readonly SpriteFactory sprites;
     private readonly PixelText text;
 
@@ -45,7 +45,13 @@ public sealed class GameHud
         sprites.DrawPanel(batch, new Rectangle(28, 27, 160, 16), new Color(55, 28, 28));
         sprites.DrawPanel(batch, new Rectangle(30, 29, player.Health * HealthSegmentWidth, 12), Color.IndianRed);
 
-        text.Draw(batch, $"ITEM SLOT {player.SelectedItem}", new Point(216, 10), 1, Color.White);
+        string itemLabel = player.SelectedItem switch
+        {
+            1 => "ITEM 1 ARROW",
+            2 => "ITEM 2 BOOMERANG",
+            _ => "ITEM 3 BOMB"
+        };
+        text.Draw(batch, itemLabel, new Point(216, 10), 1, Color.White);
         sprites.DrawPanel(batch, new Rectangle(216, 27, player.SelectedItem * ItemSegmentWidth, 16), Color.Gold);
 
         text.Draw(batch, "STATE", new Point(340, 10), 1, Color.White);

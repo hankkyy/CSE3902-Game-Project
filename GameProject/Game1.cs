@@ -34,7 +34,7 @@ public sealed class Game1 : Game
         };
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
-        Window.Title = "CSE 3902 - Sprint 2 Functionality Gallery";
+        Window.Title = "CSE 3902 - Starlight Ruins - Sprint 2";
     }
 
     protected override void LoadContent()
@@ -60,14 +60,21 @@ public sealed class Game1 : Game
             new("Stone Block", new Vector2(700, 125), BlockKind.Stone, spriteFactory),
             new("Push Block", new Vector2(700, 125), BlockKind.Push, spriteFactory),
             new("Water Tile", new Vector2(700, 125), BlockKind.Water, spriteFactory),
-            new("Statue", new Vector2(700, 125), BlockKind.Statue, spriteFactory)
+            new("Statue", new Vector2(700, 125), BlockKind.Statue, spriteFactory),
+            new("Crystal Pillar", new Vector2(700, 125), BlockKind.CrystalPillar, spriteFactory),
+            new("Rune Tile", new Vector2(700, 125), BlockKind.RuneTile, spriteFactory)
         ]);
         items = new ObjectGallery<ItemObject>(
         [
             new("Heart", new Vector2(700, 270), ItemKind.Heart, spriteFactory),
             new("Rupee", new Vector2(700, 270), ItemKind.Rupee, spriteFactory),
             new("Key", new Vector2(700, 270), ItemKind.Key, spriteFactory),
-            new("Bomb", new Vector2(700, 270), ItemKind.Bomb, spriteFactory)
+            new("Bomb", new Vector2(700, 270), ItemKind.Bomb, spriteFactory),
+            new("Bow", new Vector2(700, 270), ItemKind.Bow, spriteFactory),
+            new("Boomerang", new Vector2(700, 270), ItemKind.Boomerang, spriteFactory),
+            new("Ruins Map", new Vector2(700, 270), ItemKind.Map, spriteFactory),
+            new("Star Compass", new Vector2(700, 270), ItemKind.Compass, spriteFactory),
+            new("Star Shard", new Vector2(700, 270), ItemKind.StarShard, spriteFactory)
         ]);
         // Reserve room to the right for the Octorok's projectile as well as its patrol.
         Vector2 playAreaEnemyPosition = new(370, 450);
@@ -79,7 +86,10 @@ public sealed class Game1 : Game
             CreateEnemyPair("Octorok", EnemyKind.Octorok),
             CreateEnemyPair("Keese", EnemyKind.Keese),
             CreateEnemyPair("Gel", EnemyKind.Gel),
-            CreateEnemyPair("Old Man", EnemyKind.OldMan)
+            CreateEnemyPair("Lantern Keeper", EnemyKind.OldMan),
+            CreateEnemyPair("Rune Wisp", EnemyKind.RuneWisp),
+            CreateEnemyPair("Clockwork Beetle", EnemyKind.ClockworkBeetle),
+            CreateEnemyPair("Prism Sentinel", EnemyKind.PrismSentinel)
         ]);
         keyboard = new KeyboardController(
             player,
