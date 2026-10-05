@@ -1,6 +1,6 @@
 # CSE 3902 — Sprint 2
 
-Team: 6
+Team: 5
 
 ## 1. Project Overview
 
@@ -242,13 +242,11 @@ Existing project guides include:
 Project records:
 
 - [Code quality analysis](docs/CODE_ANALYSIS.md)
-- Code reviews — readability and maintainability:
-  [填写实际 review 文档或 PR 链接]
+- [Sprint 2 code review records](docs/code-reviews/SPRINT2_REVIEWS.md)
 - [Sprint 2 reflection](docs/SPRINT2_REFLECTION.md)
 - [Project task board](https://github.com/users/hankkyy/projects/4)
 
-Review and reflection templates are starting points, not completed
-submission records.
+The review template remains available for later sprints.
 
 ## 10. Assets and Attribution
 
