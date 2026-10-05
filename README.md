@@ -246,8 +246,6 @@ Project records:
 - [Sprint 2 reflection](docs/SPRINT2_REFLECTION.md)
 - [Project task board](https://github.com/users/hankkyy/projects/4)
 
-The review template remains available for later sprints.
-
 ## 10. Assets and Attribution
 
 The player uses the original Moss Scout atlas. Gallery objects and player
