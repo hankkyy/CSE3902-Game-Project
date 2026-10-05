@@ -3,6 +3,22 @@
 These records cover the final integrated source. Hank completed supplemental
 integration reviews where the assigned pull-request review was not submitted.
 
+## Review timeline
+
+- **September 16:** Sprint work began. The team planned a readability pass after
+  each feature became reviewable and a maintainability pass before final
+  packaging. No completed feature review is recorded for this date.
+- **September 25:** The player-state implementation was submitted in pull
+  request #13 and became available for review.
+- **September 27–28:** Player sprites, enemies/NPCs, and input/menu/HUD work
+  became available in pull requests #14–#16. The first integration build was
+  assembled so the features could be checked together.
+- **October 1:** Leo approved the enemy/NPC implementation in pull request #14.
+  Ashley also reviewed the items/blocks acceptance notes in pull request #19.
+- **October 5:** Hank completed the missing integration reviews, including the
+  maintainability scenarios below. Ashley completed the items/blocks source
+  review and recorded her comments and review time.
+
 ## Player sprites
 
 - Reviewer: Hank Zhang
