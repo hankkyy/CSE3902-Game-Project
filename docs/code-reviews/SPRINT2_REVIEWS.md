@@ -71,23 +71,23 @@ Outcome: approved in pull request #14.
 
 ## Items and blocks
 
-- Reviewer: Hank Zhang (supplemental integration review)
-- Date: October 5, 2026
+- Reviewer: Ashley Zhang
+- Date: 2026.10.05
+- Sprint: 2
 - Review type: Readability and maintainability
-- Files reviewed: `ItemObject.cs` and `BlockObject.cs`
+- Files reviewed:
+  - `GameProject/Objects/BlockObject.cs`
+  - `GameProject/Objects/ItemObject.cs`
 - Code author: Leo Zhuang
-- Review time: 12 minutes
-- Pull requests: #17 and #19
+- Review time: 30mins
+- Reviewed commit: `2fe9fd5`
+- Pull request: #17 and #19
 
-Readability: both wrapper classes keep the existing constructor surface and delegate to a
-dedicated implementation selected by the enum. Sprite injection makes gallery
-behavior testable without opening a graphics window. The switch expressions
-also make the supported roster visible in one place.
+Readability: 
+Both classes are short and easy to follow. The switch expressions clearly show which class is used for each item or block. The similar structure also makes the two files easy to compare. One small improvement would be to explain what “compatibility entry point” means in the comments.
 
-Maintainability: the current item implementations share the same preview timing. If a later item
-needs unique movement, `ItemEntity.Update` will need to become virtual or that
-item will need a separate implementation behind `ItemObject`. This does not
-block the independent Sprint 2 gallery demonstration.
+Maintainability: 
+The separate object classes and `ISprite` parameter make the code easier to extend and test. For example, adding a Potion item would require a new enum value, a new class, and updates to the switches in `ItemObject` and `SpriteFactory`. This is manageable, but both mappings need to be updated together. A test for the new item would help catch missing changes.
 
 Outcome: no blocking issue for Sprint 2.
 
