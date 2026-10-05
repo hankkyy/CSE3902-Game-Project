@@ -25,8 +25,19 @@ public sealed class PlayerSprite : IAnimatedPlayerSprite
     /// <summary>Preserves the starter's two-frame visual signal; it cannot encode attacks or damage.</summary>
     public void Draw(SpriteBatch spriteBatch, Vector2 position, Direction direction, bool alternateFrame)
     {
-        PlayerSpriteAnimation animation = alternateFrame ? PlayerSpriteAnimation.Walking : PlayerSpriteAnimation.Idle;
-        double seconds = alternateFrame ? PlayerSpriteFrames.Clip(animation).FrameSeconds : 0;
+        PlayerSpriteAnimation animation;
+        double seconds;
+        if (alternateFrame)
+        {
+            animation = PlayerSpriteAnimation.Walking;
+            seconds = PlayerSpriteFrames.Clip(animation).FrameSeconds;
+        }
+        else
+        {
+            animation = PlayerSpriteAnimation.Idle;
+            seconds = 0;
+        }
+
         Draw(spriteBatch, position, direction, animation, seconds);
     }
 
@@ -36,6 +47,7 @@ public sealed class PlayerSprite : IAnimatedPlayerSprite
     {
         ArgumentNullException.ThrowIfNull(spriteBatch);
         Rectangle source = PlayerSpriteFrames.Source(animation, direction, elapsedSeconds);
-        spriteBatch.Draw(texture, PlayerSpriteFrames.Destination(position), source, Color.White);
+        Rectangle destination = PlayerSpriteFrames.Destination(position);
+        spriteBatch.Draw(texture, destination, source, Color.White);
     }
 }

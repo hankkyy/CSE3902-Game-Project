@@ -2,6 +2,8 @@
 
 Status: **proposed; owner approval and integration pending**. No shared or player-owned file was changed by `feature/player-sprites`.
 
+**October 5 update:** Player-state wiring is implemented in `integration/sprint2-complete` at `f3b30ca` and passes its automated integration tests. It remains absent from this isolated feature branch. The proposal below records the original integration plan; it is not a claim that the team integration is still missing. Formal review and physical keyboard acceptance were not verified by this audit. See [the final check](../assets/PLAYER_SPRITES_CHECK.md).
+
 ## 1 Problem
 
 The frozen `ISprite.Draw` receives only position, direction, and `alternateFrame`. Walking, attacking, and damaged states can produce the same arguments. An implementation cannot reliably recover the missing state or a clip timer. Both the starter Player and the current player-state branch still call this boolean signature.

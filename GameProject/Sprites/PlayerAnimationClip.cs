@@ -1,6 +1,6 @@
 namespace GameProject.Sprites;
 
-/// <summary>A deterministic clip sampled using seconds supplied by the game update.</summary>
+/// <summary>Stores frame timing and selects a frame from the supplied animation time.</summary>
 public readonly record struct PlayerAnimationClip(int FrameCount, double FrameSeconds, bool Loops)
 {
     public double DurationSeconds => FrameCount * FrameSeconds;
@@ -19,8 +19,18 @@ public readonly record struct PlayerAnimationClip(int FrameCount, double FrameSe
         }
 
         double duration = DurationSeconds;
-        if (!Loops && elapsedSeconds >= duration) return FrameCount - 1;
-        double sample = Loops ? elapsedSeconds % duration : elapsedSeconds;
-        return Math.Min((int)(sample / FrameSeconds), FrameCount - 1);
+        if (!Loops && elapsedSeconds >= duration)
+        {
+            return FrameCount - 1;
+        }
+
+        double timeInClip = elapsedSeconds;
+        if (Loops)
+        {
+            timeInClip %= duration;
+        }
+
+        int frameIndex = (int)(timeInClip / FrameSeconds);
+        return Math.Min(frameIndex, FrameCount - 1);
     }
 }
