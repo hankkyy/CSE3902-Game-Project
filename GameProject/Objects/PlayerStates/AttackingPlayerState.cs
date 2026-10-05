@@ -16,6 +16,11 @@ internal sealed class AttackingPlayerState : IPlayerState
             return this;
         }
 
-        return wantsToMove ? WalkingPlayerState.Instance : IdlePlayerState.Instance;
+        if (wantsToMove)
+        {
+            return WalkingPlayerState.Instance;
+        }
+
+        return IdlePlayerState.Instance;
     }
 }

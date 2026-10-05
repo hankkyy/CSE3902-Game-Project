@@ -1,6 +1,6 @@
 namespace GameProject.Objects.PlayerStates;
 
-/// <summary>Owns valid player state transitions independently of input and drawing.</summary>
+/// <summary>Handles changes between the player's four actions.</summary>
 internal sealed class PlayerStateMachine
 {
     private IPlayerState currentState = IdlePlayerState.Instance;
@@ -30,8 +30,13 @@ internal sealed class PlayerStateMachine
         return true;
     }
 
-    public void Update(double elapsedSeconds, bool wantsToMove) =>
+    public void Update(double elapsedSeconds, bool wantsToMove)
+    {
         currentState = currentState.Update(elapsedSeconds, wantsToMove);
+    }
 
-    public void Reset() => currentState = IdlePlayerState.Instance;
+    public void Reset()
+    {
+        currentState = IdlePlayerState.Instance;
+    }
 }

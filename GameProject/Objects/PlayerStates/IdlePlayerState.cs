@@ -11,6 +11,13 @@ internal sealed class IdlePlayerState : IPlayerState
     public PlayerAction Action => PlayerAction.Idle;
     public bool AllowsMovement => true;
 
-    public IPlayerState Update(double elapsedSeconds, bool wantsToMove) =>
-        wantsToMove ? WalkingPlayerState.Instance : this;
+    public IPlayerState Update(double elapsedSeconds, bool wantsToMove)
+    {
+        if (wantsToMove)
+        {
+            return WalkingPlayerState.Instance;
+        }
+
+        return this;
+    }
 }

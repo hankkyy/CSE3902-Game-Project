@@ -8,10 +8,12 @@ namespace GameProject.Objects;
 
 public enum PlayerAction { Idle, Walking, Attacking, Damaged }
 
-/// <summary>Owns player gameplay state; drawing remains behind ISprite.</summary>
+/// <summary>Stores the player's position, health, and current action.</summary>
 public sealed class Player : IGameObject
 {
     private const float Speed = 190f;
+    private const int Width = 28;
+    private const int Height = 34;
     private readonly Vector2 startPosition;
     private readonly Rectangle bounds;
     private readonly ISprite sprite;
@@ -20,10 +22,16 @@ public sealed class Player : IGameObject
     private double animationTime;
 
     public Player(Vector2 position, Rectangle bounds, SpriteFactory sprites)
+        : this(position, bounds, sprites.CreatePlayerSprite())
+    {
+    }
+
+    /// <summary>Creates a player with a supplied sprite so its behavior can be tested without a game window.</summary>
+    public Player(Vector2 position, Rectangle bounds, ISprite sprite)
     {
         startPosition = position;
         this.bounds = bounds;
-        sprite = sprites.CreatePlayerSprite();
+        this.sprite = sprite;
         Position = position;
     }
 
@@ -42,12 +50,37 @@ public sealed class Player : IGameObject
             return;
         }
 
-        Facing = Math.Abs(direction.X) > Math.Abs(direction.Y)
-            ? (direction.X < 0 ? Direction.Left : Direction.Right)
-            : (direction.Y < 0 ? Direction.Up : Direction.Down);
+        if (Math.Abs(direction.X) > Math.Abs(direction.Y))
+        {
+            if (direction.X < 0)
+            {
+                Facing = Direction.Left;
+            }
+            else
+            {
+                Facing = Direction.Right;
+            }
+        }
+        else
+        {
+            if (direction.Y < 0)
+            {
+                Facing = Direction.Up;
+            }
+            else
+            {
+                Facing = Direction.Down;
+            }
+        }
     }
 
-    public void Attack() => stateMachine.TryAttack();
+    public void Attack()
+    {
+        if (stateMachine.TryAttack())
+        {
+            animationTime = 0;
+        }
+    }
 
     public void TakeDamage()
     {
@@ -57,6 +90,7 @@ public sealed class Player : IGameObject
         }
 
         Health = Math.Max(0, Health - 1);
+        animationTime = 0;
     }
 
     public void SelectItem(int slot) => SelectedItem = Math.Clamp(slot, 1, 3);
@@ -66,15 +100,20 @@ public sealed class Player : IGameObject
         double seconds = gameTime.ElapsedGameTime.TotalSeconds;
         animationTime += seconds;
         bool wantsToMove = pendingDirection != Vector2.Zero;
+        PlayerAction previousAction = Action;
         stateMachine.Update(seconds, wantsToMove);
+        if (Action != previousAction)
+        {
+            animationTime = 0;
+        }
 
         if (stateMachine.AllowsMovement && wantsToMove)
         {
             pendingDirection.Normalize();
             Position += pendingDirection * Speed * (float)seconds;
             Position = new Vector2(
-                MathHelper.Clamp(Position.X, bounds.Left, bounds.Right - 28),
-                MathHelper.Clamp(Position.Y, bounds.Top, bounds.Bottom - 34));
+                MathHelper.Clamp(Position.X, bounds.Left, bounds.Right - Width),
+                MathHelper.Clamp(Position.Y, bounds.Top, bounds.Bottom - Height));
         }
 
         pendingDirection = Vector2.Zero;
