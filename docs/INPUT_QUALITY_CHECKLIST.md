@@ -15,10 +15,10 @@ dotnet format tests/InputTests/InputTests.csproj --no-restore --verify-no-change
 git diff --check
 ```
 
-- [ ] Repository verification succeeds: formatting, analyzers, Release build, and hygiene.
-- [ ] All 25 input/menu assertions pass.
-- [ ] Test-project formatting succeeds.
-- [ ] `git diff --check` reports no whitespace errors.
+- [x] Repository verification succeeds: formatting, analyzers, Release build, and hygiene.
+- [x] All 25 input/menu assertions pass.
+- [x] Test-project formatting succeeds.
+- [x] `git diff --check` reports no whitespace errors.
 
 The console test project uses the existing game dependency through a project reference and does not open a graphics window. It covers the dispatcher and state-gated commands. It is not a substitute for testing the real keyboard controller and visuals below.
 
@@ -50,9 +50,9 @@ The existing `.github/workflows/build.yml` invokes this script for PRs targeting
 
 ## Before review and release
 
-- [ ] README reflects the menu, controls, HUD, limitations, and verification commands.
+- [x] README reflects the menu, controls, HUD, limitations, and verification commands.
 - [ ] Only owned feature paths and task-specific tests/docs are changed; frozen contracts, gameplay objects, and sprite implementations remain intact.
-- [ ] Generated `bin/`, `obj/`, IDE files, and local artifacts are not tracked.
+- [x] Generated `bin/`, `obj/`, IDE files, and local artifacts are not tracked.
 - [ ] PR targets `main` from `feature/input-quality`, links #12, and includes exact manual steps and the two screenshots.
 - [ ] Request `@mo46-123` as reviewer. Record readability feedback and a maintainability scenario for an authored class, such as adding a pause mode to the input dispatcher/session flow.
 - [ ] Wait for the latest PR CI result and reviewer approval; resolve feedback and any integration conflicts before merging.

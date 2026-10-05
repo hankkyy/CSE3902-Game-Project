@@ -14,9 +14,13 @@ collection, and room navigation remain outside the Sprint 2 demonstration.
 ## Burndown evidence
 
 The five original issues started at eight effort points each, for 40 points.
-The board currently reports remaining values of 3, 1, 8, 8, and 8. One item is
-marked Done while still showing eight remaining points, so the displayed total
-of 28 does not represent the amount of unfinished code.
+Before the final board reconciliation, the remaining values were 3, 1, 8, 8,
+and 8. One item was marked Done while still showing eight remaining points, so
+the displayed total of 28 did not represent the amount of unfinished code. At
+final packaging, issues #8 through #12 are marked Done and each has zero
+remaining effort. This final correction makes the board consistent with the
+integrated build, but it does not reconstruct daily effort updates that were
+missed during the sprint.
 
 The repository history also shows that work was concentrated late in the
 sprint:
@@ -30,9 +34,9 @@ sprint:
 | October 5 | 2 |
 
 The board and commit history show the same process problem: implementation
-progressed faster than task estimates and status fields were updated. This made
-the burndown appear worse than the actual build and left integration and
-documentation work near the deadline.
+progressed faster than the task estimates and status fields were updated late.
+This made the burndown appear worse than the actual build and left integration
+and documentation work near the deadline.
 
 ## Team process
 
