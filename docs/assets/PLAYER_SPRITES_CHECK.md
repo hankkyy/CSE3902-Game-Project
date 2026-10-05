@@ -4,6 +4,7 @@ Checked on October 5, 2026 for @JojoLi132. This is an AI-assisted technical chec
 
 ## Changes
 
+- Follow-up: action and direction selection now use ordinary `switch` statements; the old drawing adapter uses `if/else`, and drawing stores the destination rectangle in a local variable. The feature verification script, 79 headless checks, and GPU checks passed again after this edit. The integration-copy results below refer to the earlier two-file edit.
 - `PlayerAnimationClip.FrameAt` now uses a separate loop branch and a named frame index. Timing and return values are unchanged.
 - `PlayerSpriteFrames` names the four directions per action and separates source coordinates from screen coordinates. The body offset, texture layout, and public methods are unchanged.
 - Existing asset attribution and AI assistance disclosures are retained. No detector score was measured or claimed.
