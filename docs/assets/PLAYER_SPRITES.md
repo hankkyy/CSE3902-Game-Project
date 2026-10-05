@@ -5,6 +5,8 @@ Branch: `feature/player-sprites`
 Issue: [#9](https://github.com/hankkyy/CSE3902-Game-Project/issues/9)  
 Reviewer: @hankkyy
 
+**October 5 update:** The team's `integration/sprint2-complete` branch at `f3b30ca` now connects Player to the full animation interface. This feature branch still uses the starter Player. The compatibility notes below describe that feature-branch behavior. See [the final check](PLAYER_SPRITES_CHECK.md) for current verification and remaining submission work.
+
 ## What is implemented
 
 The player factory now returns a textured sprite using the original **Moss Scout** atlas instead of a colored rectangle. The scout is a green-clad, top-down adventurer with a red scarf, round buckler, and a short sword. It provides the requested Link-style game role without importing Nintendo artwork.
