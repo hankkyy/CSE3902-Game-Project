@@ -1,6 +1,6 @@
 # CSE 3902 — Sprint 2
 
-Team: 5
+Team: 6
 
 ## 1. Project Overview
 
