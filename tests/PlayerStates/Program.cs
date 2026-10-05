@@ -12,6 +12,11 @@ Player player = new(start, new Rectangle(0, 0, 500, 500), sprite);
 player.Draw(null!);
 Check(sprite.Animation == PlayerSpriteAnimation.Idle, "Player did not begin with the idle clip");
 
+CheckFacing(player, new Vector2(-1, 0), Direction.Left);
+CheckFacing(player, new Vector2(1, 0), Direction.Right);
+CheckFacing(player, new Vector2(0, -1), Direction.Up);
+CheckFacing(player, new Vector2(0, 1), Direction.Down);
+
 player.SetMovement(Vector2.UnitX);
 player.Update(Frame(0.1));
 player.Draw(null!);
@@ -47,7 +52,14 @@ Check(player.Health == 4, "Repeated damage bypassed the damage-state guard");
 player.Update(Frame(0.5));
 Check(player.Action == PlayerAction.Idle, "Timed damage state did not return to Idle");
 
-player.SelectItem(3);
+player.SelectItem(0);
+Check(player.SelectedItem == 1, "Item selection went below slot one");
+player.SelectItem(4);
+Check(player.SelectedItem == 3, "Item selection went above slot three");
+
+player.SetMovement(new Vector2(10, 10));
+Check(player.Facing == Direction.Down, "Equal horizontal and vertical input did not use the vertical direction");
+
 player.Reset();
 player.Draw(null!);
 Check(player.Position == start, "Reset did not restore position");
@@ -71,7 +83,17 @@ if (failures.Count > 0)
 Console.WriteLine("PASS: player states, guards, animation integration, and reset.");
 return 0;
 
-GameTime Frame(double seconds) => new(TimeSpan.Zero, TimeSpan.FromSeconds(seconds));
+GameTime Frame(double seconds)
+{
+    return new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(seconds));
+}
+
+void CheckFacing(Player testPlayer, Vector2 movement, Direction expected)
+{
+    testPlayer.SetMovement(movement);
+    Check(testPlayer.Facing == expected, $"Expected {expected} facing for movement {movement}");
+    testPlayer.Update(Frame(0));
+}
 
 void Check(bool condition, string message)
 {

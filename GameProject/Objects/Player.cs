@@ -9,7 +9,7 @@ namespace GameProject.Objects;
 
 public enum PlayerAction { Idle, Walking, Attacking, Damaged }
 
-/// <summary>Owns player gameplay state; drawing remains behind ISprite.</summary>
+/// <summary>Stores the player's position, health, and current action.</summary>
 public sealed class Player : IGameObject
 {
     private const float Speed = 190f;
@@ -76,9 +76,28 @@ public sealed class Player : IGameObject
             return;
         }
 
-        Facing = Math.Abs(direction.X) > Math.Abs(direction.Y)
-            ? (direction.X < 0 ? Direction.Left : Direction.Right)
-            : (direction.Y < 0 ? Direction.Up : Direction.Down);
+        if (Math.Abs(direction.X) > Math.Abs(direction.Y))
+        {
+            if (direction.X < 0)
+            {
+                Facing = Direction.Left;
+            }
+            else
+            {
+                Facing = Direction.Right;
+            }
+        }
+        else
+        {
+            if (direction.Y < 0)
+            {
+                Facing = Direction.Up;
+            }
+            else
+            {
+                Facing = Direction.Down;
+            }
+        }
     }
 
     public void Attack()
