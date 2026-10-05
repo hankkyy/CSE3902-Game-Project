@@ -8,10 +8,6 @@ Sprint start: **September 15, 2026**
 
 Sprint due date: **September 28, 2026**
 
-> Sprint 开始日期：**2026 年 9 月 15 日**
->
-> Sprint 截止日期：**2026 年 9 月 28 日**
-
 | Owner | Branch | Scope (8 points each) | Acceptance criteria | Reviewer |
 |---|---|---|---|---|
 | `@hankkyy` | `feature/player-states` | Replace the placeholder Player action timer with explicit idle/walk/attack/damaged states (4); add sword/item-use presentation and state-safe transitions (2); add player-focused tests and docs (2) | Four directions animate; `Z/N` attacks; `E` damages and flashes; `1–3` changes the used item; invalid overlapping states are prevented; build passes | `@JojoLi132` |

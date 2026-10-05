@@ -1,6 +1,6 @@
 # Starlight Ruins — designed Sprint 2 object roster
 
-星灯遗迹 is an original extension theme for this team's current course scaffold. The player explores an abandoned observatory and finds a Star Shard to restore its lamp. This preserves existing player controls and baseline characters while adding ten themed objects with dedicated classes and original pixel motifs.
+Starlight Ruins is an original extension theme for this team's current course scaffold. The player explores an abandoned observatory and finds a Star Shard to restore its lamp. This preserves existing player controls and baseline characters while adding ten themed objects with dedicated classes and original pixel motifs.
 
 This document defines a small first-dungeon concept so the roster has a purpose. The current executable remains a Sprint 2 functionality gallery: rooms, collection, puzzle solving, collisions, and win conditions described as future roles below are not implemented here. Counts are design choices, not a claim that the instructor requires exactly 6/9/7 types or that the submission has passed grading.
 
@@ -8,11 +8,11 @@ This document defines a small first-dungeon concept so the roster has a purpose.
 
 | Future room | Relevant roster entries | Intended later role |
 |---|---|---|
-| Entrance hall / 入门廊厅 | Stone, Rune Tile, Lantern Keeper, Map, Heart | Introduce the observatory and its routes |
-| Quiet-water corridor / 静水回廊 | Water, Key, Rupee, Octorok, Gel | Water-themed traversal and basic encounters |
-| Echo workshop / 回声工坊 | Push Block, Statue, Bow, Bomb, Clockwork Beetle | Mechanical obstacles and item introduction |
-| Starlamp court / 星灯中庭 | Crystal Pillar, Compass, Boomerang, Rune Wisp, Keese | Light motifs and mobile enemies |
-| Prism sanctuary / 棱镜圣所 | Statue, Crystal Pillar, Prism Sentinel, Star Shard | A guarded relic and the dungeon's eventual objective |
+| Entrance Hall | Stone, Rune Tile, Lantern Keeper, Map, Heart | Introduce the observatory and its routes |
+| Quiet-Water Corridor | Water, Key, Rupee, Octorok, Gel | Water-themed traversal and basic encounters |
+| Echo Workshop | Push Block, Statue, Bow, Bomb, Clockwork Beetle | Mechanical obstacles and item introduction |
+| Starlamp Court | Crystal Pillar, Compass, Boomerang, Rune Wisp, Keese | Light motifs and mobile enemies |
+| Prism Sanctuary | Statue, Crystal Pillar, Prism Sentinel, Star Shard | A guarded relic and the dungeon's eventual objective |
 
 ## Six stationary blocks — T/Y
 
