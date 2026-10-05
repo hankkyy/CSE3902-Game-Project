@@ -20,8 +20,8 @@ public sealed class Game1 : Game
     private SpriteBatch? spriteBatch;
     private SpriteFactory? spriteFactory;
     private Player? player;
-    private ObjectGallery<BlockObject>? blocks;
-    private ObjectGallery<ItemObject>? items;
+    private ObjectGallery<ObjectDisplayPair>? blocks;
+    private ObjectGallery<ObjectDisplayPair>? items;
     private ObjectGallery<EnemyDisplayPair>? enemies;
     private KeyboardController? keyboard;
 
@@ -55,26 +55,35 @@ public sealed class Game1 : Game
         }
 
         player = new Player(new Vector2(270, 270), new Rectangle(24, 72, 560, 430), spriteFactory);
-        blocks = new ObjectGallery<BlockObject>(
+        ObjectDisplayPair CreateBlockPair(string name, BlockKind kind) => new(
+            new BlockObject(name, new Vector2(700, 125), kind, spriteFactory),
+            new BlockObject(name, new Vector2(430, 140), kind, spriteFactory));
+
+        blocks = new ObjectGallery<ObjectDisplayPair>(
         [
-            new("Stone Block", new Vector2(700, 125), BlockKind.Stone, spriteFactory),
-            new("Push Block", new Vector2(700, 125), BlockKind.Push, spriteFactory),
-            new("Water Tile", new Vector2(700, 125), BlockKind.Water, spriteFactory),
-            new("Statue", new Vector2(700, 125), BlockKind.Statue, spriteFactory),
-            new("Crystal Pillar", new Vector2(700, 125), BlockKind.CrystalPillar, spriteFactory),
-            new("Rune Tile", new Vector2(700, 125), BlockKind.RuneTile, spriteFactory)
+            CreateBlockPair("Stone Block", BlockKind.Stone),
+            CreateBlockPair("Push Block", BlockKind.Push),
+            CreateBlockPair("Water Tile", BlockKind.Water),
+            CreateBlockPair("Statue", BlockKind.Statue),
+            CreateBlockPair("Crystal Pillar", BlockKind.CrystalPillar),
+            CreateBlockPair("Rune Tile", BlockKind.RuneTile)
         ]);
-        items = new ObjectGallery<ItemObject>(
+
+        ObjectDisplayPair CreateItemPair(string name, ItemKind kind) => new(
+            new ItemObject(name, new Vector2(700, 270), kind, spriteFactory),
+            new ItemObject(name, new Vector2(480, 280), kind, spriteFactory));
+
+        items = new ObjectGallery<ObjectDisplayPair>(
         [
-            new("Heart", new Vector2(700, 270), ItemKind.Heart, spriteFactory),
-            new("Rupee", new Vector2(700, 270), ItemKind.Rupee, spriteFactory),
-            new("Key", new Vector2(700, 270), ItemKind.Key, spriteFactory),
-            new("Bomb", new Vector2(700, 270), ItemKind.Bomb, spriteFactory),
-            new("Bow", new Vector2(700, 270), ItemKind.Bow, spriteFactory),
-            new("Boomerang", new Vector2(700, 270), ItemKind.Boomerang, spriteFactory),
-            new("Ruins Map", new Vector2(700, 270), ItemKind.Map, spriteFactory),
-            new("Star Compass", new Vector2(700, 270), ItemKind.Compass, spriteFactory),
-            new("Star Shard", new Vector2(700, 270), ItemKind.StarShard, spriteFactory)
+            CreateItemPair("Heart", ItemKind.Heart),
+            CreateItemPair("Rupee", ItemKind.Rupee),
+            CreateItemPair("Key", ItemKind.Key),
+            CreateItemPair("Bomb", ItemKind.Bomb),
+            CreateItemPair("Bow", ItemKind.Bow),
+            CreateItemPair("Boomerang", ItemKind.Boomerang),
+            CreateItemPair("Ruins Map", ItemKind.Map),
+            CreateItemPair("Star Compass", ItemKind.Compass),
+            CreateItemPair("Star Shard", ItemKind.StarShard)
         ]);
         // Reserve room to the right for the Octorok's projectile as well as its patrol.
         Vector2 playAreaEnemyPosition = new(370, 450);
