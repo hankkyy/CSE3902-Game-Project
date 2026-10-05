@@ -8,38 +8,66 @@ namespace GameProject.Sprites;
 public sealed class SpriteFactory
 {
     private readonly Texture2D pixel;
+    private readonly Texture2D playerAtlas;
 
     public SpriteFactory(GraphicsDevice graphicsDevice)
     {
         pixel = new Texture2D(graphicsDevice, 1, 1);
         pixel.SetData([Color.White]);
+        using MemoryStream stream = new(Convert.FromBase64String(PlayerSpriteAtlasData.PngBase64));
+        playerAtlas = Texture2D.FromStream(graphicsDevice, stream);
     }
 
-    public ISprite CreatePlayerSprite() =>
-        new PrimitiveSprite(pixel, new Color(50, 165, 83), new Color(229, 211, 118), new Point(28, 34));
+    public ISprite CreatePlayerSprite() => CreateAnimatedPlayerSprite();
+
+    public ISprite CreateArrowSprite() => new ArrowSprite(pixel);
+
+    public ISprite CreateBoomerangSprite() => new BoomerangSprite(pixel);
+
+    public ISprite CreateBombSprite() => new BombSprite(pixel);
+
+    public ISprite CreateBombExplosionSprite() => new BombExplosionSprite(pixel);
+
+    public ISprite CreateLightBoltSprite() => new RuinsSprite(pixel, RuinsVisual.LightBolt);
+
+    /// <summary>Additive animation entry point for the player-state owner; existing calls remain valid.</summary>
+    public IAnimatedPlayerSprite CreateAnimatedPlayerSprite() => new PlayerSprite(playerAtlas);
 
     public ISprite CreateBlockSprite(BlockKind kind) => kind switch
     {
-        BlockKind.Stone => new PrimitiveSprite(pixel, Color.SlateGray, Color.LightGray, new Point(52, 52)),
-        BlockKind.Push => new PrimitiveSprite(pixel, new Color(139, 91, 55), Color.Bisque, new Point(52, 52)),
-        BlockKind.Water => new PrimitiveSprite(pixel, Color.RoyalBlue, Color.LightBlue, new Point(52, 52)),
-        _ => new PrimitiveSprite(pixel, Color.DarkGoldenrod, Color.Goldenrod, new Point(52, 60))
+        BlockKind.Stone => new ClassicRuinsSprite(pixel, ClassicVisual.Stone),
+        BlockKind.Push => new ClassicRuinsSprite(pixel, ClassicVisual.Push),
+        BlockKind.Water => new ClassicRuinsSprite(pixel, ClassicVisual.Water),
+        BlockKind.Statue => new ClassicRuinsSprite(pixel, ClassicVisual.Statue),
+        BlockKind.CrystalPillar => new RuinsSprite(pixel, RuinsVisual.CrystalPillar),
+        BlockKind.RuneTile => new RuinsSprite(pixel, RuinsVisual.RuneTile),
+        _ => throw new ArgumentOutOfRangeException(nameof(kind))
     };
 
     public ISprite CreateItemSprite(ItemKind kind) => kind switch
     {
-        ItemKind.Heart => new PrimitiveSprite(pixel, Color.Crimson, Color.Pink, new Point(24, 24)),
-        ItemKind.Rupee => new PrimitiveSprite(pixel, Color.LimeGreen, Color.LightGreen, new Point(18, 30)),
-        ItemKind.Key => new PrimitiveSprite(pixel, Color.Gold, Color.LightYellow, new Point(16, 34)),
-        _ => new PrimitiveSprite(pixel, Color.Black, Color.OrangeRed, new Point(28, 28))
+        ItemKind.Heart => new ClassicRuinsSprite(pixel, ClassicVisual.Heart),
+        ItemKind.Rupee => new ClassicRuinsSprite(pixel, ClassicVisual.Rupee),
+        ItemKind.Key => new ClassicRuinsSprite(pixel, ClassicVisual.Key),
+        ItemKind.Bomb => new ClassicRuinsSprite(pixel, ClassicVisual.Bomb),
+        ItemKind.Bow => new RuinsSprite(pixel, RuinsVisual.Bow),
+        ItemKind.Boomerang => new RuinsSprite(pixel, RuinsVisual.Boomerang),
+        ItemKind.Map => new RuinsSprite(pixel, RuinsVisual.Map),
+        ItemKind.Compass => new RuinsSprite(pixel, RuinsVisual.Compass),
+        ItemKind.StarShard => new RuinsSprite(pixel, RuinsVisual.StarShard),
+        _ => throw new ArgumentOutOfRangeException(nameof(kind))
     };
 
     public ISprite CreateEnemySprite(EnemyKind kind) => kind switch
     {
-        EnemyKind.Octorok => new PrimitiveSprite(pixel, Color.IndianRed, Color.MistyRose, new Point(32, 32)),
-        EnemyKind.Keese => new PrimitiveSprite(pixel, Color.MediumPurple, Color.Lavender, new Point(38, 20)),
-        EnemyKind.Gel => new PrimitiveSprite(pixel, Color.CornflowerBlue, Color.LightCyan, new Point(26, 24)),
-        _ => new PrimitiveSprite(pixel, Color.BurlyWood, Color.White, new Point(30, 42))
+        EnemyKind.Octorok => new ClassicRuinsSprite(pixel, ClassicVisual.Octorok),
+        EnemyKind.Keese => new ClassicRuinsSprite(pixel, ClassicVisual.Keese),
+        EnemyKind.Gel => new ClassicRuinsSprite(pixel, ClassicVisual.Gel),
+        EnemyKind.OldMan => new ClassicRuinsSprite(pixel, ClassicVisual.Keeper),
+        EnemyKind.RuneWisp => new RuinsSprite(pixel, RuinsVisual.RuneWisp),
+        EnemyKind.ClockworkBeetle => new RuinsSprite(pixel, RuinsVisual.ClockworkBeetle),
+        EnemyKind.PrismSentinel => new RuinsSprite(pixel, RuinsVisual.PrismSentinel),
+        _ => throw new ArgumentOutOfRangeException(nameof(kind))
     };
 
     public void DrawPanel(SpriteBatch spriteBatch, Rectangle rectangle, Color color) => spriteBatch.Draw(pixel, rectangle, color);

@@ -5,38 +5,48 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject.Objects;
 
-public enum EnemyKind { Octorok, Keese, Gel, OldMan }
+public enum EnemyKind { Octorok, Keese, Gel, OldMan, RuneWisp, ClockworkBeetle, PrismSentinel }
 
 public sealed class EnemyObject : IGameObject
 {
-    private readonly Vector2 startPosition;
-    private readonly EnemyKind kind;
-    private readonly ISprite sprite;
-    private double elapsed;
+    private readonly IGameObject character;
 
     public EnemyObject(string name, Vector2 position, EnemyKind kind, SpriteFactory sprites)
+        : this(name, position, kind, sprites.CreateEnemySprite(kind), kind switch
+        {
+            EnemyKind.Octorok => sprites.CreateItemSprite(ItemKind.Bomb),
+            EnemyKind.PrismSentinel => sprites.CreateLightBoltSprite(),
+            _ => null
+        })
+    {
+    }
+
+    /// <summary>Allows all character kinds and their shots to be verified without a graphics device.</summary>
+    public EnemyObject(string name, Vector2 position, EnemyKind kind, ISprite sprite, ISprite? projectileSprite = null)
     {
         Name = name;
-        startPosition = position;
-        this.kind = kind;
-        sprite = sprites.CreateEnemySprite(kind);
+        character = kind switch
+        {
+            EnemyKind.Octorok => new Enemies.Octorok(name, position, sprite,
+                projectileSprite ?? throw new ArgumentNullException(nameof(projectileSprite))),
+            EnemyKind.Keese => new Enemies.Keese(name, position, sprite),
+            EnemyKind.Gel => new Enemies.Gel(name, position, sprite),
+            EnemyKind.OldMan => new Enemies.Npc(name, position, sprite),
+            EnemyKind.RuneWisp => new Enemies.RuneWisp(name, position, sprite),
+            EnemyKind.ClockworkBeetle => new Enemies.ClockworkBeetle(name, position, sprite),
+            EnemyKind.PrismSentinel => new Enemies.PrismSentinel(name, position, sprite,
+                projectileSprite ?? throw new ArgumentNullException(nameof(projectileSprite))),
+            _ => throw new ArgumentOutOfRangeException(nameof(kind))
+        };
     }
 
     public string Name { get; }
-    public void Update(GameTime gameTime) => elapsed += gameTime.ElapsedGameTime.TotalSeconds;
+    public void Update(GameTime gameTime) => character.Update(gameTime);
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        Vector2 offset = kind switch
-        {
-            EnemyKind.Octorok => new Vector2((float)Math.Sin(elapsed * 1.8) * 48, 0),
-            EnemyKind.Keese => new Vector2((float)Math.Sin(elapsed * 3) * 55, (float)Math.Cos(elapsed * 4) * 18),
-            EnemyKind.Gel => new Vector2(0, Math.Abs((float)Math.Sin(elapsed * 2.5)) * -28),
-            _ => Vector2.Zero
-        };
-        Direction facing = Math.Cos(elapsed * 1.8) < 0 ? Direction.Left : Direction.Right;
-        sprite.Draw(spriteBatch, startPosition + offset, facing, ((int)(elapsed * 7) % 2) == 1);
+        character.Draw(spriteBatch);
     }
 
-    public void Reset() => elapsed = 0;
+    public void Reset() => character.Reset();
 }

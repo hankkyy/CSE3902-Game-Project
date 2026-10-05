@@ -1,5 +1,6 @@
 using GameProject.Commands;
 using GameProject.Objects;
+using GameProject.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,51 +10,67 @@ namespace GameProject.Controllers;
 public sealed class KeyboardController
 {
     private readonly Player player;
-    private readonly Dictionary<Keys, ICommand> pressedCommands;
-    private KeyboardState previousState;
+    private readonly GameSession? session;
+    private readonly KeyPressDispatcher keyPressDispatcher;
 
     public KeyboardController(
         Player player,
         Action previousBlock, Action nextBlock,
         Action previousItem, Action nextItem,
         Action previousEnemy, Action nextEnemy,
-        Action reset, Action quit)
+        Action reset, Action quit,
+        GameSession? session = null)
     {
         this.player = player;
-        pressedCommands = new Dictionary<Keys, ICommand>
+        this.session = session;
+        Dictionary<Keys, ICommand> pressedCommands = new()
         {
-            [Keys.Z] = new ActionCommand(player.Attack),
-            [Keys.N] = new ActionCommand(player.Attack),
-            [Keys.D1] = new ActionCommand(() => player.SelectItem(1)),
-            [Keys.D2] = new ActionCommand(() => player.SelectItem(2)),
-            [Keys.D3] = new ActionCommand(() => player.SelectItem(3)),
-            [Keys.E] = new ActionCommand(player.TakeDamage),
-            [Keys.T] = new ActionCommand(previousBlock),
-            [Keys.Y] = new ActionCommand(nextBlock),
-            [Keys.U] = new ActionCommand(previousItem),
-            [Keys.I] = new ActionCommand(nextItem),
-            [Keys.O] = new ActionCommand(previousEnemy),
-            [Keys.P] = new ActionCommand(nextEnemy),
-            [Keys.R] = new ActionCommand(reset),
-            [Keys.Q] = new ActionCommand(quit),
-            [Keys.Escape] = new ActionCommand(quit)
+            [Keys.Z] = new AttackCommand(player),
+            [Keys.N] = new AttackCommand(player),
+            [Keys.D1] = new FireArrowCommand(player),
+            [Keys.D2] = new ThrowBoomerangCommand(player),
+            [Keys.D3] = new PlaceBombCommand(player),
+            [Keys.E] = new TakeDamageCommand(player),
+            [Keys.T] = new PreviousGalleryCommand(previousBlock),
+            [Keys.Y] = new NextGalleryCommand(nextBlock),
+            [Keys.U] = new PreviousGalleryCommand(previousItem),
+            [Keys.I] = new NextGalleryCommand(nextItem),
+            [Keys.O] = new PreviousGalleryCommand(previousEnemy),
+            [Keys.P] = new NextGalleryCommand(nextEnemy),
+            [Keys.R] = new ResetGameCommand(reset)
         };
+
+        if (session is not null)
+        {
+            foreach (Keys key in pressedCommands.Keys.ToArray())
+            {
+                pressedCommands[key] = new GameplayCommand(session, pressedCommands[key]);
+            }
+
+            pressedCommands[Keys.Enter] = new StartGameCommand(session);
+        }
+
+        pressedCommands[Keys.Q] = new QuitGameCommand(quit);
+        pressedCommands[Keys.Escape] = new QuitGameCommand(quit);
+        keyPressDispatcher = new KeyPressDispatcher(pressedCommands);
     }
 
-    public void Update()
+    public void Update() => Update(Keyboard.GetState());
+
+    /// <summary>Accepts one keyboard snapshot so actual bindings can be tested without a window.</summary>
+    public void Update(KeyboardState current)
     {
-        KeyboardState current = Keyboard.GetState();
         Vector2 movement = Vector2.Zero;
-        if (current.IsKeyDown(Keys.Left) || current.IsKeyDown(Keys.A)) movement.X -= 1;
-        if (current.IsKeyDown(Keys.Right) || current.IsKeyDown(Keys.D)) movement.X += 1;
-        if (current.IsKeyDown(Keys.Up) || current.IsKeyDown(Keys.W)) movement.Y -= 1;
-        if (current.IsKeyDown(Keys.Down) || current.IsKeyDown(Keys.S)) movement.Y += 1;
+        if (session is null || session.Mode == GameMode.Playing)
+        {
+            if (current.IsKeyDown(Keys.Left) || current.IsKeyDown(Keys.A)) movement.X -= 1;
+            if (current.IsKeyDown(Keys.Right) || current.IsKeyDown(Keys.D)) movement.X += 1;
+            if (current.IsKeyDown(Keys.Up) || current.IsKeyDown(Keys.W)) movement.Y -= 1;
+            if (current.IsKeyDown(Keys.Down) || current.IsKeyDown(Keys.S)) movement.Y += 1;
+        }
+
         player.SetMovement(movement);
 
-        foreach ((Keys key, ICommand command) in pressedCommands)
-        {
-            if (current.IsKeyDown(key) && previousState.IsKeyUp(key)) command.Execute();
-        }
-        previousState = current;
+        keyPressDispatcher.Update(current);
     }
 }

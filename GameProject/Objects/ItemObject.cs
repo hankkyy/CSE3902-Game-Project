@@ -1,33 +1,43 @@
 using GameProject.Core;
+using GameProject.Objects.Items;
 using GameProject.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject.Objects;
 
-public enum ItemKind { Heart, Rupee, Key, Bomb }
+public enum ItemKind { Heart, Rupee, Key, Bomb, Bow, Boomerang, Map, Compass, StarShard }
 
+/// <summary>Compatibility entry point that delegates to a dedicated item implementation.</summary>
 public sealed class ItemObject : IGameObject
 {
-    private readonly Vector2 startPosition;
-    private readonly ISprite sprite;
-    private double elapsed;
+    private readonly ItemEntity implementation;
 
     public ItemObject(string name, Vector2 position, ItemKind kind, SpriteFactory sprites)
+        : this(name, position, kind, sprites.CreateItemSprite(kind)) { }
+
+    /// <summary>Allows sprite injection for headless tests and future art integration.</summary>
+    public ItemObject(string name, Vector2 position, ItemKind kind, ISprite sprite)
     {
-        Name = name;
-        startPosition = position;
-        sprite = sprites.CreateItemSprite(kind);
+        ArgumentNullException.ThrowIfNull(sprite);
+        implementation = kind switch
+        {
+            ItemKind.Heart => new HeartItem(name, position, sprite),
+            ItemKind.Rupee => new RupeeItem(name, position, sprite),
+            ItemKind.Key => new KeyItem(name, position, sprite),
+            ItemKind.Bomb => new BombItem(name, position, sprite),
+            ItemKind.Bow => new BowItem(name, position, sprite),
+            ItemKind.Boomerang => new BoomerangItem(name, position, sprite),
+            ItemKind.Map => new MapItem(name, position, sprite),
+            ItemKind.Compass => new CompassItem(name, position, sprite),
+            ItemKind.StarShard => new StarShardItem(name, position, sprite),
+            _ => throw new ArgumentOutOfRangeException(nameof(kind))
+        };
     }
 
-    public string Name { get; }
-    public void Update(GameTime gameTime) => elapsed += gameTime.ElapsedGameTime.TotalSeconds;
-
-    public void Draw(SpriteBatch spriteBatch)
-    {
-        Vector2 bobbed = startPosition + new Vector2(0, (float)Math.Sin(elapsed * 4) * 7);
-        sprite.Draw(spriteBatch, bobbed, Direction.Down, ((int)(elapsed * 6) % 2) == 1);
-    }
-
-    public void Reset() => elapsed = 0;
+    public string Name => implementation.Name;
+    public Vector2 Position => implementation.Position;
+    public void Update(GameTime gameTime) => implementation.Update(gameTime);
+    public void Draw(SpriteBatch spriteBatch) => implementation.Draw(spriteBatch);
+    public void Reset() => implementation.Reset();
 }
