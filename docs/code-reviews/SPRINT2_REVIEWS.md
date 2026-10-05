@@ -80,7 +80,6 @@ Outcome: approved in pull request #14.
   - `GameProject/Objects/ItemObject.cs`
 - Code author: Leo Zhuang
 - Review time: 30mins
-- Reviewed commit: `2fe9fd5`
 - Pull request: #17 and #19
 
 Readability: 
