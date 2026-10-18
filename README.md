@@ -251,6 +251,7 @@ Existing project guides include:
 
 - [Sprint 3 instructor requirements and team interpretation](docs/SPRINT3_REQUIREMENTS.md)
 - [Sprint 3 five-person task plan](docs/SPRINT3_TASKS.md)
+- [Sprint 3 teammate execution guide (中文)](docs/SPRINT3_TEAM_GUIDE_CN.md)
 - [Sprint 3 functionality and process checklist](docs/SPRINT3_CHECKLIST.md)
 - [Sprint 3 architecture contract](docs/SPRINT3_ARCHITECTURE.md)
 - [Required collision matrix](docs/COLLISION_MATRIX.md)
