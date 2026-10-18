@@ -2,6 +2,12 @@
 
 每个人只做自己这一行，不要直接向 `main` 或 `integration/sprint3` 推送功能代码。
 
+时间安排（America/New_York）：
+
+- Sprint 开始：2026 年 10 月 7 日
+- Functionality check-in：2026 年 10 月 19 日
+- Sprint 3 最终截止：2026 年 10 月 26 日晚上 8:00
+
 | 队员 | Issue | 分支 | Reviewer |
 |---|---|---|---|
 | Hank | [#26](https://github.com/hankkyy/CSE3902-Game-Project/issues/26) | `feature/s3-collision-core` | Xuanzhe |
@@ -30,7 +36,8 @@ git status
 5. 自己分支对应的 `.codex/tasks/s3-*.md`
 6. 自己的 GitHub issue
 
-然后把 project board 上自己的任务从 Todo 移到 In Progress，并填写 Carmen 上的真实 Start Date 和 Target Date。
+然后把 project board 上自己的任务从 Todo 移到 In Progress。Start Date、
+Functionality Check-in 和 Target Date 已统一设置；开始工作时不要自行更改团队截止日期。
 
 ## 每次工作结束
 

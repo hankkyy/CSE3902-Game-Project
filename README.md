@@ -2,6 +2,12 @@
 
 Team: 6
 
+Sprint 3 schedule (America/New_York):
+
+- Start: October 7, 2026
+- Functionality check-in: October 19, 2026
+- Final submission: October 26, 2026 by 8:00 PM
+
 ## 1. Project Overview
 
 Starlight Ruins is a C# and MonoGame project. Sprint 3 adds data-driven

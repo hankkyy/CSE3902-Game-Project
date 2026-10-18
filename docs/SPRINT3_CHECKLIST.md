@@ -7,7 +7,8 @@
 - [x] `integration/sprint3` starts from that baseline.
 - [x] Five equal-effort assignments and review ring are documented.
 - [x] Five assigned GitHub issues and the Sprint 3 project board are created.
-- [ ] Copy the current Carmen sprint start, check-in, final, and CATME dates to this file and the GitHub project.
+- [x] Record Sprint start (October 7), functionality check-in (October 19), and final deadline (October 26, 2026 at 8:00 PM) in the repository and GitHub project.
+- [ ] Confirm and record the CATME deadline if it differs from the Sprint 3 final deadline.
 - [ ] Each member confirms their issue, branch, reviewer, estimate, and acceptance criteria.
 - [ ] Merge the small shared collision/room contract PR before dependent implementation.
 

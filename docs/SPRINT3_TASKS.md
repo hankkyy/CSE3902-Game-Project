@@ -1,6 +1,8 @@
 # Sprint 3 five-person task plan
 
-All five assignments have 12 effort points and an initial estimate of 15 hours. Dates from the supplied handout appear to belong to a different term; the integrator must copy the current Carmen dates into the project board before work begins.
+All five assignments have 12 effort points and an initial estimate of 15 hours.
+Sprint 3 runs from October 7, 2026 through October 26, 2026 at 8:00 PM
+(America/New_York). The functionality check-in is October 19, 2026.
 
 | Owner | Branch | Scope | Check-in deliverable | Final acceptance | Reviewer |
 |---|---|---|---|---|---|
@@ -43,4 +45,6 @@ No owner may wait until the final days to expose a required API. Cross-owner API
 
 All five issues begin in Todo with labels `sprint-3`, `effort-12`, and
 `functionality-check-in`. Their project fields start at 12 Effort Points,
-15 Original Estimate Hours, 15 Remaining Hours, and 0 Actual Hours.
+15 Original Estimate Hours, 15 Remaining Hours, and 0 Actual Hours. Their
+Start Date is October 7, Functionality Check-in is October 19, and Target Date
+is October 26, 2026.

@@ -1,6 +1,13 @@
 # Sprint 3 requirements — Team 6 interpretation
 
-Source: instructor-provided `sprint3.html`. The dates printed in that copy do not match the current semester; verify all submission dates in Carmen.
+Source: instructor-provided `sprint3.html`. The dates printed in that copy
+belong to a different term. Team 6's current schedule is:
+
+- Sprint start: October 7, 2026
+- Functionality check-in: October 19, 2026
+- Sprint 3 final submission: October 26, 2026 by 8:00 PM
+
+All times use America/New_York unless Carmen states otherwise.
 
 ## Required functionality
 
