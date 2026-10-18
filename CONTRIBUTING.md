@@ -11,16 +11,20 @@ dotnet build GameProject/GameProject.csproj
 
 ## Start an assigned task
 
-The five task branches are already on GitHub. Use the exact branch name in `docs/SPRINT2_TASKS.md`:
+The five Sprint 3 task branches are already on GitHub. Use the exact branch
+name in `docs/SPRINT3_TASKS.md`:
 
 ```sh
 git fetch origin
 git switch --track origin/feature/your-task
 ```
 
-When using Codex, it automatically reads the root `AGENTS.md`. Before asking it to implement anything, make sure it also reads `docs/ARCHITECTURE_CONTRACT.md` and the matching `.codex/tasks/*.md` file. A good first prompt is:
+When using Codex, it automatically reads the root `AGENTS.md`. Before asking
+it to implement anything, make sure it also reads
+`docs/SPRINT3_ARCHITECTURE.md`, `docs/COLLISION_MATRIX.md`, and the matching
+`.codex/tasks/*.md` file. A good first prompt is:
 
-> Read AGENTS.md, docs/ARCHITECTURE_CONTRACT.md, and the task file matching this branch. Implement only that assignment, stay inside owned paths, run ./scripts/verify.sh, and summarize any integration needs.
+> Read AGENTS.md, docs/SPRINT3_ARCHITECTURE.md, docs/COLLISION_MATRIX.md, and the task file matching this branch. Implement only that assignment, stay inside owned paths, run both verification scripts, and summarize any integration needs.
 
 Do not share a branch. Do not push directly to `main`. If two tasks need the same API, agree on the interface first and merge that small change before the implementations.
 
@@ -28,6 +32,7 @@ Do not share a branch. Do not push directly to `main`. If two tasks need the sam
 
 ```sh
 ./scripts/verify.sh
+./scripts/analyze-strict.sh
 git status
 ```
 
@@ -37,8 +42,15 @@ If formatting fails, run `dotnet format GameProject/GameProject.csproj`, inspect
 
 - Keep one task per PR and link its issue with `Closes #NUMBER`.
 - Include manual test steps and a screenshot/GIF for visible behavior.
-- Ask the reviewer listed in the task plan.
+- Ask the reviewer listed in the task plan and have them review both named classes.
 - Review behavior, readability, and maintainability; use `docs/code-reviews/TEMPLATE.md` if the PR itself does not preserve enough detail.
 - Resolve feedback, wait for CI, then squash-merge.
 
 Never commit generated `bin/`, `obj/`, IDE settings, secrets, or copyrighted assets without team approval.
+
+## Time tracking
+
+Every issue begins at 12 points / 15 estimated hours. Move it to In Progress
+when work begins. After every work session, comment with work completed,
+actual time, and new Remaining Hours. Set it to zero only after the PR,
+verification, manual steps, documentation, and required review are complete.

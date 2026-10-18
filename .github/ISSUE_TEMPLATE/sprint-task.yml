@@ -1,7 +1,7 @@
 name: Sprint task
-description: Track one scoped Sprint 2 implementation task
-title: "[S2][8] "
-labels: ["sprint-2"]
+description: Track one scoped Sprint 3 implementation task
+title: "[S3][12] "
+labels: ["sprint-3", "effort-12"]
 body:
   - type: textarea
     id: outcome
@@ -14,7 +14,7 @@ body:
     id: scope
     attributes:
       label: Scope and effort breakdown
-      placeholder: "Feature A (3), feature B (3), tests/docs (2)"
+      placeholder: "Feature A (4 pts/5h), feature B (4/5h), tests/docs/review (4/5h)"
     validations:
       required: true
   - type: textarea
@@ -34,7 +34,14 @@ body:
   - type: input
     id: remaining
     attributes:
-      label: Initial remaining effort
-      value: "8"
+      label: Initial remaining hours
+      value: "15"
+    validations:
+      required: true
+  - type: input
+    id: reviewer
+    attributes:
+      label: Required reviewer and two review classes
+      placeholder: "@reviewer — ClassOne and ClassTwo"
     validations:
       required: true

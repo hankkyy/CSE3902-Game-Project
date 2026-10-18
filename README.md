@@ -1,13 +1,14 @@
-# CSE 3902 — Sprint 2
+# CSE 3902 — Sprint 3
 
 Team: 6
 
 ## 1. Project Overview
 
-Starlight Ruins is a C# and MonoGame project for Sprint 2:
-Game Objects and Sprites.
+Starlight Ruins is a C# and MonoGame project. Sprint 3 adds data-driven
+dungeon rooms, room navigation, and complete collision handling to the
+working Sprint 2 object demonstration.
 
-The current program is a functionality demonstration with a controllable
+The Sprint 3 starting baseline is a functionality demonstration with a controllable
 player and separate galleries for blocks, items, and enemies/NPCs.
 It demonstrates object drawing, movement, animation, player state changes,
 keyboard input, and reset behavior.
@@ -16,18 +17,30 @@ The project uses an original visual theme. The current roster contains
 6 block types, 9 item previews, and 7 enemy/NPC types. These counts describe
 our implementation; they are not numeric requirements from the assignment.
 
-## 2. Team Contributions
+### Sprint 3 status
 
-Our team divided the main tasks as follows. We also updated the project
-documentation as the implementation changed.
+Planning and task setup are complete. Room loading, room navigation, pickups,
+and object-to-object collisions are assigned work and must not be described as
+implemented until their feature PRs merge. The exact requirements, check-in
+gate, architecture, collision matrix, and individual assignments are linked in
+[Supporting Documentation](#9-supporting-documentation).
+
+The `sprint2-final` tag is the verified Sprint 2 baseline. Sprint 3 work is
+integrated through `integration/sprint3`; contributors do not push feature
+work directly to `main`.
+
+## 2. Team assignments
+
+The five Sprint 3 assignments each start at 12 effort points and an estimated
+15 hours. Update Remaining Hours on the GitHub project after every work session.
 
 | Member | Contributions |
 | --- | --- |
-| Hank Zhang (@hankkyy) | Worked on player movement and the idle, walking, attacking, and damaged states. Added state transitions, damage feedback, reset behavior, and player-state tests. |
-| Xuanzhe Li (@JojoLi132) | Created the player sprite sheet and animations for all four directions. Worked on animation timing, sprite loading, sprite tests, and asset documentation. |
-| Michael Xu (@mo46-123) | Implemented the Octorok, Keese, Gel, and NPC behaviors. Added enemy movement, animations, projectile behavior, reset handling, and enemy tests. |
-| Leo Zhuang (@Lzzz-7) | Implemented the basic block and item classes. Added item preview animations and tests for gallery cycling, wraparound, and reset behavior. |
-| Ashley Zhang (@xing-gif) | Worked on keyboard input, command classes, the start menu, and the HUD. Added input/menu tests and maintained the verification workflow. Also reorganized the README and updated the controls, feature descriptions, limitations, and team contribution information. |
+| Hank Zhang (@hankkyy) | Collision contracts/detection/dispatch and player-solid collision. Branch: `feature/s3-collision-core`. |
+| Xuanzhe Li (@JojoLi132) | External room schema/loader, five rooms, and all-object test room. Branch: `feature/s3-room-loading`. |
+| Michael Xu (@mo46-123) | Enemy health, combat collision responses, and projectile/environment interaction. Branch: `feature/s3-combat-collisions`. |
+| Leo Zhuang (@Lzzz-7) | Item pickup/inventory, push blocks, locked doors, persistence, and reset. Branch: `feature/s3-items-blocks-collisions`. |
+| Ashley Zhang (@xing-gif) | RoomManager, mouse navigation, HUD, integration, and strict-analysis records. Branch: `feature/s3-room-navigation-integration`. |
 
 ## 3. Requirements and Running
 
@@ -68,6 +81,7 @@ The application starts at a menu. Press Enter to begin the demonstration.
 | O / P | Show the previous / next enemy or NPC |
 | R | Reset gameplay objects and gallery selections |
 | Q / Escape | Quit from either the menu or gameplay |
+| Mouse left/right | Sprint 3 room navigation after the navigation PR merges |
 
 Letter controls work regardless of letter case.
 
@@ -147,12 +161,14 @@ The selected character appears in both the preview and the play area.
 - Gameplay input is disabled while the menu is active.
 - On-screen player status, gallery names, selection indexes, and controls.
 
-## 6. Sprint 2 Scope
+## 6. Sprint 3 Scope
 
-This build focuses on object movement, sprite animation, and state changes.
-As required for Sprint 2, blocks remain stationary, while items and
-enemies demonstrate their individual behaviors without interacting
-with other objects.
+The final Sprint 3 build must load each room's objects from external data,
+support normal and mouse-driven room transitions, include an artificial room
+with every first-dungeon object type, and implement the responses listed in
+`docs/COLLISION_MATRIX.md`. Sound, smooth camera transitions, and gamepad
+support are not required. Until feature PRs merge, the baseline still has the
+Sprint 2 limitations described above.
 
 ## 7. Design and Organization
 
@@ -187,6 +203,7 @@ The repository provides:
 - .NET/Roslyn analyzers enabled through `Directory.Build.props`.
 - `dotnet format` checks.
 - A shared verification script.
+- A separate strict-analysis script and warning baseline for early cleanup.
 - Six automated test projects that run without a game window.
 - A GitHub Actions workflow for pushes to `main` and pull requests
   targeting `main`.
@@ -199,6 +216,7 @@ From the project root, using Bash:
 
 ```sh
 bash scripts/verify.sh
+./scripts/analyze-strict.sh
 ```
 
 On Windows, use a Bash environment such as Git Bash for this script.
@@ -231,6 +249,13 @@ and whitespace checks.
 
 Existing project guides include:
 
+- [Sprint 3 instructor requirements and team interpretation](docs/SPRINT3_REQUIREMENTS.md)
+- [Sprint 3 five-person task plan](docs/SPRINT3_TASKS.md)
+- [Sprint 3 functionality and process checklist](docs/SPRINT3_CHECKLIST.md)
+- [Sprint 3 architecture contract](docs/SPRINT3_ARCHITECTURE.md)
+- [Required collision matrix](docs/COLLISION_MATRIX.md)
+- [Sprint 3 review record](docs/code-reviews/SPRINT3_REVIEWS.md)
+- [Sprint 3 reflection template](docs/SPRINT3_REFLECTION_TEMPLATE.md)
 - [Object roster and planned roles](docs/STARLIGHT_RUINS_ROSTER.md)
 - [Sprint 2 checklist](docs/SPRINT2_CHECKLIST.md)
 - [Arrow behavior and checks](docs/PLAYER_ARROW.md)
