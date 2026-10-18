@@ -6,6 +6,7 @@
 - [x] Annotated tag `sprint2-final` identifies the baseline.
 - [x] `integration/sprint3` starts from that baseline.
 - [x] Five equal-effort assignments and review ring are documented.
+- [x] Five assigned GitHub issues and the Sprint 3 project board are created.
 - [ ] Copy the current Carmen sprint start, check-in, final, and CATME dates to this file and the GitHub project.
 - [ ] Each member confirms their issue, branch, reviewer, estimate, and acceptance criteria.
 - [ ] Merge the small shared collision/room contract PR before dependent implementation.

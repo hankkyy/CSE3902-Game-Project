@@ -31,3 +31,16 @@ Each reviewer covers at least two named classes and records time:
 7. Refactor, complete the second review focus, and finish documentation.
 
 No owner may wait until the final days to expose a required API. Cross-owner API needs are raised in the issue and resolved through a small integration PR.
+
+## GitHub tracking
+
+- [#26 — Collision core and player-solid response](https://github.com/hankkyy/CSE3902-Game-Project/issues/26) — Hank
+- [#23 — Data-driven room loading and all-object test level](https://github.com/hankkyy/CSE3902-Game-Project/issues/23) — Xuanzhe
+- [#22 — Combat, enemy, and projectile collision responses](https://github.com/hankkyy/CSE3902-Game-Project/issues/22) — Michael
+- [#24 — Item pickup, inventory, push blocks, and doors](https://github.com/hankkyy/CSE3902-Game-Project/issues/24) — Leo
+- [#25 — Room navigation, mouse input, HUD, and integration](https://github.com/hankkyy/CSE3902-Game-Project/issues/25) — Ashley
+- [Sprint 3 project board](https://github.com/users/hankkyy/projects/5)
+
+All five issues begin in Todo with labels `sprint-3`, `effort-12`, and
+`functionality-check-in`. Their project fields start at 12 Effort Points,
+15 Original Estimate Hours, 15 Remaining Hours, and 0 Actual Hours.

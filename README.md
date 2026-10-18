@@ -269,7 +269,8 @@ Project records:
 - [Code quality analysis](docs/CODE_ANALYSIS.md)
 - [Sprint 2 code review records](docs/code-reviews/SPRINT2_REVIEWS.md)
 - [Sprint 2 reflection](docs/SPRINT2_REFLECTION.md)
-- [Project task board](https://github.com/users/hankkyy/projects/4)
+- [Sprint 3 project board](https://github.com/users/hankkyy/projects/5)
+- [Sprint 2 project board](https://github.com/users/hankkyy/projects/4)
 
 ## 10. Game Artwork
 
