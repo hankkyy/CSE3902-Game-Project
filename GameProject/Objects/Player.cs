@@ -10,7 +10,7 @@ namespace GameProject.Objects;
 public enum PlayerAction { Idle, Walking, Attacking, Damaged }
 
 /// <summary>Stores the player's position, health, and current action.</summary>
-public sealed class Player : IGameObject
+public sealed class Player : IGameObject, IMovableCollidable
 {
     private const float Speed = 190f;
     private const int Width = 28;
@@ -56,10 +56,16 @@ public sealed class Player : IGameObject
             () => Position + new Vector2((Width - BoomerangProjectile.Size) / 2f, (Height - BoomerangProjectile.Size) / 2f));
         bomb = bombSprite is null || explosionSprite is null ? null : new PlacedBomb(bounds, bombSprite, explosionSprite);
         Position = position;
+        PreviousPosition = position;
     }
 
     public string Name => "Link";
     public Vector2 Position { get; private set; }
+    public Vector2 PreviousPosition { get; private set; }
+    public Rectangle Hitbox => CreateHitbox(Position);
+    public Rectangle PreviousHitbox => CreateHitbox(PreviousPosition);
+    public CollisionLayer CollisionLayer => CollisionLayer.Player;
+    public bool IsActive => Health > 0;
     public Direction Facing { get; private set; } = Direction.Down;
     public PlayerAction Action => stateMachine.Action;
     public int Health { get; private set; } = 5;
@@ -160,6 +166,7 @@ public sealed class Player : IGameObject
 
     public void Update(GameTime gameTime)
     {
+        PreviousPosition = Position;
         double seconds = gameTime.ElapsedGameTime.TotalSeconds;
         visualActionTime += seconds;
         bool wantsToMove = pendingDirection != Vector2.Zero;
@@ -173,9 +180,7 @@ public sealed class Player : IGameObject
         {
             pendingDirection.Normalize();
             Position += pendingDirection * Speed * (float)seconds;
-            Position = new Vector2(
-                MathHelper.Clamp(Position.X, bounds.Left, bounds.Right - Width),
-                MathHelper.Clamp(Position.Y, bounds.Top, bounds.Bottom - Height));
+            CorrectPosition(Position);
         }
 
         pendingDirection = Vector2.Zero;
@@ -183,6 +188,17 @@ public sealed class Player : IGameObject
         boomerang?.Update(gameTime);
         bomb?.Update(gameTime);
     }
+
+    /// <summary>Applies collision correction while preserving the play-area boundary.</summary>
+    public void CorrectPosition(Vector2 position)
+    {
+        Position = new Vector2(
+            MathHelper.Clamp(position.X, bounds.Left, bounds.Right - Width),
+            MathHelper.Clamp(position.Y, bounds.Top, bounds.Bottom - Height));
+    }
+
+    private static Rectangle CreateHitbox(Vector2 position) =>
+        new((int)MathF.Round(position.X), (int)MathF.Round(position.Y), Width, Height);
 
     public void Draw(SpriteBatch spriteBatch)
     {
@@ -237,6 +253,7 @@ public sealed class Player : IGameObject
     public void Reset()
     {
         Position = startPosition;
+        PreviousPosition = startPosition;
         Facing = Direction.Down;
         Health = 5;
         SelectedItem = 1;
