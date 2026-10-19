@@ -1,6 +1,6 @@
 namespace GameProject.Rooms.Definitions;
 
-/// <summary>External initial state; runtime objects and progress live separately.</summary>
+/// <summary>Room data loaded from JSON.</summary>
 public sealed record RoomDefinition
 {
     public required string Id { get; init; }

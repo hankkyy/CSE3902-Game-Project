@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace GameProject.Rooms.Loading;
 
-/// <summary>Maps validated data to existing objects; sprite injection keeps tests headless.</summary>
+/// <summary>Creates game objects from validated room data.</summary>
 public sealed class RoomObjectFactory : IRoomObjectFactory
 {
     private readonly Rectangle bounds;

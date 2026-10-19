@@ -1,18 +1,40 @@
-# Sprint 3 room-loading integration proposal
+# Room integration notes
 
-The feature implements the proposed `IRoomObjectFactory.Create` concept in
-the owner's `Rooms/Loading` directory and puts data models in
-`Rooms/Definitions`. Existing shared contracts are unchanged.
+The room API uses `RoomDefinition` in `Rooms/Definitions` and
+`IRoomObjectFactory.Create(RoomObjectDefinition)` in `Rooms/Loading`.
+The integrator should confirm this interface before other features depend on it,
+as required by `SPRINT3_ARCHITECTURE.md`.
 
-Before dependent feature work consumes these types, the integrator should
-approve/extract their additive boundary in the contract PR required by
-`SPRINT3_ARCHITECTURE.md`.
+```csharp
+var definitions = RoomLoader.LoadDirectory(roomDataDirectory);
+var definition = definitions[0];
+var factory = new RoomObjectFactory(definition.Bounds.ToRectangle(), sprites);
+var room = new LoadedRoom(definition, factory);
 
-The smallest shared-file follow-ups are to copy external JSON files from
-`Content/Rooms` to build/publish output in the game project and add the room
-test project to the verification script. Ashley then supplies production
-navigation and `Game1` wiring. Exact snippets and ownership boundaries are in
-[the room integration handoff](../rooms/INTEGRATION.md).
+room.Update(gameTime);
+// Call inside SpriteBatch.Begin/End.
+renderer.Draw(spriteBatch, room);
+```
 
-The separate room test/preview host already loads and renders all six rooms,
-so reviewers can validate this feature before shared-file integration.
+Keep loaded rooms when revisiting them. `Objects` maps room-local IDs to game
+objects. A custom factory can provide persistent objects and a shared player.
+`LoadedRoom.Reset()` resets its objects; navigation and inventory need their own
+reset handling. Apply collection changes after collision processing.
+
+Shared-file changes for integration:
+
+- Copy room data to the game output in `GameProject.csproj`:
+  ```xml
+  <None Update="Content/Rooms/*.json"
+        CopyToOutputDirectory="PreserveNewest"
+        CopyToPublishDirectory="PreserveNewest" />
+  ```
+- Load from `AppContext.BaseDirectory/Content/Rooms`.
+- Add `tests/Rooms/Rooms.Tests.csproj` to `scripts/verify.sh`.
+- Connect the active room, player, renderer, and exit triggers in RoomManager
+  and Game1. The data uses a 960x540 window and bounds `(24,72,880,430)`.
+  The room view replaces the old right-side gallery panel.
+
+The room tests and preview already copy their own data. The default factory
+creates existing objects; collision responses, persistence, and transitions
+are handled by the corresponding gameplay modules.

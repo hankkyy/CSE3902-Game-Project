@@ -1,6 +1,6 @@
 namespace GameProject.Rooms.Definitions;
 
-/// <summary>Navigation data only; the navigation owner decides when to transition.</summary>
+/// <summary>An exit leading to an entry in another room.</summary>
 public sealed record RoomLink
 {
     public required string Id { get; init; }

@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Rooms.Tests;
 
-/// <summary>Feature-local visual acceptance host, separate from production navigation/input.</summary>
+/// <summary>A test window for viewing the room data.</summary>
 internal sealed class RoomPreview : Game
 {
     private readonly string? captureDirectory;

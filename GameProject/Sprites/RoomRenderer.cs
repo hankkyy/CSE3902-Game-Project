@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject.Sprites;
 
-/// <summary>Draws room bounds, a quiet tile grid, exit markers, and every room object.</summary>
+/// <summary>Draws the room floor, boundary, exits, and objects.</summary>
 public sealed class RoomRenderer
 {
     private readonly SpriteFactory sprites;

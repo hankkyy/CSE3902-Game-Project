@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject.Rooms.Loading;
 
-/// <summary>All objects in one room, keyed by stable ID; only the active room is stepped.</summary>
+/// <summary>Stores and updates the objects in one room.</summary>
 public sealed class LoadedRoom : IGameObject
 {
     public LoadedRoom(RoomDefinition definition, IRoomObjectFactory factory)
