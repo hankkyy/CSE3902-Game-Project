@@ -60,6 +60,7 @@ public sealed class Player : IGameObject
 
     public string Name => "Link";
     public Vector2 Position { get; private set; }
+    public Rectangle Hitbox => new((int)MathF.Round(Position.X), (int)MathF.Round(Position.Y), Width, Height);
     public Direction Facing { get; private set; } = Direction.Down;
     public PlayerAction Action => stateMachine.Action;
     public int Health { get; private set; } = 5;
@@ -234,6 +235,25 @@ public sealed class Player : IGameObject
         };
     }
 
+    /// <summary>Moves between rooms while keeping health and the selected item.</summary>
+    public void EnterRoom(Vector2 position)
+    {
+        if (!float.IsFinite(position.X) || !float.IsFinite(position.Y) ||
+            position.X < bounds.Left || position.X + Width > bounds.Right ||
+            position.Y < bounds.Top || position.Y + Height > bounds.Bottom)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(position), "The entry must fit inside the room.");
+        }
+
+        Position = position;
+        pendingDirection = Vector2.Zero;
+        stateMachine.Reset();
+        arrow?.Reset();
+        boomerang?.Reset();
+        bomb?.Reset();
+        ResetVisualActionClock();
+    }
     public void Reset()
     {
         Position = startPosition;

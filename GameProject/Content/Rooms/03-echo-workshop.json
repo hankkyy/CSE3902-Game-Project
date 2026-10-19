@@ -1,0 +1,25 @@
+{
+  "id": "echo-workshop",
+  "name": "Echo Workshop",
+  "bounds": {"width":880,"x":24,"height":430,"y":72},
+  "entries": {
+    "start": {"y":440,"x":64},
+    "west": {"y":270,"x":64},
+    "east": {"y":270,"x":832},
+    "north": {"y":112,"x":448},
+    "south": {"y":430,"x":448}
+  },
+  "links": [
+    {"id":"to-water","direction":"Left","targetRoomId":"quiet-water","targetEntryId":"east","trigger":{"width":24,"x":24,"height":80,"y":250}},
+    {"id":"to-court","direction":"Right","targetRoomId":"starlamp-court","targetEntryId":"west","trigger":{"width":24,"x":880,"height":80,"y":250}}
+  ],
+  "objects": [
+    {"id":"player","type":"Player","name":"Link","position":{"y":440,"x":64}},
+    {"id":"push","type":"Block.Push","name":"Push Block","position":{"y":260,"x":350}},
+    {"id":"statue","type":"Block.Statue","name":"Statue","position":{"y":160,"x":550}},
+    {"id":"stone","type":"Block.Stone","name":"Stone Block","position":{"y":360,"x":550}},
+    {"id":"bow","type":"Item.Bow","name":"Bow","position":{"y":160,"x":250}},
+    {"id":"bomb","type":"Item.Bomb","name":"Bomb","position":{"y":360,"x":250}},
+    {"id":"beetle","type":"Enemy.ClockworkBeetle","name":"Clockwork Beetle","position":{"y":300,"x":650}}
+  ]
+}

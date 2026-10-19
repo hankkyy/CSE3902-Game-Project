@@ -1,0 +1,29 @@
+{
+  "id": "entrance-hall",
+  "name": "Entrance Hall",
+  "bounds": {"width":880,"x":24,"height":430,"y":72},
+  "entries": {
+    "start": {"y":440,"x":64},
+    "west": {"y":270,"x":64},
+    "east": {"y":270,"x":832},
+    "north": {"y":112,"x":448},
+    "south": {"y":430,"x":448}
+  },
+  "links": [
+    {"id":"to-water","direction":"Right","targetRoomId":"quiet-water","targetEntryId":"west","trigger":{"width":24,"x":880,"height":80,"y":250}},
+    {"id":"to-sanctuary","direction":"Up","targetRoomId":"prism-sanctuary","targetEntryId":"south","trigger":{"width":80,"x":424,"height":24,"y":72}},
+    {"id":"to-lab","direction":"Down","targetRoomId":"all-object-lab","targetEntryId":"north","trigger":{"width":80,"x":424,"height":24,"y":478}}
+  ],
+  "objects": [
+    {"id":"player","type":"Player","name":"Link","position":{"y":440,"x":64}},
+    {"id":"stone-west","type":"Block.Stone","name":"Stone Block","position":{"y":180,"x":192}},
+    {"id":"stone-east","type":"Block.Stone","name":"Stone Block","position":{"y":180,"x":672}},
+    {"id":"rune","type":"Block.RuneTile","name":"Rune Tile","position":{"y":240,"x":448}},
+    {"id":"keeper","type":"Enemy.OldMan","name":"Lantern Keeper","position":{"y":150,"x":448}},
+    {"id":"map","type":"Item.Map","name":"Ruins Map","position":{"y":340,"x":280}},
+    {"id":"heart","type":"Item.Heart","name":"Heart","position":{"y":340,"x":352}},
+    {"id":"bow","type":"Item.Bow","name":"Bow","position":{"y":340,"x":424}},
+    {"id":"boomerang","type":"Item.Boomerang","name":"Boomerang","position":{"y":340,"x":496}},
+    {"id":"bomb","type":"Item.Bomb","name":"Bomb","position":{"y":340,"x":568}}
+  ]
+}
