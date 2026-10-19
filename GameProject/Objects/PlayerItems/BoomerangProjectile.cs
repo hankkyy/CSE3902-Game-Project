@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject.Objects.PlayerItems;
 
-/// <summary>Flies outward, then returns to the owner's current position without object collisions.</summary>
+/// <summary>Flies outward, then returns to the owner after reaching its range or a target.</summary>
 public sealed class BoomerangProjectile(Rectangle bounds, ISprite sprite, Func<Vector2> returnPosition) : IGameObject
 {
     public const int Size = 16;
@@ -24,6 +24,21 @@ public sealed class BoomerangProjectile(Rectangle bounds, ISprite sprite, Func<V
     public Direction Facing { get; private set; } = Direction.Down;
     public bool IsActive { get; private set; }
     public bool IsReturning { get; private set; }
+    public Rectangle Hitbox => new((int)Position.X, (int)Position.Y, Size, Size);
+    public Vector2 PreviousPosition { get; private set; }
+    internal HashSet<object> HitTargets { get; } = [];
+
+    /// <summary>Collision correction is applied before beginning the return trip.</summary>
+    public void BeginReturn(Vector2 correction)
+    {
+        if (!IsActive)
+        {
+            return;
+        }
+
+        Position += correction;
+        IsReturning = true;
+    }
 
     public bool TryLaunch(Vector2 position, Direction direction)
     {
@@ -32,6 +47,8 @@ public sealed class BoomerangProjectile(Rectangle bounds, ISprite sprite, Func<V
 
         origin = position;
         Position = position;
+        PreviousPosition = position;
+        HitTargets.Clear();
         Facing = direction;
         velocity = direction switch
         {
@@ -57,7 +74,10 @@ public sealed class BoomerangProjectile(Rectangle bounds, ISprite sprite, Func<V
 
     public void Update(GameTime gameTime)
     {
+        ArgumentNullException.ThrowIfNull(gameTime);
         if (!IsActive) return;
+
+        PreviousPosition = Position;
 
         double seconds = Math.Max(0, gameTime.ElapsedGameTime.TotalSeconds);
         age += seconds;
@@ -110,5 +130,7 @@ public sealed class BoomerangProjectile(Rectangle bounds, ISprite sprite, Func<V
         outboundDuration = 0;
         outboundAge = 0;
         age = 0;
+        PreviousPosition = Vector2.Zero;
+        HitTargets.Clear();
     }
 }

@@ -11,6 +11,7 @@ public sealed class Octorok : EnemyCharacter
     private const double ShotInterval = 2;
     private const float PatrolRange = 40;
     private const float ShotOffset = 34;
+    private double lastShotTime;
     public EnemyProjectile Projectile { get; }
 
     public Octorok(string name, Vector2 position, ISprite sprite, ISprite projectileSprite)
@@ -29,18 +30,31 @@ public sealed class Octorok : EnemyCharacter
 
     public override void Update(GameTime gameTime)
     {
+        ArgumentNullException.ThrowIfNull(gameTime);
+        if (!IsActive)
+        {
+            return;
+        }
+
         base.Update(gameTime);
         // Absolute simulation time makes long frames equivalent to small updates.
-        double shotTime = Math.Floor(elapsed / ShotInterval) * ShotInterval;
-        Projectile.Reset();
-        if (shotTime < ShotInterval) return;
-        Direction direction = FacingAt(shotTime);
-        Vector2 origin = PositionAt(shotTime) +
-            new Vector2(direction == Direction.Left ? -ShotOffset : ShotOffset, 0);
-        Projectile.Launch(origin, direction);
-        Projectile.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(elapsed - shotTime)));
+        double shotTime = Math.Floor(Math.Round(elapsed, 7) / ShotInterval) * ShotInterval;
+        if (shotTime > lastShotTime)
+        {
+            lastShotTime = shotTime;
+            Direction direction = FacingAt(shotTime);
+            Vector2 origin = PositionAt(shotTime) + MovementOffset +
+                new Vector2(direction == Direction.Left ? -ShotOffset : ShotOffset, 0);
+            Projectile.Launch(origin, direction);
+            Projectile.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(Math.Max(0, elapsed - shotTime))));
+        }
+        else
+        {
+            Projectile.Update(gameTime);
+        }
         // Leave space for the existing 28-pixel placeholder sprite inside the panel.
-        if (Projectile.Position.X < startPosition.X - 76 || Projectile.Position.X > startPosition.X + 184)
+        if (Projectile.Position.X < startPosition.X + MovementOffset.X - 76 ||
+            Projectile.Position.X > startPosition.X + MovementOffset.X + 184)
         {
             Projectile.Reset();
         }
@@ -48,6 +62,11 @@ public sealed class Octorok : EnemyCharacter
 
     public override void Draw(SpriteBatch spriteBatch)
     {
+        if (!IsActive)
+        {
+            return;
+        }
+
         base.Draw(spriteBatch);
         Projectile.Draw(spriteBatch);
     }
@@ -55,6 +74,12 @@ public sealed class Octorok : EnemyCharacter
     public override void Reset()
     {
         base.Reset();
+        lastShotTime = 0;
         Projectile.Reset();
+    }
+
+    protected override void OnDefeated()
+    {
+        Projectile.Deactivate();
     }
 }

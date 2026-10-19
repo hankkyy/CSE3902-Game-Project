@@ -1,6 +1,6 @@
 # Sprint 3 collision core
 
-Owner: Hank Zhang  
+Owner: Hank Zhang
 Required reviewer: Xuanzhe Li
 
 ## Implemented scope

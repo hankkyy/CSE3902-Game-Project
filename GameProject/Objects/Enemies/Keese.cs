@@ -7,6 +7,7 @@ namespace GameProject.Objects.Enemies;
 /// <summary>Flies in a bounded figure-eight relative to its starting point.</summary>
 public sealed class Keese(string name, Vector2 position, ISprite sprite) : EnemyCharacter(name, position, sprite)
 {
+    protected override Point HitboxSize => new(38, 20);
     protected override void UpdateMovement()
     {
         const float horizontalRange = 55;

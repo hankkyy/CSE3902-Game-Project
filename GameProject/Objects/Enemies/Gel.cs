@@ -6,6 +6,7 @@ namespace GameProject.Objects.Enemies;
 /// <summary>Pauses on the ground before each short hop.</summary>
 public sealed class Gel(string name, Vector2 position, ISprite sprite) : EnemyCharacter(name, position, sprite)
 {
+    protected override Point HitboxSize => new(26, 24);
     protected override void UpdateMovement()
     {
         const double cycleSeconds = 1.6;

@@ -6,5 +6,7 @@ namespace GameProject.Objects.Enemies;
 /// <summary>Stationary NPC using the shared idle animation clock.</summary>
 public sealed class Npc(string name, Vector2 position, ISprite sprite) : EnemyCharacter(name, position, sprite)
 {
+    public override bool IsHostile => false;
+    protected override Point HitboxSize => new(30, 42);
     protected override void UpdateMovement() => Position = startPosition;
 }
