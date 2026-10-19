@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject.Objects.PlayerItems;
 
-/// <summary>A stationary timed bomb with a visual explosion only; it does not damage other objects.</summary>
+/// <summary>A timed bomb with a separate explosion hitbox and one hit per target per placement.</summary>
 public sealed class PlacedBomb(Rectangle bounds, ISprite bombSprite, ISprite explosionSprite) : IGameObject
 {
     public const int Size = 16;
@@ -18,6 +18,31 @@ public sealed class PlacedBomb(Rectangle bounds, ISprite bombSprite, ISprite exp
     public Vector2 Position { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsExploding => IsActive && age >= FuseSeconds;
+    internal HashSet<object> HitTargets { get; } = [];
+    public Rectangle ExplosionHitbox
+    {
+        get
+        {
+            if (!IsExploding)
+            {
+                return Rectangle.Empty;
+            }
+
+            Vector2 position = ExplosionPosition;
+            return new Rectangle((int)position.X, (int)position.Y, ExplosionSize, ExplosionSize);
+        }
+    }
+
+    private Vector2 ExplosionPosition
+    {
+        get
+        {
+            Vector2 position = Position + new Vector2((Size - ExplosionSize) / 2f);
+            return new Vector2(
+                MathHelper.Clamp(position.X, bounds.Left, bounds.Right - ExplosionSize),
+                MathHelper.Clamp(position.Y, bounds.Top, bounds.Bottom - ExplosionSize));
+        }
+    }
 
     public bool TryPlace(Vector2 position)
     {
@@ -26,6 +51,7 @@ public sealed class PlacedBomb(Rectangle bounds, ISprite bombSprite, ISprite exp
             position.X + Size > bounds.Right || position.Y + Size > bounds.Bottom) return false;
 
         Position = position;
+        HitTargets.Clear();
         age = 0;
         IsActive = true;
         return true;
@@ -33,6 +59,7 @@ public sealed class PlacedBomb(Rectangle bounds, ISprite bombSprite, ISprite exp
 
     public void Update(GameTime gameTime)
     {
+        ArgumentNullException.ThrowIfNull(gameTime);
         if (!IsActive) return;
         age += Math.Max(0, gameTime.ElapsedGameTime.TotalSeconds);
         if (age >= FuseSeconds + ExplosionSeconds) IsActive = false;
@@ -49,11 +76,7 @@ public sealed class PlacedBomb(Rectangle bounds, ISprite bombSprite, ISprite exp
         }
 
         // Keep the complete explosion visible inside the play area, including edge placements.
-        Vector2 explosionPosition = Position + new Vector2((Size - ExplosionSize) / 2f);
-        explosionPosition = new Vector2(
-            MathHelper.Clamp(explosionPosition.X, bounds.Left, bounds.Right - ExplosionSize),
-            MathHelper.Clamp(explosionPosition.Y, bounds.Top, bounds.Bottom - ExplosionSize));
-        explosionSprite.Draw(spriteBatch, explosionPosition, Direction.Down, alternate);
+        explosionSprite.Draw(spriteBatch, ExplosionPosition, Direction.Down, alternate);
     }
 
     public void Reset()
@@ -61,5 +84,6 @@ public sealed class PlacedBomb(Rectangle bounds, ISprite bombSprite, ISprite exp
         Position = Vector2.Zero;
         age = 0;
         IsActive = false;
+        HitTargets.Clear();
     }
 }

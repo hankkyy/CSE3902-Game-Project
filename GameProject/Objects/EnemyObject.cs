@@ -9,7 +9,7 @@ public enum EnemyKind { Octorok, Keese, Gel, OldMan, RuneWisp, ClockworkBeetle, 
 
 public sealed class EnemyObject : IGameObject
 {
-    private readonly IGameObject character;
+    private readonly Enemies.EnemyCharacter character;
 
     public EnemyObject(string name, Vector2 position, EnemyKind kind, SpriteFactory sprites)
         : this(name, position, kind, sprites.CreateEnemySprite(kind), kind switch
@@ -41,6 +41,7 @@ public sealed class EnemyObject : IGameObject
     }
 
     public string Name { get; }
+    public Enemies.EnemyCharacter Character => character;
     public void Update(GameTime gameTime) => character.Update(gameTime);
 
     public void Draw(SpriteBatch spriteBatch)

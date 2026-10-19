@@ -67,6 +67,82 @@ public sealed class Player : IGameObject
     public bool HasActiveArrow => arrow?.IsActive ?? false;
     public bool HasActiveBoomerang => boomerang?.IsActive ?? false;
     public bool HasActiveBomb => bomb?.IsActive ?? false;
+    public bool IsActive => Health > 0;
+    public Rectangle Hitbox => new((int)Position.X, (int)Position.Y, Width, Height);
+    public ArrowProjectile? Arrow => arrow;
+    public BoomerangProjectile? Boomerang => boomerang;
+    public PlacedBomb? Bomb => bomb;
+    internal HashSet<object> SwordTargets { get; } = [];
+
+    /// <summary>The active blade reaches 20 pixels in front of the player.</summary>
+    public Rectangle SwordHitbox
+    {
+        get
+        {
+            if (!IsActive || Action != PlayerAction.Attacking)
+            {
+                return Rectangle.Empty;
+            }
+
+            const int reach = 20;
+            Rectangle body = Hitbox;
+            if (Facing == Direction.Up)
+            {
+                return new Rectangle(body.Left, body.Top - reach, Width, reach);
+            }
+            else if (Facing == Direction.Down)
+            {
+                return new Rectangle(body.Left, body.Bottom, Width, reach);
+            }
+            else if (Facing == Direction.Left)
+            {
+                return new Rectangle(body.Left - reach, body.Top, reach, Height);
+            }
+            else
+            {
+                return new Rectangle(body.Right, body.Top, reach, Height);
+            }
+        }
+    }
+
+    /// <summary>Uses the existing 0.45-second damage state as the invulnerability window.</summary>
+    public bool ReceiveContactDamage(Vector2 sourcePosition)
+    {
+        if (!IsActive || Action == PlayerAction.Damaged)
+        {
+            return false;
+        }
+
+        TakeDamage();
+        const float knockbackDistance = 12;
+        Vector2 away = Hitbox.Center.ToVector2() - sourcePosition;
+        Vector2 knockback;
+        if (Math.Abs(away.X) > Math.Abs(away.Y))
+        {
+            if (away.X < 0)
+            {
+                knockback = new Vector2(-knockbackDistance, 0);
+            }
+            else
+            {
+                knockback = new Vector2(knockbackDistance, 0);
+            }
+        }
+        else if (away.Y < 0)
+        {
+            knockback = new Vector2(0, -knockbackDistance);
+        }
+        else
+        {
+            knockback = new Vector2(0, knockbackDistance);
+        }
+
+        Position += knockback;
+        Position = new Vector2(
+            MathHelper.Clamp(Position.X, bounds.Left, bounds.Right - Width),
+            MathHelper.Clamp(Position.Y, bounds.Top, bounds.Bottom - Height));
+        return true;
+    }
 
     public void SetMovement(Vector2 direction)
     {
@@ -102,15 +178,16 @@ public sealed class Player : IGameObject
 
     public void Attack()
     {
-        if (stateMachine.TryAttack())
+        if (IsActive && stateMachine.TryAttack())
         {
+            SwordTargets.Clear();
             ResetVisualActionClock();
         }
     }
 
     public void TakeDamage()
     {
-        if (!stateMachine.TryTakeDamage())
+        if (!IsActive || !stateMachine.TryTakeDamage())
         {
             return;
         }
@@ -125,7 +202,7 @@ public sealed class Player : IGameObject
     public bool TryFireArrow()
     {
         SelectItem(1);
-        if (arrow is null || Action is PlayerAction.Attacking or PlayerAction.Damaged) return false;
+        if (!IsActive || arrow is null || Action is PlayerAction.Attacking or PlayerAction.Damaged) return false;
 
         return arrow.TryLaunch(ItemStartPosition(ArrowProjectile.Size), Facing);
     }
@@ -134,7 +211,7 @@ public sealed class Player : IGameObject
     public bool TryThrowBoomerang()
     {
         SelectItem(2);
-        if (boomerang is null || Action is PlayerAction.Attacking or PlayerAction.Damaged) return false;
+        if (!IsActive || boomerang is null || Action is PlayerAction.Attacking or PlayerAction.Damaged) return false;
         return boomerang.TryLaunch(ItemStartPosition(BoomerangProjectile.Size), Facing);
     }
 
@@ -142,7 +219,7 @@ public sealed class Player : IGameObject
     public bool TryPlaceBomb()
     {
         SelectItem(3);
-        if (bomb is null || Action is PlayerAction.Attacking or PlayerAction.Damaged) return false;
+        if (!IsActive || bomb is null || Action is PlayerAction.Attacking or PlayerAction.Damaged) return false;
         return bomb.TryPlace(ItemStartPosition(PlacedBomb.Size));
     }
 
@@ -160,7 +237,8 @@ public sealed class Player : IGameObject
 
     public void Update(GameTime gameTime)
     {
-        double seconds = gameTime.ElapsedGameTime.TotalSeconds;
+        ArgumentNullException.ThrowIfNull(gameTime);
+        double seconds = Math.Max(0, gameTime.ElapsedGameTime.TotalSeconds);
         visualActionTime += seconds;
         bool wantsToMove = pendingDirection != Vector2.Zero;
         stateMachine.Update(seconds, wantsToMove);
@@ -169,7 +247,7 @@ public sealed class Player : IGameObject
             ResetVisualActionClock();
         }
 
-        if (stateMachine.AllowsMovement && wantsToMove)
+        if (IsActive && stateMachine.AllowsMovement && wantsToMove)
         {
             pendingDirection.Normalize();
             Position += pendingDirection * Speed * (float)seconds;
@@ -242,6 +320,7 @@ public sealed class Player : IGameObject
         SelectedItem = 1;
         pendingDirection = Vector2.Zero;
         stateMachine.Reset();
+        SwordTargets.Clear();
         arrow?.Reset();
         boomerang?.Reset();
         bomb?.Reset();

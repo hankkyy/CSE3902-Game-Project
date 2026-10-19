@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject.Objects.PlayerItems;
 
-/// <summary>A single player-owned arrow that flies without colliding with other objects.</summary>
+/// <summary>A player-owned arrow; combat responses can deactivate it on impact.</summary>
 public sealed class ArrowProjectile(Rectangle bounds, ISprite sprite) : IGameObject
 {
     public const int Size = 16;
@@ -19,6 +19,12 @@ public sealed class ArrowProjectile(Rectangle bounds, ISprite sprite) : IGameObj
     public Vector2 Position { get; private set; }
     public Direction Facing { get; private set; } = Direction.Down;
     public bool IsActive { get; private set; }
+    public Rectangle Hitbox => new((int)Position.X, (int)Position.Y, Size, Size);
+
+    public void Deactivate()
+    {
+        IsActive = false;
+    }
 
     /// <summary>Starts at a top-left position; an active arrow cannot be replaced.</summary>
     public bool TryLaunch(Vector2 position, Direction direction)
@@ -42,6 +48,7 @@ public sealed class ArrowProjectile(Rectangle bounds, ISprite sprite) : IGameObj
 
     public void Update(GameTime gameTime)
     {
+        ArgumentNullException.ThrowIfNull(gameTime);
         if (!IsActive) return;
 
         age += Math.Max(0, gameTime.ElapsedGameTime.TotalSeconds);

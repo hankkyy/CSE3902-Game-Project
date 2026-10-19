@@ -12,18 +12,19 @@ public sealed class PrismSentinel : EnemyCharacter
     private const double ShotLifetime = 0.6;
     private const double ChargeStartsAt = 1.2;
     private readonly ISprite sprite;
+    private double lastShotTime;
 
     public PrismSentinel(string name, Vector2 position, ISprite sprite, ISprite projectileSprite)
         : base(name, position, sprite)
     {
         this.sprite = sprite;
-        Projectile = new EnemyProjectile(projectileSprite);
+        Projectile = new EnemyProjectile(projectileSprite, 8);
     }
 
     public EnemyProjectile Projectile { get; }
     // Match GameTime's 100-nanosecond precision at exact charge/shot boundaries.
     private double SimulationTime => Math.Round(elapsed, 7);
-    public bool IsCharging => SimulationTime % ShotInterval >= ChargeStartsAt;
+    public bool IsCharging => IsActive && SimulationTime % ShotInterval >= ChargeStartsAt;
 
     protected override void UpdateMovement()
     {
@@ -36,21 +37,42 @@ public sealed class PrismSentinel : EnemyCharacter
 
     public override void Update(GameTime gameTime)
     {
+        ArgumentNullException.ThrowIfNull(gameTime);
+        if (!IsActive)
+        {
+            return;
+        }
+
         base.Update(gameTime);
         double shotTime = Math.Floor(SimulationTime / ShotInterval) * ShotInterval;
         double shotAge = SimulationTime - shotTime;
-        Projectile.Reset();
-        if (shotTime < ShotInterval || shotAge >= ShotLifetime) return;
+        if (shotTime > lastShotTime)
+        {
+            lastShotTime = shotTime;
+            long shotNumber = (long)Math.Floor(shotTime / ShotInterval);
+            Direction shotDirection = shotNumber % 2 == 1 ? Direction.Right : Direction.Left;
+            Vector2 offset = shotDirection == Direction.Right ? new Vector2(32, 10) : new Vector2(-12, 10);
+            Projectile.Launch(Position + offset, shotDirection);
+            Projectile.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(shotAge)));
+        }
+        else
+        {
+            Projectile.Update(gameTime);
+        }
 
-        long shotNumber = (long)Math.Floor(shotTime / ShotInterval);
-        Direction shotDirection = shotNumber % 2 == 1 ? Direction.Right : Direction.Left;
-        Vector2 offset = shotDirection == Direction.Right ? new Vector2(32, 10) : new Vector2(-12, 10);
-        Projectile.Launch(startPosition + offset, shotDirection);
-        Projectile.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(shotAge)));
+        if (shotAge >= ShotLifetime)
+        {
+            Projectile.Deactivate();
+        }
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
+        if (!IsActive)
+        {
+            return;
+        }
+
         sprite.Draw(spriteBatch, Position, Facing, IsCharging);
         Projectile.Draw(spriteBatch);
     }
@@ -58,6 +80,12 @@ public sealed class PrismSentinel : EnemyCharacter
     public override void Reset()
     {
         base.Reset();
+        lastShotTime = 0;
         Projectile.Reset();
+    }
+
+    protected override void OnDefeated()
+    {
+        Projectile.Deactivate();
     }
 }

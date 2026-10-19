@@ -121,6 +121,8 @@ Require(!((Octorok)previews[0]).Projectile.IsActive &&
 Console.WriteLine("PASS: paired selection, movement, animation, projectiles, drawing, play-area bounds and reset.");
 int ruinsChecks = RuinsEnemyChecks.Run();
 Console.WriteLine($"PASS: {ruinsChecks} Starlight Ruins enemy checks; all 7 enemy/NPC kinds, paired galleries and reset.");
+int combatChecks = CombatChecks.Run();
+Console.WriteLine($"PASS: {combatChecks} Sprint 3 combat checks; damage, weapons, walls, death, projectiles and reset.");
 
 sealed class RecordingSprite : ISprite
 {

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace GameProject.Objects.Enemies;
 
 /// <summary>Enemy-owned horizontal shot with a sprite provided by the visual layer.</summary>
-public sealed class EnemyProjectile(ISprite sprite) : IGameObject
+public sealed class EnemyProjectile(ISprite sprite, int size = 28) : IGameObject
 {
     private const float Speed = 100;
     private Direction facing;
@@ -15,6 +15,12 @@ public sealed class EnemyProjectile(ISprite sprite) : IGameObject
     public string Name => "Octorok projectile";
     public Vector2 Position { get; private set; }
     public bool IsActive { get; private set; }
+    public Rectangle Hitbox => new((int)Position.X, (int)Position.Y, size, size);
+
+    public void Deactivate()
+    {
+        IsActive = false;
+    }
 
     public void Launch(Vector2 position, Direction direction)
     {
@@ -27,6 +33,7 @@ public sealed class EnemyProjectile(ISprite sprite) : IGameObject
 
     public void Update(GameTime gameTime)
     {
+        ArgumentNullException.ThrowIfNull(gameTime);
         if (!IsActive) return;
         age += Math.Max(0, gameTime.ElapsedGameTime.TotalSeconds);
         Position = origin + new Vector2((facing == Direction.Left ? -1 : 1) * Speed * (float)age, 0);
