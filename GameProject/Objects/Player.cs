@@ -312,6 +312,25 @@ public sealed class Player : IGameObject
         };
     }
 
+    /// <summary>Moves between rooms while keeping health and the selected item.</summary>
+    public void EnterRoom(Vector2 position)
+    {
+        if (!float.IsFinite(position.X) || !float.IsFinite(position.Y) ||
+            position.X < bounds.Left || position.X + Width > bounds.Right ||
+            position.Y < bounds.Top || position.Y + Height > bounds.Bottom)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(position), "The entry must fit inside the room.");
+        }
+
+        Position = position;
+        pendingDirection = Vector2.Zero;
+        stateMachine.Reset();
+        arrow?.Reset();
+        boomerang?.Reset();
+        bomb?.Reset();
+        ResetVisualActionClock();
+    }
     public void Reset()
     {
         Position = startPosition;
