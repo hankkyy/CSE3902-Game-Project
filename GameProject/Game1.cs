@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using GameProject.Rooms.Navigation;
 using GameProject.Sprites;
 using GameProject.States;
@@ -8,8 +9,10 @@ using Microsoft.Xna.Framework.Graphics;
 namespace GameProject;
 
 /// <summary>Creates game services and forwards update and draw calls.</summary>
-public sealed class Game1 : Game
+internal sealed class Game1 : Game
 {
+    [SuppressMessage("Usage", "CA2213:Disposable fields should be disposed",
+        Justification = "MonoGame registers this manager with Game, and base.Dispose(disposing) releases it.")]
     private readonly GraphicsDeviceManager graphics;
     private readonly GameSession session = new();
     private SpriteBatch? spriteBatch;
@@ -40,6 +43,17 @@ public sealed class Game1 : Game
         hud = new RoomHud(sprites);
         gameplay = RoomGameplay.Create(sprites, session, Exit);
         base.LoadContent();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            spriteBatch?.Dispose();
+            spriteBatch = null;
+        }
+
+        base.Dispose(disposing);
     }
 
     protected override void Update(GameTime gameTime)

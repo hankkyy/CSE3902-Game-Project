@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace GameProject.UI;
 
 /// <summary>Renders the start screen and its keyboard instructions.</summary>
-public sealed class StartMenu
+internal sealed class StartMenu
 {
     private const int PanelWidth = 672;
     private const int PanelHeight = 348;
