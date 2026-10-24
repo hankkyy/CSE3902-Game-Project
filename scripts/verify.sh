@@ -25,6 +25,8 @@ test_projects=(
   "tests/Enemies/Enemies.Tests.csproj"
   "tests/InputTests/InputTests.csproj"
   "tests/ItemsBlocks/ItemsBlocks.csproj"
+  "tests/Collision/Collision.Tests.csproj"
+  "tests/RoomNavigation/RoomNavigation.Tests.csproj"
 )
 
 for project in "${test_projects[@]}"; do
