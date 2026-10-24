@@ -1,0 +1,27 @@
+{
+  "id": "quiet-water",
+  "name": "Quiet-Water Corridor",
+  "bounds": {"width":880,"x":24,"height":430,"y":72},
+  "entries": {
+    "start": {"y":440,"x":64},
+    "west": {"y":270,"x":64},
+    "east": {"y":270,"x":832},
+    "north": {"y":112,"x":448},
+    "south": {"y":430,"x":448}
+  },
+  "links": [
+    {"id":"to-entrance","direction":"Left","targetRoomId":"entrance-hall","targetEntryId":"east","trigger":{"width":24,"x":24,"height":80,"y":250}},
+    {"id":"to-workshop","direction":"Right","targetRoomId":"echo-workshop","targetEntryId":"west","trigger":{"width":24,"x":880,"height":80,"y":250}}
+  ],
+  "objects": [
+    {"id":"player","type":"Player","name":"Link","position":{"y":440,"x":64}},
+    {"id":"water-west","type":"Block.Water","name":"Water Tile","position":{"y":180,"x":250}},
+    {"id":"water-center","type":"Block.Water","name":"Water Tile","position":{"y":180,"x":302}},
+    {"id":"water-east","type":"Block.Water","name":"Water Tile","position":{"y":180,"x":354}},
+    {"id":"stone","type":"Block.Stone","name":"Stone Block","position":{"y":350,"x":600}},
+    {"id":"key","type":"Item.Key","name":"Key","position":{"y":160,"x":680}},
+    {"id":"rupee","type":"Item.Rupee","name":"Rupee","position":{"y":180,"x":530}},
+    {"id":"octorok","type":"Enemy.Octorok","name":"Octorok","position":{"y":300,"x":380}},
+    {"id":"gel","type":"Enemy.Gel","name":"Gel","position":{"y":260,"x":650}}
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "all-object-lab",
+  "name": "All-Object Laboratory",
+  "bounds": {"width":880,"x":24,"height":430,"y":72},
+  "entries": {
+    "start": {"y":440,"x":64},
+    "west": {"y":270,"x":64},
+    "east": {"y":270,"x":832},
+    "north": {"y":112,"x":448},
+    "south": {"y":430,"x":448}
+  },
+  "links": [
+    {"id":"to-entrance","direction":"Up","targetRoomId":"entrance-hall","targetEntryId":"south","trigger":{"width":80,"x":424,"height":24,"y":72}}
+  ],
+  "objects": [
+    {"id":"player","type":"Player","name":"Link","position":{"y":440,"x":64}},
+    {"id":"block-Stone","type":"Block.Stone","name":"Stone","position":{"y":130,"x":80},"properties":{"purpose":"solid-collision-test"}},
+    {"id":"block-Push","type":"Block.Push","name":"Push","position":{"y":130,"x":220}},
+    {"id":"block-Water","type":"Block.Water","name":"Water","position":{"y":130,"x":360}},
+    {"id":"block-Statue","type":"Block.Statue","name":"Statue","position":{"y":130,"x":500}},
+    {"id":"block-CrystalPillar","type":"Block.CrystalPillar","name":"CrystalPillar","position":{"y":130,"x":640}},
+    {"id":"block-RuneTile","type":"Block.RuneTile","name":"RuneTile","position":{"y":130,"x":780}},
+    {"id":"item-Heart","type":"Item.Heart","name":"Heart","position":{"y":230,"x":80}},
+    {"id":"item-Rupee","type":"Item.Rupee","name":"Rupee","position":{"y":230,"x":170}},
+    {"id":"item-Key","type":"Item.Key","name":"Key","position":{"y":230,"x":260}},
+    {"id":"item-Bomb","type":"Item.Bomb","name":"Bomb","position":{"y":230,"x":350}},
+    {"id":"item-Bow","type":"Item.Bow","name":"Bow","position":{"y":230,"x":440}},
+    {"id":"item-Boomerang","type":"Item.Boomerang","name":"Boomerang","position":{"y":230,"x":530}},
+    {"id":"item-Map","type":"Item.Map","name":"Map","position":{"y":230,"x":620}},
+    {"id":"item-Compass","type":"Item.Compass","name":"Compass","position":{"y":230,"x":710}},
+    {"id":"item-StarShard","type":"Item.StarShard","name":"StarShard","position":{"y":230,"x":800}},
+    {"id":"enemy-Octorok","type":"Enemy.Octorok","name":"Octorok","position":{"y":360,"x":130}},
+    {"id":"enemy-Keese","type":"Enemy.Keese","name":"Keese","position":{"y":360,"x":245}},
+    {"id":"enemy-Gel","type":"Enemy.Gel","name":"Gel","position":{"y":360,"x":360}},
+    {"id":"enemy-RuneWisp","type":"Enemy.RuneWisp","name":"RuneWisp","position":{"y":360,"x":475}},
+    {"id":"enemy-ClockworkBeetle","type":"Enemy.ClockworkBeetle","name":"ClockworkBeetle","position":{"y":360,"x":590}},
+    {"id":"enemy-PrismSentinel","type":"Enemy.PrismSentinel","name":"PrismSentinel","position":{"y":360,"x":705}},
+    {"id":"enemy-OldMan","type":"Enemy.OldMan","name":"OldMan","position":{"y":360,"x":820}}
+  ]
+}

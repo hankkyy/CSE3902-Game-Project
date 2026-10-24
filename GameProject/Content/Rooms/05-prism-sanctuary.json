@@ -1,0 +1,25 @@
+{
+  "id": "prism-sanctuary",
+  "name": "Prism Sanctuary",
+  "bounds": {"width":880,"x":24,"height":430,"y":72},
+  "entries": {
+    "start": {"y":440,"x":64},
+    "west": {"y":270,"x":64},
+    "east": {"y":270,"x":832},
+    "north": {"y":112,"x":448},
+    "south": {"y":430,"x":448}
+  },
+  "links": [
+    {"id":"to-court","direction":"Left","targetRoomId":"starlamp-court","targetEntryId":"east","trigger":{"width":24,"x":24,"height":80,"y":250}},
+    {"id":"to-entrance","direction":"Down","targetRoomId":"entrance-hall","targetEntryId":"north","trigger":{"width":80,"x":424,"height":24,"y":478}}
+  ],
+  "objects": [
+    {"id":"player","type":"Player","name":"Link","position":{"y":440,"x":64}},
+    {"id":"statue-west","type":"Block.Statue","name":"Statue","position":{"y":160,"x":250}},
+    {"id":"statue-east","type":"Block.Statue","name":"Statue","position":{"y":160,"x":650}},
+    {"id":"pillar-west","type":"Block.CrystalPillar","name":"Crystal Pillar","position":{"y":360,"x":250}},
+    {"id":"pillar-east","type":"Block.CrystalPillar","name":"Crystal Pillar","position":{"y":360,"x":650}},
+    {"id":"sentinel","type":"Enemy.PrismSentinel","name":"Prism Sentinel","position":{"y":240,"x":450}},
+    {"id":"shard","type":"Item.StarShard","name":"Star Shard","position":{"y":150,"x":450}}
+  ]
+}

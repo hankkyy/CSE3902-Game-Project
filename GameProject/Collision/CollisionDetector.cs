@@ -26,7 +26,7 @@ public static class CollisionDetector
                     continue;
                 }
 
-                if (first.Hitbox.Intersects(second.Hitbox))
+                if (IntersectsNowOrAlongPath(first, second))
                 {
                     collisions.Add(new CollisionPair(first, second));
                 }
@@ -34,5 +34,22 @@ public static class CollisionDetector
         }
 
         return collisions;
+    }
+
+    private static bool IntersectsNowOrAlongPath(ICollidable first, ICollidable second)
+    {
+        if (first.Hitbox.Intersects(second.Hitbox))
+        {
+            return true;
+        }
+
+        if (first is IMovableCollidable firstMoving &&
+            SweptAabb.TryFind(firstMoving, second.Hitbox, out _))
+        {
+            return true;
+        }
+
+        return second is IMovableCollidable secondMoving &&
+            SweptAabb.TryFind(secondMoving, first.Hitbox, out _);
     }
 }

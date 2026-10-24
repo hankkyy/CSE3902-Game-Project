@@ -6,6 +6,7 @@ namespace GameProject.Core;
 public interface IMovableCollidable : ICollidable
 {
     Vector2 Position { get; }
+    Vector2 PreviousPosition { get; }
     Rectangle PreviousHitbox { get; }
     void CorrectPosition(Vector2 position);
 }

@@ -49,6 +49,7 @@ public sealed class PlayerSolidCollisionHandler : ICollisionHandler
         Rectangle current = player.Hitbox;
         if (!current.Intersects(solid))
         {
+            ResolveSweptCollision(player, solid);
             return;
         }
 
@@ -57,23 +58,48 @@ public sealed class PlayerSolidCollisionHandler : ICollisionHandler
 
         if (previous.Bottom <= solid.Top)
         {
-            corrected.Y -= current.Bottom - solid.Top;
+            corrected.Y = solid.Top - current.Height;
         }
         else if (previous.Top >= solid.Bottom)
         {
-            corrected.Y += solid.Bottom - current.Top;
+            corrected.Y = solid.Bottom;
         }
         else if (previous.Right <= solid.Left)
         {
-            corrected.X -= current.Right - solid.Left;
+            corrected.X = solid.Left - current.Width;
         }
         else if (previous.Left >= solid.Right)
         {
-            corrected.X += solid.Right - current.Left;
+            corrected.X = solid.Right;
         }
         else
         {
             corrected = ResolveSmallestOverlap(player.Position, current, solid);
+        }
+
+        player.CorrectPosition(corrected);
+    }
+
+    private static void ResolveSweptCollision(IMovableCollidable player, Rectangle solid)
+    {
+        if (!SweptAabb.TryFind(player, solid, out SweptHit hit))
+        {
+            return;
+        }
+
+        Vector2 movement = player.Position - player.PreviousPosition;
+        Vector2 corrected = player.PreviousPosition + movement * hit.Time;
+        if (hit.Horizontal)
+        {
+            corrected.X = movement.X > 0
+                ? solid.Left - player.PreviousHitbox.Width
+                : solid.Right;
+        }
+        else
+        {
+            corrected.Y = movement.Y > 0
+                ? solid.Top - player.PreviousHitbox.Height
+                : solid.Bottom;
         }
 
         player.CorrectPosition(corrected);
@@ -91,12 +117,12 @@ public sealed class PlayerSolidCollisionHandler : ICollisionHandler
         if (current.Center.X < solid.Center.X)
         {
             horizontalOverlap = leftOverlap;
-            horizontalCorrection = -leftOverlap;
+            horizontalCorrection = solid.Left - current.Width;
         }
         else
         {
             horizontalOverlap = rightOverlap;
-            horizontalCorrection = rightOverlap;
+            horizontalCorrection = solid.Right;
         }
 
         int verticalOverlap;
@@ -104,19 +130,19 @@ public sealed class PlayerSolidCollisionHandler : ICollisionHandler
         if (current.Center.Y < solid.Center.Y)
         {
             verticalOverlap = topOverlap;
-            verticalCorrection = -topOverlap;
+            verticalCorrection = solid.Top - current.Height;
         }
         else
         {
             verticalOverlap = bottomOverlap;
-            verticalCorrection = bottomOverlap;
+            verticalCorrection = solid.Bottom;
         }
 
         if (horizontalOverlap < verticalOverlap)
         {
-            return new Vector2(position.X + horizontalCorrection, position.Y);
+            return new Vector2(horizontalCorrection, position.Y);
         }
 
-        return new Vector2(position.X, position.Y + verticalCorrection);
+        return new Vector2(position.X, verticalCorrection);
     }
 }

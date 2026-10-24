@@ -11,6 +11,8 @@ Required reviewer: Xuanzhe Li
 - A dispatcher that lets each feature register a focused response handler.
 - Player-solid response for walls, stationary solid blocks, room boundaries, and closed doors.
 - Previous-position response with a smallest-overlap fallback for initial/spawned intersections.
+- Swept collision checks that stop the player from crossing a thin solid during a long frame.
+- Active-room wiring that runs before exit checks in `RoomGameplay`.
 
 The collision code does not draw, poll input, remove room objects, or contain item/enemy rules. Other owners add handlers instead of editing the detector.
 
@@ -26,7 +28,7 @@ CollisionSystem collisions = new(dispatcher);
 collisions.Process(activeRoomCollidables);
 ```
 
-Represent room walls, boundaries, and closed doors with `SolidCollider` until a visible block class exposes the same `ICollidable` contract. Opening a door can call `SetActive(false)`.
+`RoomSolidCollisionSystem` creates colliders for stone, push, water, statue, and crystal-pillar room objects. Rune tiles remain walkable floor decoration. Opening a door can call `SetActive(false)` on its collider when locked-door state is integrated.
 
 ## Automated verification
 
@@ -34,7 +36,11 @@ Represent room walls, boundaries, and closed doors with `SolidCollider` until a 
 dotnet run --project tests/Collision/Collision.Tests.csproj --configuration Release
 ```
 
-Coverage includes four movement directions, diagonal corners, a large elapsed-time step, reversed pair order, inactive objects, unique pairs, unsupported pairs, a player initially overlapping a solid, and reset.
+Coverage includes four movement directions, diagonal corners, thin-wall tunneling, fractional positions, reversed pair order, deactivation during a collision pass, all current solid block types, a player initially overlapping a solid, active-room integration, and reset.
+
+## Review follow-up
+
+Xuanzhe's review identified thin-wall tunneling, fractional correction, and repeated handling after deactivation. The detector now checks the player's swept path, correction snaps to the solid edge, and the system rechecks active state before every dispatch. Each case has a regression test.
 
 ## Strict analyzer decision
 
@@ -47,9 +53,7 @@ documented API-boundary decision rather than blanket suppression.
 
 ## Manual verification
 
-After room integration:
-
-1. Hold each movement direction against every wall and closed doorway.
-2. Move diagonally into all four wall corners; confirm the player does not enter or jitter inside the wall.
-3. Open a door and confirm the disabled door collider no longer blocks movement.
-4. Press R after a collision and confirm the player and hitbox return to the starting position.
+1. In Entrance Hall, walk into either stone block from each open side; the player stops at its edge.
+2. In Quiet Water, walk into the water row and the stone block; neither can be crossed.
+3. In Starlamp Court, walk across the rune tile, then into a crystal pillar; only the pillar blocks movement.
+4. Press R after a collision and confirm the player returns to the starting position.

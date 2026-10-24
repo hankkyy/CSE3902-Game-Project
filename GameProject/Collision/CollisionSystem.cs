@@ -13,6 +13,11 @@ public sealed class CollisionSystem(CollisionDispatcher dispatcher)
         int handledCount = 0;
         foreach (CollisionPair collision in collisions)
         {
+            if (!collision.First.IsActive || !collision.Second.IsActive)
+            {
+                continue;
+            }
+
             if (dispatcher.Dispatch(collision))
             {
                 handledCount++;
